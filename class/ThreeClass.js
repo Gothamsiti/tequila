@@ -4,16 +4,18 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 export default class ThreeClass{
     constructor(canvas){
+        this.canvas = canvas;
         this.debug = true;
 
         this.scene = null;
         this.camera = null;
         this.renderer = null;
         this.controls = null;
-        this.lights = [];
 
         this.mixer = null;
         this.clock = null;
+
+        this.modelGroup = new THREE.Group();
         
         this.init(canvas);
     }
@@ -23,8 +25,7 @@ export default class ThreeClass{
         this.camera = new THREE.PerspectiveCamera( 75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000 );
         this.camera.position.z = 25;
         
-        this.renderer = new THREE.WebGLRenderer({canvas:canvas});
-        this.renderer.setSize( canvas.clientWidth, canvas.clientHeight );
+        this.initRenderer()
         this.clock = new THREE.Clock();
 
         if(this.debug){
@@ -33,13 +34,34 @@ export default class ThreeClass{
 
         this.initLights();
         await this.loadModel();
-
+        this.scene.add(this.modelGroup)
         this.animate();
+    }
+    initRenderer(){
+        const topPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), 4.3)
+        const bottomPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), 0)
+        bottomPlane.negate();
+
+
+        this.renderer = new THREE.WebGLRenderer({canvas:this.canvas});
+        this.renderer.setSize( this.canvas.clientWidth, this.canvas.clientHeight );
+        this.renderer.clippingPlanes = [topPlane, bottomPlane];
+        this.renderer.localClippingEnabled = true;
+
     }
 
     initLights(){
         const ambientLight = new THREE.AmbientLight( 0x404040 ); // soft white light
         this.scene.add( ambientLight );
+
+        const light_1 = new THREE.PointLight( 0xffffff, 1, 100 );
+        light_1.position.set( 0, 10, 0 );
+        if(this.debug){
+            const axesHelper = new THREE.AxesHelper( 5 );
+            light_1.add( axesHelper );
+        }
+
+        this.modelGroup.add( light_1 );
     }
 
     async loadModel(){
@@ -48,16 +70,11 @@ export default class ThreeClass{
             loader.load(
                 './models/tequila.glb', 
                 (gltf) => {
-                    // console.log(gltf);
-                    gltf.scene.traverse((child) => {
-                        if (child instanceof THREE.Mesh) {
-                            console.log('mesh',child);
-                        }
-                    })
-    
-    
-                    this.scene.add(gltf.scene);
-                    this.mixer = new THREE.AnimationMixer( this.scene.children[1] );
+
+
+                    
+                    this.modelGroup.add(gltf.scene);
+                    this.mixer = new THREE.AnimationMixer( this.modelGroup.children[1] );
                     this.handleAnimations(gltf.animations);
 
                     return resolve();
