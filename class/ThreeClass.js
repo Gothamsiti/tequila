@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import Stats from 'stats-js'
+import InstancedMeshClass from './InstancedMeshClass.js';
 
 export default class ThreeClass{
     constructor(canvas){
@@ -13,6 +14,8 @@ export default class ThreeClass{
         this.renderer = null;
         this.controls = null;
         this.stats = null;
+
+        this.gltf = null;
 
         this.mixer = null;
         this.clock = null;
@@ -38,10 +41,48 @@ export default class ThreeClass{
         }
 
         this.initLights();
-        await this.loadModel();
+
+        this.gltf = await this.loadModel();
+
+        const piano_1 = this.gltf.scene.getObjectByName('foglia-agave-01'); 
+        const piano_2 = this.gltf.scene.getObjectByName('foglia-agave-02'); 
+        const piano_3 = this.gltf.scene.getObjectByName('foglia-agave-03'); 
+        const piano_4 = this.gltf.scene.getObjectByName('foglia-agave-04'); 
+        const piano_5 = this.gltf.scene.getObjectByName('foglia-agave-05'); 
+        const piano_6 = this.gltf.scene.getObjectByName('foglia-agave-06'); 
+
+        const piano_1_instancedMesh = new InstancedMeshClass(this, piano_1.geometry, piano_1.material, 9);
+        const piano_2_instancedMesh = new InstancedMeshClass(this, piano_2.geometry, piano_2.material, 9);
+        const piano_3_instancedMesh = new InstancedMeshClass(this, piano_3.geometry, piano_3.material, 9);
+        const piano_4_instancedMesh = new InstancedMeshClass(this, piano_4.geometry, piano_4.material, 6);
+        const piano_5_instancedMesh = new InstancedMeshClass(this, piano_5.geometry, piano_5.material, 6);
+        const piano_6_instancedMesh = new InstancedMeshClass(this, piano_6.geometry, piano_6.material, 3);
+        this.agave_cuore();
+
         this.scene.add(this.modelGroup)
         this.animate();
     }
+
+    agave_cuore(){
+        const agave_01 = this.gltf.scene.getObjectByName('agave-01001'); 
+        const agave_02 = this.gltf.scene.getObjectByName('agave-02001'); 
+        const agave_03 = this.gltf.scene.getObjectByName('agave-03001'); 
+        const agave_04 = this.gltf.scene.getObjectByName('agave-04001'); 
+        const agave_05 = this.gltf.scene.getObjectByName('agave-05001'); 
+        const agave_06 = this.gltf.scene.getObjectByName('agave-06001'); 
+
+        const agave_cuore = new THREE.Group();
+
+        agave_cuore.add(agave_01)
+        agave_cuore.add(agave_02)
+        agave_cuore.add(agave_03)
+        agave_cuore.add(agave_04)
+        agave_cuore.add(agave_05)
+        agave_cuore.add(agave_06);
+
+        this.modelGroup.add(agave_cuore);
+    }
+
     initRenderer(){
         const topPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), 4.3)
         const bottomPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), 0)
@@ -70,22 +111,15 @@ export default class ThreeClass{
     }
 
     async loadModel(){
-        await new Promise((resolve,reject) => {
+        return await new Promise((resolve,reject) => {
             const loader = new GLTFLoader();
-            loader.load(
-                './models/tequila.glb', 
+            return loader.load(
+                './models/agave-pianta.glb', 
                 (gltf) => {
-
-
-                    
-                    this.modelGroup.add(gltf.scene);
-                    this.mixer = new THREE.AnimationMixer( this.modelGroup.children[1] );
-                    this.handleAnimations(gltf.animations);
-
-                    return resolve();
+                    return resolve(gltf);
                 },
                 (xhr) => {
-                    console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+                    // console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
                 },
                 (error) => {
                     console.log( 'An error happened' );
@@ -101,12 +135,12 @@ export default class ThreeClass{
         } );
     }
 
-
-
     animate(){
         if(this.stats) this.stats.begin();
         this.renderer.render( this.scene, this.camera );
-        this.mixer.update(this.clock.getDelta());
+
+        // this.mixer.update(this.clock.getDelta());
+
         if(this.debug){
             this.controls.update();
 
