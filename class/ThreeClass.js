@@ -16,18 +16,20 @@ export default class ThreeClass {
         this.stats = null;
 
         this.gltf = null;
+        // non buono con 2 modelli,meglio impostare meglio blender modificando solo l'origine per x e z delle foglie, lasciando la y invariata così da dover impostare solo la rotation_offset
+        this.gltf2 = null;
 
         this.mixer = null;
         this.clock = null;
 
         this.modelGroup = new THREE.Group();
         this.layers = [
-            { search: '01',rotation_offset:  2,y:0 ,distance: .6, quantity: 9, mesh: null },
-            { search: '02',rotation_offset: 5,  y:.2 ,quantity: .5, distance: 1, mesh: null },
-            { search: '03',rotation_offset: 0,  y:.4 ,distance: .7, quantity: 9, mesh: null },
-            { search: '04',rotation_offset: 6, y:.6 ,distance: 1, quantity: 6, mesh: null },
-            { search: '05',rotation_offset: 3, y:.8 ,distance: .5, quantity: 6, mesh: null },
-            { search: '06',rotation_offset: 5, y:1 ,distance: .2, quantity: 3, mesh: null },
+            { search: '01',rotation_offset:  0,y:0 ,distance: .47, quantity: 9, mesh: null },
+            { search: '02', rotation_offset: 22.1,  y:.21 ,quantity: 9, distance: .74, mesh: null },
+            { search: '03',rotation_offset: 0,  y:.44 ,distance: .6, quantity: 9, mesh: null },
+            { search: '04',rotation_offset: 19.8, y:.528 ,distance: .414, quantity: 6, mesh: null },
+            { search: '05',rotation_offset: -13.8, y:.707 ,distance: .378, quantity: 6, mesh: null },
+            { search: '06',rotation_offset: 31, y:.89,distance: .12, quantity: 3, mesh: null },
         ]
         this.init(canvas);
     }
@@ -35,7 +37,9 @@ export default class ThreeClass {
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color(0xffffff);
         this.camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
-        this.camera.position.y = 7;
+        this.camera.position.z = 2;
+        this.camera.position.y = 4;
+
 
         this.initRenderer()
         this.clock = new THREE.Clock();
@@ -50,6 +54,7 @@ export default class ThreeClass {
         this.initLights();
 
         this.gltf = await this.loadModel();
+        this.gltf2 = await this.loadModel2();
 
 
         this.agave();
@@ -63,8 +68,8 @@ export default class ThreeClass {
         this.layers.map((layer) => {
             const piano = this.gltf.scene.getObjectByName(`foglia-agave-${layer.search}`);
             layer.mesh = new InstancedMeshClass(this, piano.geometry, piano.material, layer);
-            // const agave = this.gltf.scene.getObjectByName(`agave-${layer.search}001`); 
-            // agave_cuore.add(agave)
+            const agave = this.gltf2.scene.getObjectByName(`agave-${layer.search}001`); 
+            agave_cuore.add(agave)
         })
 
         this.modelGroup.add(agave_cuore);
@@ -102,6 +107,25 @@ export default class ThreeClass {
             const loader = new GLTFLoader();
             return loader.load(
                 './models/agave-pianta_new.glb',
+                (gltf) => {
+                    console.log(gltf)
+                    return resolve(gltf);
+                },
+                (xhr) => {
+                    // console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+                },
+                (error) => {
+                    console.log('An error happened');
+                }
+            )
+
+        })
+    }
+    async loadModel2() {
+        return await new Promise((resolve, reject) => {
+            const loader = new GLTFLoader();
+            return loader.load(
+                './models/agave-pianta.glb',
                 (gltf) => {
                     console.log(gltf)
                     return resolve(gltf);

@@ -30,7 +30,7 @@ export default class InstancedMeshClass {
         }
         this.parent.modelGroup.add(this.mesh);
 
-        // this.gsapAnimations()
+        this.gsapAnimations()
         this.animate();
     }
     setInstancedMeshPositions() {
@@ -55,7 +55,7 @@ export default class InstancedMeshClass {
             this.mesh.setMatrixAt(i, this.dummy.matrix);
         }
         this.mesh.instanceMatrix.needsUpdate = true;
-        this.gsapAnimations()
+        
 
     }
 
