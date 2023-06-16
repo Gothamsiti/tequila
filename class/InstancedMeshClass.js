@@ -41,7 +41,6 @@ export default class InstancedMeshClass {
             const rotationY = radian;
             console.log(deg)
             this.dummy.rotation.y = rotationY;
-            this.dummy.translateX(2)
             this.dummy.position.y= this.layer.y;
             this.dummy.position.z =   Math.cos(radian) * (this.layer.distance) * (-1) // + (deg >= 180 ? -.2 : .2)
             this.dummy.position.x =   Math.sin(radian) * (this.layer.distance) * (-1) // + (deg >= 180 ? -.2 : .2)
@@ -56,37 +55,67 @@ export default class InstancedMeshClass {
             this.mesh.setMatrixAt(i, this.dummy.matrix);
         }
         this.mesh.instanceMatrix.needsUpdate = true;
+        this.gsapAnimations()
 
     }
 
-    // gsapAnimations() {
-    //     const from = { posiiton: JSON.parse(JSON.stringify(this.dummy.position)) }
-    //     const tl = gsap.timeline();
-    //     const tempDummy = new THREE.Object3D()
-    //     tl.to(from.posiiton, {
-    //         duration: 5,
-    //         x: this.to.position.x,
-    //         onUpdate: () => {
-    //             console.log('position',from.posiiton.x)
-    //             for (var i = 0; i < this.count; i++) {
-    //                 tempDummy.position.set(from.posiiton)
-    //                 tempDummy.updateMatrix()
-    //                 this.mesh.setMatrixAt(i, tempDummy.matrix)
-    //             }
-    //             // this.mesh.instanceMatrix.needsUpdate = true;
-    //         }
-    //     }, 0)
-        
-    // }
+     gsapAnimations() {
+         const from = { distance: this.layer.distance , ry: 0}
+         const to = { distance: this.layer.distance+3 , ry: 180}
+         const tl = gsap.timeline({ defaults: {duration: 5,} });
+         tl.to(from, {
+             ...to,
+             onUpdate: () => {
+                 const dummy = new THREE.Object3D();
+                 for (var i = 0; i < this.layer.quantity; i++) {
+                    const deg =360 / this.layer.quantity * i +this.layer.rotation_offset + from.ry;
+                    const radian = THREE.MathUtils.degToRad(deg)
+                    const rotationY = radian;
+                    dummy.rotation.y = rotationY;
+                    dummy.position.y= this.layer.y;
+                    dummy.position.z =   Math.cos(radian) * (from.distance) * (-1) // + (deg >= 180 ? -.2 : .2)
+                    dummy.position.x =   Math.sin(radian) * (from.distance) * (-1) // + (deg >= 180 ? -.2 : .2)
+                    
+                    
+                    // this.dummy.position.z =   Math.cos(radian) * distnce * (-1)  //+ (deg >= 180 ? -.2: .2)
+                    // this.dummy.position.x =   Math.sin(radian) * distnce * (-1)  //+ (deg >= 180 ? -.2 : .2)
+                    // this.dummy.position.z =   Math.cos(radian) * distnce * (-1)  + (deg >= 180 ? -.4 : .4)
+                    // this.dummy.position.x =   Math.sin(radian) * distnce * (-1)  + (deg >= 180 ? -.4 : .4)
+                    
+                    dummy.updateMatrix();
+                    this.mesh.setMatrixAt(i, dummy.matrix);
+                }
+                 this.mesh.instanceMatrix.needsUpdate = true;
+             }
+         }, )
+         .to(from, {
+             ...from,
+             onUpdate: () => {
+                 const dummy = new THREE.Object3D();
+                 for (var i = 0; i < this.layer.quantity; i++) {
+                    const deg =360 / this.layer.quantity * i +this.layer.rotation_offset + from.ry;
+                    const radian = THREE.MathUtils.degToRad(deg)
+                    const rotationY = radian;
+                    dummy.rotation.y = rotationY;
+                    dummy.position.y= this.layer.y;
+                    dummy.position.z =   Math.cos(radian) * (from.distance) * (-1) // + (deg >= 180 ? -.2 : .2)
+                    dummy.position.x =   Math.sin(radian) * (from.distance) * (-1) // + (deg >= 180 ? -.2 : .2)
+                    
+                    
+                    // this.dummy.position.z =   Math.cos(radian) * distnce * (-1)  //+ (deg >= 180 ? -.2: .2)
+                    // this.dummy.position.x =   Math.sin(radian) * distnce * (-1)  //+ (deg >= 180 ? -.2 : .2)
+                    // this.dummy.position.z =   Math.cos(radian) * distnce * (-1)  + (deg >= 180 ? -.4 : .4)
+                    // this.dummy.position.x =   Math.sin(radian) * distnce * (-1)  + (deg >= 180 ? -.4 : .4)
+                    
+                    dummy.updateMatrix();
+                    this.mesh.setMatrixAt(i, dummy.matrix);
+                }
+                 this.mesh.instanceMatrix.needsUpdate = true;
+             }
+         })
+  
+     }
 
-    getSine(radius, deg){
-
-    }
-
-    getCosine( radius, deg){
-
-    }
-    
 
     // randomizeMatrix(matrix) {
     //     const position = new THREE.Vector3();
