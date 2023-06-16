@@ -17,7 +17,11 @@ export default class InstancedMeshClass {
         this.init();
     }
     init() {
+        console.log(this.geometry)
         this.mesh = new THREE.InstancedMesh(this.geometry, this.material, this.count);
+        const mesh = new THREE.Mesh(this.geometry,this.material)
+        
+        
         this.setInstancedMeshPositions()
 
         this.mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage); //per animare
@@ -34,15 +38,21 @@ export default class InstancedMeshClass {
     setInstancedMeshPositions() {
         const distnce = 3;
         for (var i = 0; i < this.count; i++) {
-            const deg =360 / this.count * i
+            const deg =360 / this.count * i 
             const radian = THREE.MathUtils.degToRad(deg)
             const rotationY = radian;
             console.log(deg)
             this.dummy.rotation.y = rotationY;
-            // this.dummy.translateX(Math.cos(radian) * distnce);
+            this.dummy.translateX(2)
             
-            // this.dummy.position.z = deg>= 10 ?  Math.cos(radian) * distnce :
-            // this.dummy.position.z = Math.sin(radian) * distnce
+            this.dummy.position.z =   Math.cos(radian) * (distnce) * (-1) // + (deg >= 180 ? -.2 : .2)
+            this.dummy.position.x =   Math.sin(radian) * (distnce) * (-1) // + (deg >= 180 ? -.2 : .2)
+            
+            
+            // this.dummy.position.z =   Math.cos(radian) * distnce * (-1)  //+ (deg >= 180 ? -.2: .2)
+            // this.dummy.position.x =   Math.sin(radian) * distnce * (-1)  //+ (deg >= 180 ? -.2 : .2)
+            // this.dummy.position.z =   Math.cos(radian) * distnce * (-1)  + (deg >= 180 ? -.4 : .4)
+            // this.dummy.position.x =   Math.sin(radian) * distnce * (-1)  + (deg >= 180 ? -.4 : .4)
             
             this.dummy.updateMatrix();
             this.mesh.setMatrixAt(i, this.dummy.matrix);
