@@ -22,28 +22,12 @@ export default class ThreeClass {
 
         this.modelGroup = new THREE.Group();
         this.layers = [
-            // { search: '01', quantity: 9, mesh : null},
-            { 
-                search: '05',
-                quantity: 6,
-                mesh: null,
-                from: {
-                    position: { 
-
-                    }
-                },
-                to: {
-                    position: { 
-                        x: 2, 
-                        y: 1,
-                        z: 1
-                    }, 
-                } 
-                },
-            // { search: '03', quantity: 9, mesh : null},
-            // { search: '04', quantity: 6, mesh : null},
-            // { search: '05', quantity: 6, mesh : null},
-            // { search: '06', quantity: 3, mesh : null},
+            { search: '01',rotation_offset:  2,y:0 ,distance: .6, quantity: 9, mesh: null },
+            { search: '02',rotation_offset: 5,  y:.2 ,quantity: .5, distance: 1, mesh: null },
+            { search: '03',rotation_offset: 0,  y:.4 ,distance: .7, quantity: 9, mesh: null },
+            { search: '04',rotation_offset: 6, y:.6 ,distance: 1, quantity: 6, mesh: null },
+            { search: '05',rotation_offset: 3, y:.8 ,distance: .5, quantity: 6, mesh: null },
+            { search: '06',rotation_offset: 5, y:1 ,distance: .2, quantity: 3, mesh: null },
         ]
         this.init(canvas);
     }
@@ -78,7 +62,7 @@ export default class ThreeClass {
         const agave_cuore = new THREE.Group();
         this.layers.map((layer) => {
             const piano = this.gltf.scene.getObjectByName(`foglia-agave-${layer.search}`);
-            layer.mesh = new InstancedMeshClass(this, piano.geometry, piano.material, layer.quantity, layer.from ,layer.to);
+            layer.mesh = new InstancedMeshClass(this, piano.geometry, piano.material, layer);
             // const agave = this.gltf.scene.getObjectByName(`agave-${layer.search}001`); 
             // agave_cuore.add(agave)
         })
