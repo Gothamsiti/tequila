@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import Stats from 'stats-js'
 
 export default class ThreeClass{
     constructor(canvas){
@@ -11,6 +12,7 @@ export default class ThreeClass{
         this.camera = null;
         this.renderer = null;
         this.controls = null;
+        this.stats = null;
 
         this.mixer = null;
         this.clock = null;
@@ -23,13 +25,16 @@ export default class ThreeClass{
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color( 0xffffff );
         this.camera = new THREE.PerspectiveCamera( 75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000 );
-        this.camera.position.z = 25;
+        this.camera.position.z = 7;
         
         this.initRenderer()
         this.clock = new THREE.Clock();
 
         if(this.debug){
             this.controls = new OrbitControls( this.camera, this.renderer.domElement );
+            this.stats = new Stats();
+            const statsContainer = document.getElementById('stats');
+            if(statsContainer) statsContainer.appendChild(this.stats.dom)
         }
 
         this.initLights();
@@ -99,12 +104,16 @@ export default class ThreeClass{
 
 
     animate(){
+        if(this.stats) this.stats.begin();
         this.renderer.render( this.scene, this.camera );
         this.mixer.update(this.clock.getDelta());
         if(this.debug){
             this.controls.update();
 
         }
+
+        if(this.stats) this.stats.end();
+
         requestAnimationFrame( () => this.animate() );
 
     }

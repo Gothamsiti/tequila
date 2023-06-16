@@ -1,6 +1,7 @@
 <template lang="pug">
 main#main
     canvas(ref="mainThree")
+    #stats
 </template>
 <script setup>
 import ThreeClass from '../class/ThreeClass';
@@ -22,6 +23,11 @@ onMounted(() => {
         left:0;
         width: 100%;
         height: 100%;
+    }
+    > #stats{
+        position: absolute;
+        left: 0;
+        top: 0;
     }
 }
 
