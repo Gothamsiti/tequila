@@ -16,8 +16,6 @@ export default class ThreeClass {
         this.stats = null;
 
         this.gltf = null;
-        // non buono con 2 modelli,meglio impostare meglio blender modificando solo l'origine per x e z delle foglie, lasciando la y invariata così da dover impostare solo la rotation_offset
-        this.gltf2 = null;
 
         this.mixer = null;
         this.clock = null;
@@ -68,7 +66,6 @@ export default class ThreeClass {
         this.initLights();
 
         this.gltf = await this.loadModel();
-        this.gltf2 = await this.loadModel2();
 
 
         this.agave();
@@ -81,9 +78,9 @@ export default class ThreeClass {
         const agave_cuore = new THREE.Group();
         this.layers.map((layer) => {
             const piano = this.gltf.scene.getObjectByName(`foglia-agave-${layer.search}`);
-            layer.mesh = new InstancedMeshClass(this, piano.geometry, piano.material, layer);
-            const agave = this.gltf2.scene.getObjectByName(`agave-${layer.search}001`); 
-            agave_cuore.add(agave)
+            layer.mesh = new InstancedMeshClass(this, piano.geometry, piano.material, layer.quantity, layer.from ,layer.to);
+            // const agave = this.gltf.scene.getObjectByName(`agave-${layer.search}001`); 
+            // agave_cuore.add(agave)
         })
 
         this.modelGroup.add(agave_cuore);
@@ -120,28 +117,8 @@ export default class ThreeClass {
         return await new Promise((resolve, reject) => {
             const loader = new GLTFLoader();
             return loader.load(
-                './models/agave-pianta_new.glb',
-                (gltf) => {
-                    console.log(gltf)
-                    return resolve(gltf);
-                },
-                (xhr) => {
-                    // console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-                },
-                (error) => {
-                    console.log('An error happened');
-                }
-            )
-
-        })
-    }
-    async loadModel2() {
-        return await new Promise((resolve, reject) => {
-            const loader = new GLTFLoader();
-            return loader.load(
                 './models/agave-pianta.glb',
                 (gltf) => {
-                    console.log(gltf)
                     return resolve(gltf);
                 },
                 (xhr) => {
