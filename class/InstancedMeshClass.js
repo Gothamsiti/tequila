@@ -56,27 +56,94 @@ export default class InstancedMeshClass {
     }
 
     gsapAnimations() {
-        const offset = (this.count - 1) / 2;
-
-        for (var i = 0; i < this.count; i++) {
-                const angle = 360 / this.count * i
-                // const angle = Math.PI * 0.5 * i;
-                const distance = 1;
-                const x = distance * Math.cos(angle);
-                const y = distance * Math.sin(angle);
-
-                this.matrixes[i].position.x = x;
-                this.matrixes[i].position.z = y;
-                this.matrixes[i].rotation.y = angle + Math.PI * 0.5;
-                this.matrixes[i].updateMatrix();
-
-                this.mesh.setMatrixAt(i, this.matrixes[i].matrix);
-            
-            
-
-        }
+        const deltaDegrees = 360/this.count;
+        const offsetDegrees = 90 + 360 - deltaDegrees/2;
+        const distance = 1;
         
-        this.mesh.instanceMatrix.needsUpdate = true;
+        // for(var i = 0 ; i < this.count; i++){
+        //     var deg =  offsetDegrees - i * deltaDegrees;
+        //     deg = THREE.MathUtils.degToRad(deg);
+        //     this.matrixes[i].position.x = -distance * Math.cos(deg);
+        //     this.matrixes[i].position.z = -distance * Math.sin(deg);
+        //     this.matrixes[i].updateMatrix();
+        //     this.mesh.setMatrixAt(i, this.matrixes[i].matrix);
+        // }
+        // this.mesh.instanceMatrix.needsUpdate = true;
+
+        const positions = { 
+            distance : 0,
+            y : 3,
+            rY : THREE.MathUtils.degToRad(30)
+        }
+        gsap.to(
+            positions,
+            {
+                distance : 1,
+                duration : 6,
+                rY : THREE.MathUtils.degToRad(30)
+            }
+        )
+        for(var i = 0 ; i < this.count; i++){
+            var deg =  offsetDegrees - i * deltaDegrees;
+            deg = THREE.MathUtils.degToRad(deg);
+            // this.matrixes[i].position.x = -distance * Math.cos(deg);
+            // this.matrixes[i].position.z = -distance * Math.sin(deg);
+            this.matrixes[i].rotation.z = positions.rY;
+            this.matrixes[i].updateMatrix();
+            this.mesh.setMatrixAt(i, this.matrixes[i].matrix);
+        }
+        // gsap.to(
+        //     positions,
+        //     {
+        //         y : -1,
+        //         duration: 10,
+        //         repeat: -1,
+        //         onUpdate : () => {
+        //             for(var i = 0 ; i < this.count; i++){
+        //                 var deg =  offsetDegrees - i * deltaDegrees;
+        //                 deg = THREE.MathUtils.degToRad(deg);
+        //                 this.matrixes[i].position.x = -positions.distance * Math.cos(deg);
+        //                 this.matrixes[i].position.z = -positions.distance * Math.sin(deg);
+        //                 this.matrixes[i].rotation.x = -positions.rY;
+        //                 // this.matrixes[i].rotation.z = -positions.rY * Math.sin(deg);
+        //                 this.matrixes[i].rotation.y = 0;
+        //                 this.matrixes[i].position.y = 1;
+        //                 this.matrixes[i].updateMatrix();
+        //                 this.mesh.setMatrixAt(i, this.matrixes[i].matrix);
+        //                 this.matrixes[i].rotation.y = deg;
+        //                 this.matrixes[i].updateMatrix();
+        //                 this.mesh.setMatrixAt(i, this.matrixes[i].matrix);
+        //             }
+        //             this.mesh.instanceMatrix.needsUpdate = true;
+        //         }
+        //     }
+        // )
+
+        // this.matrixes[1].position.x = 1;
+        // this.matrixes[1].updateMatrix();
+        // this.mesh.setMatrixAt(1, this.matrixes[1].matrix);
+
+        // this.matrixes[i].position.z = y;
+
+        // for (var i = 0; i < this.count; i++) {
+        //         const angle = 360 / this.count * i
+
+        //         console.log(angle);
+        //         // const angle = Math.PI * 0.5 * i;
+        //         const distance = 1;
+        //         const x = distance * Math.cos(angle);
+        //         const y = distance * Math.sin(angle);
+
+        //         this.matrixes[i].position.x = x;
+        //         this.matrixes[i].position.z = y;
+
+        //         // this.matrixes[i].rotation.y = angle + Math.PI * 0.5;
+        //         this.matrixes[i].updateMatrix();
+
+        //         this.mesh.setMatrixAt(i, this.matrixes[i].matrix);
+
+        // }
+        
 
 
         // const from = { posiiton: JSON.parse(JSON.stringify(this.dummy.position)) }

@@ -51,7 +51,7 @@ export default class ThreeClass {
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color(0xffffff);
         this.camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
-        this.camera.position.z = 7;
+        this.camera.position.y = 7;
 
         this.initRenderer()
         this.clock = new THREE.Clock();
@@ -94,7 +94,7 @@ export default class ThreeClass {
 
         this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas });
         this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
-        this.renderer.clippingPlanes = [topPlane, bottomPlane];
+        // this.renderer.clippingPlanes = [topPlane, bottomPlane];
         this.renderer.localClippingEnabled = true;
 
     }
