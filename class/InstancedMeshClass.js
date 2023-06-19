@@ -9,7 +9,10 @@ export default class InstancedMeshClass {
         this.count = count;
         // this.positions = positions;
         // this.rotations = rotations;
-        this.dummy = new THREE.Object3D();
+
+        this.matrixes = [];
+
+        
         this.from = from;
         this.to = to;
         this.mesh = null;
@@ -23,51 +26,75 @@ export default class InstancedMeshClass {
         this.mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage); //per animare
         if(this.parent.debug){
             const axesHelper = new THREE.AxesHelper(5)
-            
             this.mesh.add(axesHelper);
         }
         this.parent.modelGroup.add(this.mesh);
 
-        // this.gsapAnimations()
+        this.gsapAnimations()
         this.animate();
     }
     setInstancedMeshPositions() {
         const distnce = 3;
         for (var i = 0; i < this.count; i++) {
-            const deg =360 / this.count * i
+            const dummy = new THREE.Object3D();
+            const deg = 360 / this.count * i
             const radian = THREE.MathUtils.degToRad(deg)
             const rotationY = radian;
-            console.log(deg)
-            this.dummy.rotation.y = rotationY;
+            dummy.rotation.y = rotationY;
+            dummy.updateMatrix();
+            this.mesh.setMatrixAt(i, dummy.matrix);
+            this.matrixes.push(dummy);
+
             // this.dummy.translateX(Math.cos(radian) * distnce);
             
             // this.dummy.position.z = deg>= 10 ?  Math.cos(radian) * distnce :
             // this.dummy.position.z = Math.sin(radian) * distnce
-            
-            this.dummy.updateMatrix();
-            this.mesh.setMatrixAt(i, this.dummy.matrix);
         }
+
         this.mesh.instanceMatrix.needsUpdate = true;
 
     }
 
     gsapAnimations() {
-        const from = { posiiton: JSON.parse(JSON.stringify(this.dummy.position)) }
-        const tl = gsap.timeline();
-        const tempDummy = new THREE.Object3D()
-        tl.to(from.posiiton, {
-            duration: 5,
-            x: this.to.position.x,
-            onUpdate: () => {
-                console.log('position',from.posiiton.x)
-                for (var i = 0; i < this.count; i++) {
-                    tempDummy.position.set(from.posiiton)
-                    tempDummy.updateMatrix()
-                    this.mesh.setMatrixAt(i, tempDummy.matrix)
-                }
-                // this.mesh.instanceMatrix.needsUpdate = true;
-            }
-        }, 0)
+        const offset = (this.count - 1) / 2;
+
+        for (var i = 0; i < this.count; i++) {
+                const angle = 360 / this.count * i
+                // const angle = Math.PI * 0.5 * i;
+                const distance = 1;
+                const x = distance * Math.cos(angle);
+                const y = distance * Math.sin(angle);
+
+                this.matrixes[i].position.x = x;
+                this.matrixes[i].position.z = y;
+                this.matrixes[i].rotation.y = angle + Math.PI * 0.5;
+                this.matrixes[i].updateMatrix();
+
+                this.mesh.setMatrixAt(i, this.matrixes[i].matrix);
+            
+            
+
+        }
+        
+        this.mesh.instanceMatrix.needsUpdate = true;
+
+
+        // const from = { posiiton: JSON.parse(JSON.stringify(this.dummy.position)) }
+        // const tl = gsap.timeline();
+        // const tempDummy = new THREE.Object3D()
+        // tl.to(from.posiiton, {
+        //     duration: 5,
+        //     x: this.to.position.x,
+        //     onUpdate: () => {
+        //         console.log('position',from.posiiton.x)
+        //         for (var i = 0; i < this.count; i++) {
+        //             tempDummy.position.set(from.posiiton)
+        //             tempDummy.updateMatrix()
+        //             this.mesh.setMatrixAt(i, tempDummy.matrix)
+        //         }
+        //         // this.mesh.instanceMatrix.needsUpdate = true;
+        //     }
+        // }, 0)
         
     }
 

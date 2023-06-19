@@ -25,7 +25,7 @@ export default class ThreeClass {
             // { search: '01', quantity: 9, mesh : null},
             { 
                 search: '02',
-                quantity: 1,
+                quantity: 9,
                 mesh: null,
                 from: {
                     position: { 
