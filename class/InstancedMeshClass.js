@@ -60,20 +60,25 @@ export default class InstancedMeshClass {
     }
 
     gsapAnimations() {
-        const from = { distance: this.layer.distance, ry: 0, rx: 0, py: this.layer.y }
-        const to = { distance: this.layer.distance + 3, ry: 180, rx: this.layer.to.rotation.x, py: this.layer.to.position.y }
+        const from = { distance: this.layer.distance, rotation: { y: 0, x: 0 }, position: { y: this.layer.y } }
+        const to = { distance: this.layer.distance + 3, rotation: { x: this.layer.to.rotation.x, y: 180 }, position: { y: this.layer.to.position.y } }
+
         const tl = gsap.timeline({
-            defaults: { duration: 2, }, repeat: -1, delay: 2, onUpdate: () => {
+            defaults: { duration: 2, },
+            repeat: -1,
+            delay: 2,
+            onUpdate: () => {
                 const dummy = new THREE.Object3D();
                 for (var i = 0; i < this.layer.quantity; i++) {
-                    const deg = 360 / this.layer.quantity * i + this.layer.rotation_offset + from.ry;
+                    const deg = 360 / this.layer.quantity * i + this.layer.rotation_offset + from.rotation.y;
                     const radianY = THREE.MathUtils.degToRad(deg)
-                    const radianX = THREE.MathUtils.degToRad(from.rx)
+                    console.log('tesy', from.position.y, from.distance, from.rotation.x)
+                    const radianX = THREE.MathUtils.degToRad(from.rotation.x)
                     const rotationY = radianY;
                     const rotationX = radianX;
                     dummy.rotation.y = rotationY;
                     dummy.rotation.x = rotationX;
-                    dummy.position.y = from.py;
+                    dummy.position.y = from.position.y;
                     dummy.position.z = Math.cos(radianY) * (from.distance) * (-1) // + (deg >= 180 ? -.2 : .2)
                     dummy.position.x = Math.sin(radianY) * (from.distance) * (-1) // + (deg >= 180 ? -.2 : .2)
 
@@ -89,32 +94,16 @@ export default class InstancedMeshClass {
                 this.mesh.instanceMatrix.needsUpdate = true;
             },
         });
-        tl.to(from, {
-            ...to,
-
+        tl.to(from.position, {
+            ...to.position,
             ease: "back.in(4)"
-        },)
+        },
+            "=0"
+        )
+
+
     }
 
-
-    // randomizeMatrix(matrix) {
-    //     const position = new THREE.Vector3();
-    //     const rotation = new THREE.Euler();
-    //     const quaternion = new THREE.Quaternion();
-    //     const scale = new THREE.Vector3();
-
-    //     position.x = Math.random() * 40 - 20;
-    //     position.y = Math.random() * 40 - 20;
-    //     position.z = Math.random() * 40 - 20;
-
-    //     rotation.x = Math.random() * 2 * Math.PI;
-    //     rotation.y = Math.random() * 2 * Math.PI;
-    //     rotation.z = Math.random() * 2 * Math.PI;
-
-    //     quaternion.setFromEuler( rotation );
-    //     scale.x = scale.y = scale.z = Math.random() * 1;
-    //     matrix.compose( position, quaternion, scale );
-    // }
 
     animate() {
 
