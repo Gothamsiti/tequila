@@ -62,7 +62,7 @@ export default class InstancedMeshClass {
      gsapAnimations() {
          const from = { distance: this.layer.distance , ry: 0}
          const to = { distance: this.layer.distance+3 , ry: 180}
-         const tl = gsap.timeline({ defaults: {duration: 2,} });
+         const tl = gsap.timeline({ defaults: {duration: 2,}, repeat:-1, delay: 1 });
          tl.to(from, {
              ...to,
              onUpdate: () => {
