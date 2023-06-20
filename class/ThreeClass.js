@@ -22,28 +22,12 @@ export default class ThreeClass {
 
         this.modelGroup = new THREE.Group();
         this.layers = [
-            // { search: '01', quantity: 9, mesh : null},
-            { 
-                search: '02',
-                quantity: 9,
-                mesh: null,
-                from: {
-                    position: { 
-
-                    }
-                },
-                to: {
-                    position: { 
-                        x: 2, 
-                        y: 1,
-                        z: 1
-                    }, 
-                } 
-                },
-            // { search: '03', quantity: 9, mesh : null},
-            // { search: '04', quantity: 6, mesh : null},
-            // { search: '05', quantity: 6, mesh : null},
-            // { search: '06', quantity: 3, mesh : null},
+            { search: '01', quantity: 9, mesh : null, from: {}, to: { position: {x:1, y:-1, z: 1}, rotation: {x: -90, y: 0, z: 0}}},
+            { search: '02', quantity: 9, mesh : null, from: {}, to: { position: {x:1, y:-1, z: 1}, rotation: {x: -90, y: 0, z: 0}}},
+            { search: '03', quantity: 9, mesh : null, from: {}, to: { position: {x:2, y:-2, z: 2}, rotation: {x: -90, y: 0, z: 0}}},
+            { search: '04', quantity: 6, mesh : null, from: {}, to: { position: {x:3, y:-3, z: 3}, rotation: {x: -90, y: 0, z: 0}}},
+            { search: '05', quantity: 6, mesh : null, from: {}, to: { position: {x:4, y:-4, z: 4}, rotation: {x: -90, y: 0, z: 0}}},
+            { search: '06', quantity: 3, mesh : null, from: {}, to: { position: {x:5, y:-5, z: 5}, rotation: {x: -90, y: 0, z: 0}}},
         ]
         this.init(canvas);
     }
@@ -51,7 +35,10 @@ export default class ThreeClass {
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color(0xffffff);
         this.camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
-        this.camera.position.y = 7;
+        // this.camera.position.y = 7
+        this.camera.position.x = 4;
+        this.camera.position.y = 3;
+        this.camera.position.z = 4;
 
         this.initRenderer()
         this.clock = new THREE.Clock();
@@ -78,9 +65,10 @@ export default class ThreeClass {
         const agave_cuore = new THREE.Group();
         this.layers.map((layer) => {
             const piano = this.gltf.scene.getObjectByName(`foglia-agave-${layer.search}`);
-            layer.mesh = new InstancedMeshClass(this, piano.geometry, piano.material, layer.quantity, layer.from ,layer.to);
-            // const agave = this.gltf.scene.getObjectByName(`agave-${layer.search}001`); 
-            // agave_cuore.add(agave)
+            layer.mesh = new InstancedMeshClass(this, piano.geometry, piano.material, layer.quantity, layer.from, layer.to);
+
+            const agave = this.gltf.scene.getObjectByName(`agave-${layer.search}001`); 
+            agave_cuore.add(agave)
         })
 
         this.modelGroup.add(agave_cuore);
@@ -106,8 +94,8 @@ export default class ThreeClass {
         const light_1 = new THREE.PointLight(0xffffff, 1, 100);
         light_1.position.set(0, 10, 0);
         if (this.debug) {
-            const axesHelper = new THREE.AxesHelper(5);
-            light_1.add(axesHelper);
+            // const axesHelper = new THREE.AxesHelper(5);
+            // light_1.add(axesHelper);
         }
 
         this.modelGroup.add(light_1);
@@ -142,7 +130,7 @@ export default class ThreeClass {
         if (this.stats) this.stats.begin();
         this.renderer.render(this.scene, this.camera);
 
-        // this.mixer.update(this.clock.getDelta());
+        // this.mixer.update(this.clock  .getDelta());
 
         if (this.debug) {
             this.controls.update();
