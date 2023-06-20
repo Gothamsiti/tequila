@@ -11,7 +11,7 @@ export default class InstancedMeshClass {
         // this.positions = positions;
         // this.rotations = rotations;
         this.dummy = new THREE.Object3D();
-
+        this.offsets = []
         this.mesh = null;
 
         this.init();
@@ -37,7 +37,8 @@ export default class InstancedMeshClass {
 
         for (var i = 0; i < this.layer.quantity; i++) {
             const deg = 360 / this.layer.quantity * i + this.layer.rotation_offset;
-            const radian = THREE.MathUtils.degToRad(deg)
+            this.offsets.push(deg)
+            const radian = THREE.MathUtils.degToRad(this.offsets[i])
             const rotationY = radian;
             console.log(deg)
             this.dummy.rotation.y = rotationY;
@@ -60,29 +61,29 @@ export default class InstancedMeshClass {
     }
 
     gsapAnimations() {
-        const from = { distance: this.layer.distance, rotation: { y: 0, x: 0 }, position: { y: this.layer.y } }
-        const to = { distance: this.layer.distance + 3, rotation: { x: this.layer.to.rotation.x, y: 180 }, position: { y: this.layer.to.position.y } }
+        const from = {rotation: { y: 0, x: 0 }, position: { y: this.layer.y, x: this.layer.distance } }
+        const to = {  rotation: { x: this.layer.to.rotation.x, y: 180 }, position: { y: this.layer.to.position.y, x: this.layer.to.position.x } }
 
         const tl = gsap.timeline({
-            defaults: { duration: 2, },
+            defaults: { duration: 5, },
             repeat: -1,
             delay: 2,
             onUpdate: () => {
                 const dummy = new THREE.Object3D();
                 for (var i = 0; i < this.layer.quantity; i++) {
-                    const deg = 360 / this.layer.quantity * i + this.layer.rotation_offset + from.rotation.y;
-                    const radianY = THREE.MathUtils.degToRad(deg)
-                    console.log('tesy', from.position.y, from.distance, from.rotation.x)
+                    
+                    const radianY = THREE.MathUtils.degToRad(this.offsets[i] )
+                    
                     const radianX = THREE.MathUtils.degToRad(from.rotation.x)
-                    const rotationY = radianY;
-                    const rotationX = radianX;
-                    dummy.rotation.y = rotationY;
-                    dummy.rotation.x = rotationX;
+                    console.log(radianX)
+                    
+                    dummy.rotation.y = radianY;
+
+                    
+                    
                     dummy.position.y = from.position.y;
-                    dummy.position.z = Math.cos(radianY) * (from.distance) * (-1) // + (deg >= 180 ? -.2 : .2)
-                    dummy.position.x = Math.sin(radianY) * (from.distance) * (-1) // + (deg >= 180 ? -.2 : .2)
-
-
+                    dummy.position.z = Math.cos(radianY) * (from.position.x) * (-1) // + (deg >= 180 ? -.2 : .2)
+                    dummy.position.x = Math.sin(radianY) * (from.position.x) * (-1) // + (deg >= 180 ? -.2 : .2)
                     // this.dummy.position.z =   Math.cos(radian) * distnce * (-1)  //+ (deg >= 180 ? -.2: .2)
                     // this.dummy.position.x =   Math.sin(radian) * distnce * (-1)  //+ (deg >= 180 ? -.2 : .2)
                     // this.dummy.position.z =   Math.cos(radian) * distnce * (-1)  + (deg >= 180 ? -.4 : .4)
@@ -98,9 +99,15 @@ export default class InstancedMeshClass {
             ...to.position,
             ease: "back.in(4)"
         },
-            "=0"
         )
-
+        tl.to(from.rotation, {
+            ...to.rotation,
+            
+            duration: 5,
+        },
+        "-=5"
+        )
+       
 
     }
 
