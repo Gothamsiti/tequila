@@ -24,12 +24,12 @@ export default class ThreeClass {
 
         this.modelGroup = new THREE.Group();
         this.layers = [
-            { search: '01',rotation_offset:  0,y:0 ,distance: .47, quantity: 9, mesh: null },
-            { search: '02', rotation_offset: 22.1,  y:.21 ,quantity: 9, distance: .74, mesh: null },
-            { search: '03',rotation_offset: 0,  y:.44 ,distance: .6, quantity: 9, mesh: null },
-            { search: '04',rotation_offset: 19.8, y:.528 ,distance: .414, quantity: 6, mesh: null },
-            { search: '05',rotation_offset: -13.8, y:.707 ,distance: .378, quantity: 6, mesh: null },
-            { search: '06',rotation_offset: 31, y:.89,distance: .12, quantity: 3, mesh: null },
+            // { search: '01',rotation_offset:  0,y:0 ,distance: .47, quantity: 9, mesh: null, to: { rotation: {x: 90}, position: {}} },
+            // { search: '02', rotation_offset: 22.1,  y:.21 ,quantity: 9, distance: .74, mesh: null, to: { rotation: {x: 90}, position: {}} },
+            { search: '03',rotation_offset: 0,  y:.44 ,distance: .6, quantity: 9, mesh: null, to: { rotation: {x: 110}, position: {y: -2}} },
+            //{ search: '04',rotation_offset: 19.8, y:.528 ,distance: .414, quantity: 6, mesh: null, to: { rotation: {x: 90}, position: {}} },
+            // { search: '05',rotation_offset: -13.8, y:.707 ,distance: .378, quantity: 6, mesh: null, to: { rotation: {x: 90}, position: {}} },
+            // { search: '06',rotation_offset: 31, y:.89,distance: .12, quantity: 3, mesh: null },
         ]
         this.init(canvas);
     }
@@ -37,7 +37,7 @@ export default class ThreeClass {
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color(0xffffff);
         this.camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
-        this.camera.position.z = 2;
+//        this.camera.position.z = 2;
         this.camera.position.y = 4;
 
 
@@ -83,8 +83,8 @@ export default class ThreeClass {
 
         this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas });
         this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
-        this.renderer.clippingPlanes = [topPlane, bottomPlane];
-        this.renderer.localClippingEnabled = true;
+        // this.renderer.clippingPlanes = [topPlane, bottomPlane];
+        // this.renderer.localClippingEnabled = true;
 
     }
 
