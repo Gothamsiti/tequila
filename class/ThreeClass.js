@@ -10,7 +10,7 @@ Array.prototype.avarage = function() {
 }
 
 export default class ThreeClass {
-    constructor(isAr = false, canvas = null) {
+    constructor(isAr = false, canvas) {
         this.isAr = isAr;
 
         this.canvas = canvas;
@@ -110,7 +110,9 @@ export default class ThreeClass {
     }
 
     initAr(XR8scene, XR8camera, XR8renderer){
-        this.renderer = XR8renderer;
+        //this.initRenderer() // o questo renderer
+        this.renderer = XR8renderer; // oppure questo
+
         this.scene = XR8scene;
         this.camera = XR8camera;
         this.renderer.autoClear = false;
@@ -176,8 +178,6 @@ export default class ThreeClass {
         if(this.avarageScale.length >=  20) this.avarageScale.shift();
     }
 
-    
-
     initRenderer() {
         const topPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), 4.3)
         const bottomPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), 0)
@@ -228,37 +228,27 @@ export default class ThreeClass {
         if (this.stats) this.stats.begin();
 
         if(this.mainGroup){
-            console.log(this.avaragePX.avarage(), this.avaragePY.avarage(), this.avaragePZ.avarage())
             this.mainGroup.position.set(this.avaragePX.avarage(), this.avaragePY.avarage(), this.avaragePZ.avarage());
             this.mainGroup.quaternion.set(this.avarageRX.avarage(), this.avarageRY.avarage(), this.avarageRZ.avarage(), this.avarageRW.avarage());
             this.mainGroup.scale.set(this.avarageScale.avarage() / 2, this.avarageScale.avarage() / 2, this.avarageScale.avarage() / 2);
-
-            // if (this.light) {
-            //     this.light.position.set(this.mainGroup.position.x + 30, this.mainGroup.position.y + 100, this.mainGroup.position.z + 200);
-            // }
         }
-        // if(this.group){
-        //     this.agaveGroup.rotation.y = THREE.MathUtils.degToRad(this.rotationOffset);
-        // }
 
+        this.renderer.render(this.scene, this.camera);
         if (this.stats) this.stats.end();
-
         requestAnimationFrame(() => { this.ARanimate() });
     }
 
     animate() {
         if (this.stats) this.stats.begin();
         
-        this.agaveGroup.rotateY(0.01);
-        this.agaveGroup.children.map((child)=> child.rotateY(-0.04) )
-        this.renderer.render(this.scene, this.camera);
+        //this.agaveGroup.rotateY(0.01);
+        //this.agaveGroup.children.map((child)=> child.rotateY(-0.04) )
         if (this.debug) {
             if(this.controls) this.controls.update();
 
         }
-
+        this.renderer.render(this.scene, this.camera);
         if (this.stats) this.stats.end();
-
         requestAnimationFrame(() => this.animate());
 
     }

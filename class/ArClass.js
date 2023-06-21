@@ -34,7 +34,7 @@ export default class ArClass{
     }
     initScenePipelineModuleONStart({canvas}){
         const {scene, camera, renderer} = XR8.Threejs.xrScene();
-        this.threeClass = new ThreeClass(true);
+        this.threeClass = new ThreeClass(true, canvas);
         this.threeClass.initAr(scene, camera, renderer)
 
         canvas.addEventListener('touchmove', (event) => {
