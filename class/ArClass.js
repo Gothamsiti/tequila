@@ -1,7 +1,8 @@
 import FullWindowCanvas from '~/class/XRExtras/fullWindowCanvas';
+import ThreeClass from './ThreeClass'
 export default class ArClass{
     constructor(){
-
+        this.threeClass = null;
     }
     init(){
         const fullWindowCanvas = new FullWindowCanvas();
@@ -33,9 +34,8 @@ export default class ArClass{
     }
     initScenePipelineModuleONStart({canvas}){
         const {scene, camera, renderer} = XR8.Threejs.xrScene();
-        
-        console.log('QUI INIZIALIZZO LA SCENA')
-        // this.initGame(scene, camera, renderer);
+        this.threeClass = new ThreeClass(true);
+        this.threeClass.initAr(scene, camera, renderer)
 
         canvas.addEventListener('touchmove', (event) => {
             event.preventDefault()
@@ -45,12 +45,12 @@ export default class ArClass{
         )
     }
     handleTargetFound(e){
-        console.log('handleTargetFound')
+        this.threeClass.handleTargetFound(e.detail)
     }
     handleTargetUpdate(e){
-        console.log('handleTargetUpdate')
+        this.threeClass.handleTargetUpdate(e.detail)
     }
     handleTargetLost(e){
-        console.log('handleTargetLost')
+        this.threeClass.handleTargetLost(e.detail)
     }
 }

@@ -7,7 +7,7 @@ main#main
 import ThreeClass from '../class/ThreeClass';
 const mainThree = ref();
 onMounted(() => {
-    const threeClass = new ThreeClass(mainThree.value);
+    const threeClass = new ThreeClass(false, mainThree.value);
 
 })
 </script>

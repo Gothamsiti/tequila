@@ -1,6 +1,7 @@
 <template lang="pug">
 main#ar
     canvas#camerafeed
+    #stats
 </template>
 <script setup>
 import ArClass from '~/class/ArClass';
@@ -66,6 +67,12 @@ body {
             overflow: hidden;
             position: relative;
             background: rgb(26, 26, 26);
+            > #stats{
+                position: absolute;
+                left: 0;
+                top: 0;
+                z-index: 2;
+            }
 
             canvas#camerafeed,
             >video {
