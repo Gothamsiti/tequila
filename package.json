@@ -6,7 +6,8 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "devssl": "nuxt dev --https --ssl-cert 192.168.3.125.pem --ssl-key 192.168.3.125-key.pem"
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
