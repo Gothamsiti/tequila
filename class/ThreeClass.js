@@ -18,7 +18,7 @@ export default class ThreeClass {
         this.agaveModels = []
         this.distanceFromBottle = 3;
 
-        this.agaveQuantity = 8;
+        this.agaveQuantity = 5;
         this.gltf = null;
 
         this.mixer = null;
