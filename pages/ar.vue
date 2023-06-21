@@ -2,6 +2,7 @@
 main#ar
     canvas#camerafeed
     #stats
+    
 </template>
 <script setup>
 import ArClass from '~/class/ArClass';
