@@ -16,14 +16,15 @@ export default class ThreeClass {
         this.stats = null;
         this.agavePositionsDeg = []
         this.agaveModels = []
-        this.distanceFromBottle = 2;
-        this.agaveQuantity = 5;
+        this.distanceFromBottle = 3;
+
+        this.agaveQuantity = 8;
         this.gltf = null;
 
         this.mixer = null;
         this.clock = null;
 
-        this.modelGroup = new THREE.Group();
+        this.agaveGroup = new THREE.Group();
        
         this.init(canvas);
     }
@@ -62,16 +63,16 @@ export default class ThreeClass {
             
             const agave = new Agave(
                 {
-                    radian : THREE.MathUtils.degToRad(deg ),
+                    radian : -.06,
                     x: px,
                     z: pz
                 },
                 this.agaveModels[i], 
                 this.debug
             );
-            this.scene.add(agave.modelGroup)
+            this.agaveGroup.add(agave.modelGroup)
         }
-
+        this.scene.add(this.agaveGroup)
         
         this.animate();
     }
@@ -86,8 +87,8 @@ export default class ThreeClass {
 
         this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas });
         this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
-        // this.renderer.clippingPlanes = [topPlane, bottomPlane];
-        // this.renderer.localClippingEnabled = true;
+        this.renderer.clippingPlanes = [topPlane, bottomPlane];
+        this.renderer.localClippingEnabled = true;
 
     }
 
@@ -134,10 +135,11 @@ export default class ThreeClass {
 
     animate() {
         if (this.stats) this.stats.begin();
-        this.renderer.render(this.scene, this.camera);
-
+        
         // this.mixer.update(this.clock  .getDelta());
-
+        this.agaveGroup.rotateY(0.01);
+        this.agaveGroup.children.map((child)=> child.rotateY(-0.04) )
+        this.renderer.render(this.scene, this.camera);
         if (this.debug) {
             this.controls.update();
 
