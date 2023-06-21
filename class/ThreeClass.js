@@ -3,6 +3,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import Stats from 'stats-js'
 import InstancedMeshClass from './InstancedMeshClass.js';
+import gsap from 'gsap';
 
 export default class ThreeClass {
     constructor(canvas) {
@@ -22,23 +23,24 @@ export default class ThreeClass {
 
         this.modelGroup = new THREE.Group();
         this.layers = [
-            { search: '01', quantity: 9, mesh : null, from: {}, to: { position: {x:1, y:-1, z: 1}, rotation: {x: -90, y: 0, z: 0}}},
-            { search: '02', quantity: 9, mesh : null, from: {}, to: { position: {x:1, y:-1, z: 1}, rotation: {x: -90, y: 0, z: 0}}},
-            { search: '03', quantity: 9, mesh : null, from: {}, to: { position: {x:2, y:-2, z: 2}, rotation: {x: -90, y: 0, z: 0}}},
-            { search: '04', quantity: 6, mesh : null, from: {}, to: { position: {x:3, y:-3, z: 3}, rotation: {x: -90, y: 0, z: 0}}},
-            { search: '05', quantity: 6, mesh : null, from: {}, to: { position: {x:4, y:-4, z: 4}, rotation: {x: -90, y: 0, z: 0}}},
-            { search: '06', quantity: 3, mesh : null, from: {}, to: { position: {x:5, y:-5, z: 5}, rotation: {x: -90, y: 0, z: 0}}},
+            { search: '01', quantity: 9, mesh : null, from: {}, to: { position: {x:.2, y:-1.5, z: .3}, rotation: {x: -10, y: 0, z: 0}}},
+            { search: '02', quantity: 9, mesh : null, from: {}, to: { position: {x:.2, y:-1.5, z: .3}, rotation: {x: -10, y: 0, z: 0}}},
+            // { search: '03', quantity: 9, mesh : null, from: {}, to: { position: {x:.2, y:-1.5, z: .3}, rotation: {x: -10, y: 0, z: 0}}},
+            // { search: '04', quantity: 6, mesh : null, from: {}, to: { position: {x:.2, y:-1.5, z: .3}, rotation: {x: -10, y: 0, z: 0}}},
+            // { search: '05', quantity: 6, mesh : null, from: {}, to: { position: {x:.2, y:-1.5, z: .3}, rotation: {x: -10, y: 0, z: 0}}},
+            // { search: '06', quantity: 3, mesh : null, from: {}, to: { position: {x:.2, y:-1.5, z: .3}, rotation: {x: -10, y: 0, z: 0}}},
         ]
+        this.leafDummies = [];
         this.init(canvas);
     }
     async init(canvas) {
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color(0xffffff);
         this.camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
-        // this.camera.position.y = 7
-        this.camera.position.x = 4;
-        this.camera.position.y = 3;
-        this.camera.position.z = 4;
+        this.camera.position.y = 3
+        // this.camera.position.x = 4;
+        // this.camera.position.y = 3;
+        // this.camera.position.z = 4;
 
         this.initRenderer()
         this.clock = new THREE.Clock();
@@ -72,6 +74,32 @@ export default class ThreeClass {
         })
 
         this.modelGroup.add(agave_cuore);
+
+        const leafDummiesPositions = this.leafDummies.map(d => d.position);
+        const leafDummiesRotations = this.leafDummies.map(d => d.rotation);
+
+        // gsap.to(
+        //     leafDummiesPositions,
+        //     { 
+        //         x : i => {  
+        //             const deg = this.leafDummies[i].offsetDegrees - i * this.leafDummies[i].deltaDegrees;
+        //             return -1 * Math.cos(THREE.MathUtils.degToRad(deg))
+        //         },
+        //         z : i => {  
+        //             const deg = this.leafDummies[i].offsetDegrees - i * this.leafDummies[i].deltaDegrees;
+        //             return -1 * Math.sin(THREE.MathUtils.degToRad(deg))
+        //         },
+        //         duration : 5,
+        //         onUpdate : () => {
+        //             for(const dummy of this.leafDummies){
+        //                 console.log("onUpdate",dummy.position.x);
+        //                 dummy.updateMatrix();
+        //                 dummy.parentMesh.setMatrixAt(dummy.dummyIndex, dummy.matrix);
+        //                 dummy.parentMesh.instanceMatrix.needsUpdate = true;
+        //             }
+        //         }
+        //     }
+        // )
     }
 
     initRenderer() {
@@ -82,7 +110,7 @@ export default class ThreeClass {
 
         this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas });
         this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
-        // this.renderer.clippingPlanes = [topPlane, bottomPlane];
+        this.renderer.clippingPlanes = [topPlane, bottomPlane];
         this.renderer.localClippingEnabled = true;
 
     }
