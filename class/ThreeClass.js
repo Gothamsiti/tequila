@@ -77,15 +77,12 @@ export default class ThreeClass {
     }
     async initScene(){
         this.initLights();
-        for(let i = 0; i<this.agaveQuantity ;i++){
-            
-            this.agaveModels.push(await this.loadModel()); // da capire perchè perde il modello del ciore
-        }
+        this.gltf = await this.loadModel();
+        
         for(let i = 0; i<this.agaveQuantity ;i++){
             const deg = 360 / this.agaveQuantity * i
             const px = this.distanceFromBottle * Math.cos(THREE.MathUtils.degToRad(deg))
             const pz = this.distanceFromBottle *  Math.sin(THREE.MathUtils.degToRad(deg));
-            
             
             const agave = new Agave(
                 {
@@ -93,7 +90,10 @@ export default class ThreeClass {
                     x: px,
                     z: pz
                 },
-                this.agaveModels[i], 
+                {
+                    ...this.gltf,
+                    scene: this.gltf.scene.clone()
+                },
                 this.debug
             );
             this.agaveGroup.add(agave.modelGroup)
