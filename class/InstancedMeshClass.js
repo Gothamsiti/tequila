@@ -2,19 +2,20 @@
 import * as THREE from 'three';
 import gsap from 'gsap'
 export default class InstancedMeshClass {
-    constructor(parent, geometry, material, count, from, to) {
+    constructor(parent, geometry, material, layer, i) {
+        this.layer = layer;
         this.parent = parent;
         this.geometry = geometry;
         this.material = material;
-        this.count = count;
+        this.count = layer.quantity;
         // this.positions = positions;
         // this.rotations = rotations;
 
         this.matrixes = [];
-        this.from = from;
-        this.to = to;
+        this.from = layer.from;
+        this.to = layer.to;
         this.mesh = null;
-
+        this.index = i;
         this.initialRoatationsY = [];
 
         this.init();
@@ -37,7 +38,7 @@ export default class InstancedMeshClass {
         const distnce = 3;
 
         const deltaDegrees = 360/this.count;
-        const offsetDegrees = 110 + 360 - deltaDegrees/2;
+        const offsetDegrees = this.layer.rotationOffset + 360 - deltaDegrees/2;
         for (var i = 0; i < this.count; i++) {
             const dummy = new THREE.Object3D();
             const deg = 360 / this.count * i
@@ -50,6 +51,8 @@ export default class InstancedMeshClass {
             dummy.dummyIndex = i;
             dummy.deltaDegrees = deltaDegrees;
             dummy.offsetDegrees = offsetDegrees;
+            dummy.layerIndex = this.index
+            dummy.layer = this.layer
             this.parent.leafDummies.push(dummy);
             this.mesh.setMatrixAt(i, dummy.matrix);
             this.matrixes.push(dummy);
