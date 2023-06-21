@@ -9,7 +9,6 @@ export default class InstancedMeshClass {
         this.count = count;
         // this.positions = positions;
         // this.rotations = rotations;
-
         this.matrixes = [];
         this.from = from;
         this.to = to;
@@ -28,7 +27,7 @@ export default class InstancedMeshClass {
         }
         this.parent.modelGroup.add(this.mesh);
 
-        this.gsapAnimations()
+        // this.gsapAnimations()
         this.animate();
     }
     setInstancedMeshPositions() {
@@ -42,11 +41,6 @@ export default class InstancedMeshClass {
             dummy.updateMatrix();
             this.mesh.setMatrixAt(i, dummy.matrix);
             this.matrixes.push(dummy);
-
-            // this.dummy.translateX(Math.cos(radian) * distnce);
-            
-            // this.dummy.position.z = deg>= 10 ?  Math.cos(radian) * distnce :
-            // this.dummy.position.z = Math.sin(radian) * distnce
         }
 
         this.mesh.instanceMatrix.needsUpdate = true;
@@ -56,7 +50,7 @@ export default class InstancedMeshClass {
     gsapAnimations() {
         const deltaDegrees = 360/this.count;
         const offsetDegrees = 110 + 360 - deltaDegrees/2; //aggiungo 110° per compensare il fatto che il primo indice non parte da 0°
-
+        const duration = 2;
         var position = {};
         if(this.from && this.from.position){
             position = JSON.parse(JSON.stringify(this.from.position))
@@ -73,7 +67,6 @@ export default class InstancedMeshClass {
 
         const prevRotation = JSON.parse(JSON.stringify(rotation));
         var deltaRotation = {x: 0, y: 0, z: 0}
-        const trashold = .5;
 
         var sumX = 0;
 
@@ -126,17 +119,17 @@ export default class InstancedMeshClass {
             {
                 x: this.to.position.x,
                 z: this.to.position.z,
-                duration : 5
+                duration 
             }
         )
         tl.to(
             position,
             {
                 y: this.to.position.y,
-                duration : 5,
+                duration ,
                 ease: 'back.in(4)'
             },
-            '-=5'
+            `-=${duration}`
         )
         tl.to(
             rotation,
@@ -144,11 +137,12 @@ export default class InstancedMeshClass {
                 x:this.to.rotation.x,
                 y:this.to.rotation.y,
                 z:this.to.rotation.z,
-                duration: 5,
+                duration,
                 ease: 'power4.in'
             },
-            '-=5'
-        )        
+            `-=${duration}`
+        )
+                
     }
     
 

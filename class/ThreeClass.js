@@ -2,33 +2,29 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import Stats from 'stats-js'
-import InstancedMeshClass from './InstancedMeshClass.js';
+
+import Agave from './Agave.js';
 
 export default class ThreeClass {
     constructor(canvas) {
         this.canvas = canvas;
         this.debug = true;
-
         this.scene = null;
         this.camera = null;
         this.renderer = null;
         this.controls = null;
         this.stats = null;
-
+        this.agavePositionsDeg = []
+        this.agaveModels = []
+        this.distanceFromBottle = 2;
+        this.agaveQuantity = 5;
         this.gltf = null;
 
         this.mixer = null;
         this.clock = null;
 
         this.modelGroup = new THREE.Group();
-        this.layers = [
-            { search: '01', quantity: 9, mesh : null, from: {}, to: { position: {x:1, y:-1, z: 1}, rotation: {x: -90, y: 0, z: 0}}},
-            { search: '02', quantity: 9, mesh : null, from: {}, to: { position: {x:1, y:-1, z: 1}, rotation: {x: -90, y: 0, z: 0}}},
-            { search: '03', quantity: 9, mesh : null, from: {}, to: { position: {x:2, y:-2, z: 2}, rotation: {x: -90, y: 0, z: 0}}},
-            { search: '04', quantity: 6, mesh : null, from: {}, to: { position: {x:3, y:-3, z: 3}, rotation: {x: -90, y: 0, z: 0}}},
-            { search: '05', quantity: 6, mesh : null, from: {}, to: { position: {x:4, y:-4, z: 4}, rotation: {x: -90, y: 0, z: 0}}},
-            { search: '06', quantity: 3, mesh : null, from: {}, to: { position: {x:5, y:-5, z: 5}, rotation: {x: -90, y: 0, z: 0}}},
-        ]
+       
         this.init(canvas);
     }
     async init(canvas) {
@@ -51,28 +47,36 @@ export default class ThreeClass {
         }
 
         this.initLights();
+        for(let i = 0; i<this.agaveQuantity ;i++){
+            
+            this.agaveModels.push(await this.loadModel()); // da capire perchè perde il modello del ciore
+        }
+        for(let i = 0; i<this.agaveQuantity ;i++){
+            const deg = 360 / this.agaveQuantity * i
+            console.log(Math.cos(THREE.MathUtils.degToRad(180)))
+            console.log('deg =', deg, 'sin =', Math.sin(THREE.MathUtils.degToRad(deg)), 'cos = ',(Math.cos(THREE.MathUtils.degToRad(deg))))
+            const px = this.distanceFromBottle * Math.cos(THREE.MathUtils.degToRad(deg))
+            const pz = this.distanceFromBottle *  Math.sin(THREE.MathUtils.degToRad(deg));
+            // const pz = -this.distanceFromBottle * Math.sin(deg);
+            
+            
+            const agave = new Agave(
+                {
+                    radian : THREE.MathUtils.degToRad(deg ),
+                    x: px,
+                    z: pz
+                },
+                this.agaveModels[i], 
+                this.debug
+            );
+            this.scene.add(agave.modelGroup)
+        }
 
-        this.gltf = await this.loadModel();
-
-
-        this.agave();
-
-        this.scene.add(this.modelGroup)
+        
         this.animate();
     }
 
-    agave() {
-        const agave_cuore = new THREE.Group();
-        this.layers.map((layer) => {
-            const piano = this.gltf.scene.getObjectByName(`foglia-agave-${layer.search}`);
-            layer.mesh = new InstancedMeshClass(this, piano.geometry, piano.material, layer.quantity, layer.from, layer.to);
-
-            const agave = this.gltf.scene.getObjectByName(`agave-${layer.search}001`); 
-            agave_cuore.add(agave)
-        })
-
-        this.modelGroup.add(agave_cuore);
-    }
+    
 
     initRenderer() {
         const topPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), 4.3)
@@ -83,13 +87,15 @@ export default class ThreeClass {
         this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas });
         this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
         // this.renderer.clippingPlanes = [topPlane, bottomPlane];
-        this.renderer.localClippingEnabled = true;
+        // this.renderer.localClippingEnabled = true;
 
     }
 
     initLights() {
         const ambientLight = new THREE.AmbientLight(0x404040); // soft white light
         this.scene.add(ambientLight);
+        const axesHelper = new THREE.AxesHelper(5);
+        this.scene.add(axesHelper)
 
         const light_1 = new THREE.PointLight(0xffffff, 1, 100);
         light_1.position.set(0, 10, 0);
@@ -98,7 +104,7 @@ export default class ThreeClass {
             // light_1.add(axesHelper);
         }
 
-        this.modelGroup.add(light_1);
+        this.scene.add(light_1);
     }
 
     async loadModel() {
