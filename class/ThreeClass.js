@@ -48,6 +48,8 @@ export default class ThreeClass {
         this.avarageRW = [];
 
         this.avarageScale = [];
+
+        this.clippingPlanes = {};
        
         if(!this.isAr) {
             this.init(canvas)
@@ -63,7 +65,6 @@ export default class ThreeClass {
         this.camera.position.x = 4;
         this.camera.position.y = 3;
         this.camera.position.z = 4;
-        const bottle = new Bottle(this.mainGroup, {position: { y : 1.1 }})
         this.initRenderer()
         this.clock = new THREE.Clock();
 
@@ -80,6 +81,7 @@ export default class ThreeClass {
     }
     async initScene(){
         this.initLights();
+        new Bottle(this.mainGroup, {position: { y : 1.1 }})
         this.gltf = await this.loadModel();
         
         for(let i = 0; i<this.agaveQuantity ;i++){
@@ -88,6 +90,7 @@ export default class ThreeClass {
             const pz = this.distanceFromBottle *  Math.sin(THREE.MathUtils.degToRad(deg));
             
             const agave = new Agave(
+                this,
                 {
                     radian : -.06,
                     x: px,
@@ -96,8 +99,7 @@ export default class ThreeClass {
                 {
                     ...this.gltf,
                     scene: this.gltf.scene.clone()
-                },
-                this.debug
+                }
             );
             this.agaveGroup.add(agave.modelGroup)
         }
@@ -114,14 +116,14 @@ export default class ThreeClass {
     }
 
     async initAr(XR8scene, XR8camera, XR8renderer){
-        //this.initRenderer() // o questo renderer
-        this.renderer = XR8renderer; // oppure questo
-
         this.scene = XR8scene;
+
+        this.initRenderer() // o questo renderer
+        // this.renderer = XR8renderer; // oppure questo
+
         this.camera = XR8camera;
         this.renderer.autoClear = false;
         this.group.visible = false;
-        const bottle = new Bottle(this.mainGroup, {position: { y : 1.1 }})
         if (this.debug) {
             this.stats = new Stats();
             const statsContainer = document.getElementById('stats');
@@ -183,14 +185,20 @@ export default class ThreeClass {
     }
 
     initRenderer() {
-        const topPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), 4.3)
-        const bottomPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), 0)
-        bottomPlane.negate();
+        this.clippingPlanes.top = new THREE.Plane(new THREE.Vector3(0, -1, 0), 4.3)
+        this.clippingPlanes.bottom = new THREE.Plane(new THREE.Vector3(0, -1, 0), 0)
+        this.clippingPlanes.bottom.negate();
+
+        if(this.debug){
+            const planeHelpers = new THREE.Group();
+            planeHelpers.add(new THREE.PlaneHelper( this.clippingPlanes.top, 20, 0xff0000 ))
+            planeHelpers.add(new THREE.PlaneHelper( this.clippingPlanes.bottom, 20, 0xff0000 ))
+            this.scene.add( planeHelpers );
+        }
 
         this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas });
         this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
-        console.log(this.renderer)
-        this.renderer.clippingPlanes = [topPlane, bottomPlane];
+        this.renderer.clippingPlanes = [this.clippingPlanes.bottom];
         this.renderer.localClippingEnabled = true;
 
     }
@@ -235,7 +243,9 @@ export default class ThreeClass {
             this.mainGroup.position.set(this.avaragePX.avarage(), this.avaragePY.avarage(), this.avaragePZ.avarage());
             this.mainGroup.quaternion.set(this.avarageRX.avarage(), this.avarageRY.avarage(), this.avarageRZ.avarage(), this.avarageRW.avarage());
             this.mainGroup.scale.set(this.avarageScale.avarage() / 2, this.avarageScale.avarage() / 2, this.avarageScale.avarage() / 2);
+
         }
+
 
         this.renderer.render(this.scene, this.camera);
         if (this.stats) this.stats.end();

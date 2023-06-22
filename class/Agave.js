@@ -3,10 +3,10 @@ import InstancedMeshClass from './InstancedMeshClass.js';
 import gsap from 'gsap' 
 
 export default class Agave {
-    constructor(origin, gltf ){
+    constructor(parent, origin, gltf){
         this.origin = origin;
         this.gltf = gltf;
-        this.debug = false;
+        this.parent = parent;
         this.modelGroup = new THREE.Group();
         this.layers = [
             { search: '01', rotationOffset: 110, angle : 0 , quantity: 9, mesh : null, from: {}, to: { position: {x:.2, y:0, z: .2}, rotation: {x: -10, y: 0, z: 0}}},
