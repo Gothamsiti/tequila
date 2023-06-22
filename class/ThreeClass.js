@@ -4,6 +4,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import Stats from 'stats-js'
 
 import Agave from './Agave.js';
+import Bottle from './Bottle.js';
 
 Array.prototype.avarage = function() {
     return this.length ?  this.reduce((a, b) => a + b, 0) / this.length : 0 ;
@@ -48,7 +49,9 @@ export default class ThreeClass {
 
         this.avarageScale = [];
        
-        if(!this.isAr) this.init(canvas);
+        if(!this.isAr) {
+            this.init(canvas)
+        };
     }
     async init(canvas) {
         this.group.visible = true;
@@ -60,7 +63,7 @@ export default class ThreeClass {
         this.camera.position.x = 4;
         this.camera.position.y = 3;
         this.camera.position.z = 4;
-
+        const bottle = new Bottle(this.mainGroup, {position: { y : 1.1 }})
         this.initRenderer()
         this.clock = new THREE.Clock();
 
@@ -71,7 +74,7 @@ export default class ThreeClass {
             if (statsContainer) statsContainer.appendChild(this.stats.dom)
         }
 
-        this.initScene();
+        await this.initScene();
         
         this.animate();
     }
@@ -107,9 +110,10 @@ export default class ThreeClass {
 
         this.group.add(this.mainGroup)
         this.scene.add(this.group)
+        
     }
 
-    initAr(XR8scene, XR8camera, XR8renderer){
+    async initAr(XR8scene, XR8camera, XR8renderer){
         //this.initRenderer() // o questo renderer
         this.renderer = XR8renderer; // oppure questo
 
@@ -117,14 +121,14 @@ export default class ThreeClass {
         this.camera = XR8camera;
         this.renderer.autoClear = false;
         this.group.visible = false;
-
+        const bottle = new Bottle(this.mainGroup, {position: { y : 1.1 }})
         if (this.debug) {
             this.stats = new Stats();
             const statsContainer = document.getElementById('stats');
             if (statsContainer) statsContainer.appendChild(this.stats.dom)
         }
 
-        this.initScene();
+        await this.initScene();
         this.ARanimate();
     }
 
@@ -183,9 +187,9 @@ export default class ThreeClass {
         const bottomPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), 0)
         bottomPlane.negate();
 
-
         this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas });
         this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
+        console.log(this.renderer)
         this.renderer.clippingPlanes = [topPlane, bottomPlane];
         this.renderer.localClippingEnabled = true;
 
@@ -252,4 +256,5 @@ export default class ThreeClass {
         requestAnimationFrame(() => this.animate());
 
     }
+
 }
