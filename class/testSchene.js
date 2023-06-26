@@ -17,8 +17,8 @@ export default class CubeScene {
         this.camera = new THREE.PerspectiveCamera(75, this.canvas.clientWidth / this.canvas.clientHeight, 0.1, 1000);
         // this.camera.position.y = 7
         this.camera.position.x = 4;
-        this.camera.position.y = 3;
-        this.camera.position.z = 4;
+        this.camera.position.y = 7;
+        // this.camera.position.z = 4;
         
         this.initRenderer()
         if (this.debug) {

@@ -17,6 +17,7 @@ export default class Tower {
         const material = new THREE.MeshBasicMaterial( {
             color: 0xffff00, 
             side: THREE.DoubleSide,
+            transparent : true,
             clippingPlanes : this.parent.clipPlanes,
             clipIntersection : true,
         }); 
@@ -28,7 +29,11 @@ export default class Tower {
     }
 
     animate(){
-        if(this.tower.position.y < 4 + this.towerHeight / 2 ) this.tower.position.y += 0.1;
+        if(this.tower.position.y < 4 + this.towerHeight / 3 ) {
+            this.tower.position.y += 0.1;
+            this.tower.material.opacity -= .002
+            console.log(this.tower.material)
+        }
 
         requestAnimationFrame(()=> this.animate())
     }

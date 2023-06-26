@@ -63,9 +63,9 @@ export default class ThreeClass {
         this.scene.background = new THREE.Color(0xffffff);
 
         this.camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
-        // this.camera.position.y = 7
         this.camera.position.x = 4;
-        this.camera.position.y = 3;
+        
+        this.camera.position.y = 7
         this.camera.position.z = 4;
         this.initRenderer()
         this.clock = new THREE.Clock();
@@ -263,7 +263,7 @@ export default class ThreeClass {
 
         }
 
-
+        this.clipPlanes[0].constant -= .02
         this.renderer.render(this.scene, this.camera);
         if (this.stats) this.stats.end();
         requestAnimationFrame(() => { this.ARanimate() });
@@ -278,7 +278,7 @@ export default class ThreeClass {
             if(this.controls) this.controls.update();
 
         }
-        // this.clipPlanes[0].constant -= .01
+        
         this.renderer.render(this.scene, this.camera);
         if (this.stats) this.stats.end();
         requestAnimationFrame(() => this.animate());
