@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import Stats from 'stats-js'
 
 import Agave from './Agave.js';
@@ -13,7 +13,7 @@ Array.prototype.avarage = function() {
 export default class ThreeClass {
     constructor(isAr = false, canvas) {
         this.isAr = isAr;
-
+        this.clipPlanes =[]
         this.canvas = canvas;
         this.scene = null;
         this.camera = null;
@@ -82,6 +82,7 @@ export default class ThreeClass {
     async initScene(){
         this.initLights();
         new Bottle(this.mainGroup, {position: { y : 1.1 }})
+        this.setUpClippingPlanes()
         this.gltf = await this.loadModel();
         
         for(let i = 0; i<this.agaveQuantity ;i++){
@@ -93,26 +94,45 @@ export default class ThreeClass {
                 this,
                 {
                     radian : -.06,
+                    y: 0,
                     x: px,
                     z: pz
                 },
                 {
                     ...this.gltf,
                     scene: this.gltf.scene.clone()
-                }
+                },
+                this.clipPlanes
             );
             this.agaveGroup.add(agave.modelGroup)
         }
 
+        // const agave = new Agave(
+        //     this,
+        //     {
+                
+        //         x: 2,
+        //         x: 2,
+        //         y: -.4
+        //     },
+        //     {
+        //         ...this.gltf,
+        //         scene: this.gltf.scene.clone()
+        //     },
+        //     this.clipPlanes
+        // );
+        // this.agaveGroup.add(agave.modelGroup)
+
         this.mainGroup.add(this.agaveGroup);
+        
         if(this.debug){
             const axesHelper = new THREE.AxesHelper(5);
             this.mainGroup.add(axesHelper);
         }
-
+        
         this.group.add(this.mainGroup)
         this.scene.add(this.group)
-        
+       
     }
 
     async initAr(XR8scene, XR8camera, XR8renderer){
@@ -185,21 +205,15 @@ export default class ThreeClass {
     }
 
     initRenderer() {
-        this.clippingPlanes.top = new THREE.Plane(new THREE.Vector3(0, -1, 0), 4.3)
-        this.clippingPlanes.bottom = new THREE.Plane(new THREE.Vector3(0, -1, 0), 0)
-        this.clippingPlanes.bottom.negate();
-
-        if(this.debug){
-            const planeHelpers = new THREE.Group();
-            planeHelpers.add(new THREE.PlaneHelper( this.clippingPlanes.top, 20, 0xff0000 ))
-            planeHelpers.add(new THREE.PlaneHelper( this.clippingPlanes.bottom, 20, 0xff0000 ))
-            this.scene.add( planeHelpers );
-        }
+        
+        // this.clippingPlanes.top = new THREE.Plane(new THREE.Vector3(0, -1, 0), 4.3)
+        // this.clippingPlanes.bottom = new THREE.Plane(new THREE.Vector3(0, -1, 0), 0)
+        // this.clippingPlanes.bottom.negate();
 
         this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas });
         this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
-        this.renderer.clippingPlanes = [this.clippingPlanes.bottom];
         this.renderer.localClippingEnabled = true;
+        // this.renderer.clippingPlanes = [this.clippingPlanes.bottom];
 
     }
 
@@ -266,5 +280,30 @@ export default class ThreeClass {
         requestAnimationFrame(() => this.animate());
 
     }
+    setUpClippingPlanes(){
+       
+        this.clipPlanes= [
+            new THREE.Plane(new THREE.Vector3(0, -1 ,0 ) , 4),
+            
+        ]
+        const cubeSize = 10;
+        const CubeGeometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
+        // const trasparentMaterial = new THREE.MeshPhongMaterial( {color: 0xffff00, } );
+        const trasparentMaterial = new THREE.MeshPhongMaterial( {color: 0xffff00, colorWrite: false} );
+        const cube = new THREE.Mesh(CubeGeometry, trasparentMaterial)
+        cube.position.y= -cubeSize/2;
+        this.mainGroup.add(cube)
+        // this.clipPlanes[0].negate()
+        // this.clipPlanes[0].negate()
+       
+        if(this.debug){
+            const helpers = new THREE.Group()
+            helpers.add(new THREE.PlaneHelper(this.clipPlanes[0], 15, 0xff0000))
+            helpers.visible = true
+            helpers.name='helpers'
 
+            this.scene.add(helpers)
+        }
+
+    }
 }

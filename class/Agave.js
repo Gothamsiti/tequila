@@ -3,7 +3,8 @@ import InstancedMeshClass from './InstancedMeshClass.js';
 import gsap from 'gsap' 
 
 export default class Agave {
-    constructor(parent, origin, gltf){
+    constructor(parent, origin, gltf, clipPlanes){
+        this.clipPlanes =clipPlanes;
         this.origin = origin;
         this.gltf = gltf;
         this.parent = parent;
@@ -31,18 +32,26 @@ export default class Agave {
 
 
     init() {
-        const agave_cuore = new THREE.Group();
+        const agave_cuore = new THREE.Group();        
         this.layers.map((layer, i) => {
             const piano = this.gltf.scene.getObjectByName(`foglia-agave-${layer.search}`);
             layer.mesh = new InstancedMeshClass(this, piano.geometry, piano.material, layer, i);
-
-            // console.log(agave)
-            agave_cuore.add( this.gltf.scene.getObjectByName(`agave-${layer.search}001`))
+            const cuore =  this.gltf.scene.getObjectByName(`agave-${layer.search}001`)
+            cuore.children.map((child, i)=> { 
+                child.renderOrder = 3
+                child.material.clippingPlanes = this.clipPlanes;
+                child.material.clipIntersection = true;
+                
+            })
+            agave_cuore.add( cuore)
         })
         
+       
         
-        this.modelGroup.position.x = this.origin.x
-        this.modelGroup.position.z = this.origin.z
+        
+        this.modelGroup.position.x = this.origin.x ?? 0
+        this.modelGroup.position.z = this.origin.z ?? 0
+        this.modelGroup.position.y = this.origin.y ?? 0
         this.modelGroup.add(agave_cuore);
 
         const leafDummiesPositions = this.leafDummies.map(d => d.position);

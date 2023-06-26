@@ -21,9 +21,11 @@ export default class InstancedMeshClass {
     this.init();
   }
   init() {
+    this.material.clippingPlanes = this.parent.clipPlanes;
+    this.material.clipIntersection = true;;
     this.mesh = new THREE.InstancedMesh(this.geometry, this.material, this.count);
     this.setInstancedMeshPositions()
-
+    this.mesh.renderOrder=3
     this.mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage); //per animare
     if (this.parent.debug) {
       const axesHelper = new THREE.AxesHelper(5)
@@ -31,7 +33,6 @@ export default class InstancedMeshClass {
     }
     this.parent.modelGroup.add(this.mesh);
 
-    // this.gsapAnimations()
     this.animate();
   }
   setInstancedMeshPositions() {
