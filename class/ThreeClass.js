@@ -5,6 +5,7 @@ import Stats from 'stats-js'
 
 import Agave from './Agave.js';
 import Bottle from './Bottle.js';
+import Tower from './Tower.js';
 
 Array.prototype.avarage = function() {
     return this.length ?  this.reduce((a, b) => a + b, 0) / this.length : 0 ;
@@ -18,6 +19,7 @@ export default class ThreeClass {
         this.scene = null;
         this.camera = null;
         this.renderer = null;
+        this.tower = null;
 
         this.controls = null;
         this.stats = null;
@@ -83,6 +85,7 @@ export default class ThreeClass {
         this.initLights();
         new Bottle(this.mainGroup, {position: { y : 1.1 }})
         this.setUpClippingPlanes()
+        this.tower = new Tower(this, this.mainGroup, {})
         this.gltf = await this.loadModel();
         
         for(let i = 0; i<this.agaveQuantity ;i++){
@@ -275,6 +278,7 @@ export default class ThreeClass {
             if(this.controls) this.controls.update();
 
         }
+        // this.clipPlanes[0].constant -= .01
         this.renderer.render(this.scene, this.camera);
         if (this.stats) this.stats.end();
         requestAnimationFrame(() => this.animate());
