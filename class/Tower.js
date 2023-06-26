@@ -25,7 +25,7 @@ export default class Tower {
         
 
         this.group.add(this.tower)
-        this.animate()
+        
     }
 
     animate(){

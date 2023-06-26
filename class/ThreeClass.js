@@ -160,7 +160,7 @@ export default class ThreeClass {
     handleTargetFound(detail) {
         console.log('=== FOUND ===')
         // this.rotationOffset = this.calcRotationOffset(detail.metadata);
-        
+        this.tower.animate()
         this.group.visible = true;
         this.avaragePX = [detail.position.x];
         this.avaragePY = [detail.position.y];
@@ -263,7 +263,7 @@ export default class ThreeClass {
 
         }
 
-        this.clipPlanes[0].constant -= .02
+        
         this.renderer.render(this.scene, this.camera);
         if (this.stats) this.stats.end();
         requestAnimationFrame(() => { this.ARanimate() });
