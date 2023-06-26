@@ -29,10 +29,12 @@ export default class Tower {
     }
 
     animate(){
-        if(this.tower.position.y < 4 + this.towerHeight / 3 ) {
+        if(this.tower.position.y < 4 + this.towerHeight / 2 ) {
             this.tower.position.y += 0.1;
-            this.tower.material.opacity -= .002
-            console.log(this.tower.material)
+            this.tower.material.opacity = 1 - this.tower.position.y / (4 + this.towerHeight / 2)
+            
+        }else {
+            return
         }
 
         requestAnimationFrame(()=> this.animate())

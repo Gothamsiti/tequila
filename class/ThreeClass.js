@@ -84,7 +84,7 @@ export default class ThreeClass {
     async initScene(){
         this.initLights();
         new Bottle(this.mainGroup, {position: { y : 1.1 }})
-        this.setUpClippingPlanes()
+        this.setUpGroupSceneLimits()
         this.tower = new Tower(this, this.mainGroup, {})
         this.gltf = await this.loadModel();
         
@@ -284,12 +284,8 @@ export default class ThreeClass {
         requestAnimationFrame(() => this.animate());
 
     }
-    setUpClippingPlanes(){
+    setUpGroupSceneLimits(){
        
-        this.clipPlanes= [
-            new THREE.Plane(new THREE.Vector3(0, -1 ,0 ) , 4),
-            
-        ]
         const cubeSize = 10;
         const CubeGeometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
         // const trasparentMaterial = new THREE.MeshPhongMaterial( {color: 0xffff00, } );
@@ -299,15 +295,19 @@ export default class ThreeClass {
         this.mainGroup.add(cube)
         // this.clipPlanes[0].negate()
         // this.clipPlanes[0].negate()
-       
-        if(this.debug){
-            const helpers = new THREE.Group()
-            helpers.add(new THREE.PlaneHelper(this.clipPlanes[0], 15, 0xff0000))
-            helpers.visible = true
-            helpers.name='helpers'
+        
+        // this.clipPlanes= [
+        //     new THREE.Plane(new THREE.Vector3(0, -1 ,0 ) , 4),
+            
+        // ]
+        // if(this.debug){
+        //     const helpers = new THREE.Group()
+        //     helpers.add(new THREE.PlaneHelper(this.clipPlanes[0], 15, 0xff0000))
+        //     helpers.visible = true
+        //     helpers.name='helpers'
 
-            this.scene.add(helpers)
-        }
+        //     this.scene.add(helpers)
+        // }
 
     }
 }
