@@ -19,7 +19,6 @@ export default class Bottle {
         this.bottle.scene.scale.set(this.bottleScale, this.bottleScale, this.bottleScale) 
         const box = new THREE.Box3().setFromObject( this.bottle.scene  ); 
         const size = box.getSize(new THREE.Vector3());
-        console.log('bottole size ', size.y * this.bottleScale /2)
         this.bottle.scene.position.y = this.settings.position.y + size.y /2 
         this.group.add(this.bottle.scene)
 

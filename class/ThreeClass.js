@@ -5,11 +5,11 @@ import Stats from 'stats-js'
 
 import Agave from './Agave.js';
 import Bottle from './Bottle.js';
-import Tower from './Tower.js';
+import Tower from './Oven.js';
 import AnimationsClass from './AnimationsClass.js'
 
-Array.prototype.avarage = function() {
-    return this.length ?  this.reduce((a, b) => a + b, 0) / this.length : 0 ;
+const avarage = function(array) {
+    return array.length ?  array.reduce((a, b) => a + b, 0) / array.length : 0 ;
 }
 
 export default class ThreeClass {
@@ -76,7 +76,7 @@ export default class ThreeClass {
         }
 
         await this.initScene();
-        this.tower.animate()
+        // this.tower.animate()
         this.animate();
     }
     async initScene(){
@@ -221,9 +221,9 @@ export default class ThreeClass {
         if (this.stats) this.stats.begin();
 
         if(this.mainGroup){
-            this.mainGroup.position.set(this.avaragePX.avarage(), this.avaragePY.avarage(), this.avaragePZ.avarage());
-            this.mainGroup.quaternion.set(this.avarageRX.avarage(), this.avarageRY.avarage(), this.avarageRZ.avarage(), this.avarageRW.avarage());
-            this.mainGroup.scale.set(this.avarageScale.avarage() / 2, this.avarageScale.avarage() / 2, this.avarageScale.avarage() / 2);
+            this.mainGroup.position.set(avarage(this.avaragePX), avarage(this.avaragePY), avarage(this.avaragePZ));
+            this.mainGroup.quaternion.set(avarage(this.avarageRX), avarage(this.avarageRY), avarage(this.avarageRZ), avarage(this.avarageRW));
+            this.mainGroup.scale.set(avarage(this.avarageScale) / 2, avarage(this.avarageScale) / 2, avarage(this.avarageScale) / 2);
 
         }
 

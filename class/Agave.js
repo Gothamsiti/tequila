@@ -92,8 +92,10 @@ export default class Agave {
             },
             "-=.75"
         )
+        tl.addLabel('agave')
         tl.name = 'agave';
         this.modelGroup.gsapAnimation = tl
+
 
     }
 
