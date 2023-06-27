@@ -1,5 +1,7 @@
+import gsap from 'gsap' 
 export default class AnimationsClass {
     constructor(parent){
+        this.masterTimeline = gsap.timeline({ repeat:-1 })
         this.parent = parent;
         this.animations = {};
         this.init();
@@ -7,8 +9,18 @@ export default class AnimationsClass {
     init(){
         this.parent.scene.traverse(child => {
             if(child.gsapAnimation){
-                console.log('hello there', child.gsapAnimation.labels)
+                if(!this.animations[child.gsapAnimation.name]){
+                    this.animations[child.gsapAnimation.name] = [child.gsapAnimation]
+                }else{
+                    this.animations[child.gsapAnimation.name].push(child.gsapAnimation)
+                }
             }
         })
+
+        for(var i in this.animations){
+            for(var k in this.animations[i]){
+                this.masterTimeline.add(this.animations[i][k])
+            }
+        }
     }
 }

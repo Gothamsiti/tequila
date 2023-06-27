@@ -7,6 +7,8 @@ export default class Agave {
         this.origin = origin;
         this.gltf = gltf;
         this.parent = parent;
+        this.direction = 1;
+        this.groupHeight = null;
         this.modelGroup = new THREE.Group();
         this.layers = [
             { search: '01', rotationOffset: 110, angle : 0 , quantity: 9, mesh : null, from: {}, to: { position: {x:.2, y:0, z: .2}, rotation: {x: -10, y: 0, z: 0}}},
@@ -27,12 +29,24 @@ export default class Agave {
             const piano = this.gltf.scene.getObjectByName(`foglia-agave-${layer.search}`);
             layer.mesh = new InstancedMeshClass(this, piano.geometry, piano.material, layer, i);
             const cuore =  this.gltf.scene.getObjectByName(`agave-${layer.search}001`)
-            agave_cuore.add(cuore)
+            cuore.children.map((child, i)=> { 
+                child.renderOrder = 3
+                child.material.clippingPlanes = this.clipPlanes;
+                child.material.transparent = true
+                child.material.clipIntersection = true;
+            })
+
+            agave_cuore.add( cuore)
         })
+        
         this.modelGroup.position.x = this.origin.x ?? 0
         this.modelGroup.position.z = this.origin.z ?? 0
         this.modelGroup.position.y = this.origin.y ?? 0
         this.modelGroup.add(agave_cuore);
+        const box = new THREE.Box3().setFromObject( this.modelGroup  ); 
+        const size = box.getSize(new THREE.Vector3());
+        this.groupHeight = size.y
+        this.animate()
         
         
         this.addToTimeline();
@@ -41,15 +55,14 @@ export default class Agave {
     addToTimeline(){
         const leafDummiesPositions = this.leafDummies.map(d => d.position);
         const tl = gsap.timeline({
-            paused: true,
-            repeat:-1,
             onUpdate : () => {
                 for(const dummy of this.leafDummies){
                     dummy.updateMatrix();
+                    // this.modelGroup.position.y += 0.002 * this.direction;
                     dummy.parentMesh.setMatrixAt(dummy.dummyIndex, dummy.matrix);
                     dummy.parentMesh.instanceMatrix.needsUpdate = true;
                 }
-            }
+            },
         })
         tl.to(
             leafDummiesPositions,
@@ -79,9 +92,22 @@ export default class Agave {
             },
             "-=.75"
         )
-        tl.addLabel('agave');
+        tl.name = 'agave';
         this.modelGroup.gsapAnimation = tl
 
+    }
+
+    animate(){
+
+        this.modelGroup.children[6].children.map(cuore=> cuore.children.map((child)=> {
+            child.material.opacity = this.parent.getOpacity(this.groupHeight, this.modelGroup.position.y, 4)
+        }))
+
+        // if(this.modelGroup.position.y > 8 || this.modelGroup.position.y < 0 ){
+        //     this.direction = this.direction * -1
+        // }
+
+        requestAnimationFrame(()=> this.animate())
     }
 
 }

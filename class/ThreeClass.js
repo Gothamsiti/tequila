@@ -20,11 +20,10 @@ export default class ThreeClass {
         this.camera = null;
         this.renderer = null;
         this.tower = null;
-
+        this.sceneHeight = 4;
         this.controls = null;
         this.stats = null;
         this.debug = true;
-
         this.agavePositionsDeg = []
         this.agaveModels = []
         this.distanceFromBottle = 3;
@@ -248,6 +247,12 @@ export default class ThreeClass {
         requestAnimationFrame(() => this.animate());
 
     }
+
+    getOpacity(modelHeight, y, offset= 0, ){
+        if(y < offset) return 1
+        return  1 - (y ) / (this.sceneHeight + offset + modelHeight)
+    }
+
     setUpGroupSceneLimits(){
        
         const cubeSize = 10;
