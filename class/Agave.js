@@ -3,8 +3,7 @@ import InstancedMeshClass from './InstancedMeshClass.js';
 import gsap from 'gsap' 
 
 export default class Agave {
-    constructor(parent, origin, gltf, clipPlanes){
-        this.clipPlanes =clipPlanes;
+    constructor(parent, origin, gltf){
         this.origin = origin;
         this.gltf = gltf;
         this.parent = parent;
@@ -20,16 +19,7 @@ export default class Agave {
             { search: '06', rotationOffset: 130, angle : THREE.MathUtils.degToRad(130), quantity: 3, mesh : null, from: {}, to: { position: {x:.3, y:0, z:.3}, rotation: {x: -10, y: 0, z: 0}}},
         ]
         this.leafDummies = [];
-
         this.init()
-    }
-
-    
-
-    play(){
-        this.layers.map((layer)=>{
-            layer.mesh.gsapAnimations()
-        })
     }
 
 
@@ -60,6 +50,14 @@ export default class Agave {
         const size = box.getSize(new THREE.Vector3());
         this.groupHeight = size.y
         this.animate()
+        
+        
+        this.addToTimeline();
+
+    }
+    addToTimeline(){
+        
+
         const leafDummiesPositions = this.leafDummies.map(d => d.position);
         const tl = gsap.timeline({
             repeat:-1,
@@ -90,22 +88,6 @@ export default class Agave {
                 duration : .6,
             }
         )
-        // tl.to(
-        //     leafDummiesPositions,
-        //     { 
-        //         x : i => {  
-        //             const deg = this.leafDummies[i].offsetDegrees - i * this.leafDummies[i].deltaDegrees;
-        //             return -this.leafDummies[i].layer.to.position.x * 4 * Math.cos(THREE.MathUtils.degToRad(deg))
-        //         },
-        //         z : i => {  
-        //             const deg = this.leafDummies[i].offsetDegrees - i * this.leafDummies[i].deltaDegrees;
-        //             return -this.leafDummies[i].layer.to.position.z * 4 * Math.sin(THREE.MathUtils.degToRad(deg))
-        //         },
-        //         ease : "power4.out",
-        //         stagger: .05,
-        //         duration : 1,
-        //     }
-        // )
         tl.to(
             leafDummiesPositions,
             {
@@ -116,7 +98,6 @@ export default class Agave {
             },
             "-=.75"
         )
-
 
     }
 

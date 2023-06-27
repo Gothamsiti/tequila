@@ -14,7 +14,6 @@ Array.prototype.avarage = function() {
 export default class ThreeClass {
     constructor(isAr = false, canvas) {
         this.isAr = isAr;
-        this.clipPlanes =[]
         this.canvas = canvas;
         this.scene = null;
         this.camera = null;
@@ -49,8 +48,6 @@ export default class ThreeClass {
         this.avarageRW = [];
 
         this.avarageScale = [];
-
-        this.clippingPlanes = {};
        
         if(!this.isAr) {
             this.init(canvas)
@@ -82,48 +79,19 @@ export default class ThreeClass {
     }
     async initScene(){
         this.initLights();
-        new Bottle(this.mainGroup, {position: { y : 1.1 }})
+        new Bottle(this, this.mainGroup, {position: { y : 1.1 }})
         this.setUpGroupSceneLimits()
         this.tower = new Tower(this, this.mainGroup, {})
-        this.gltf = await this.loadModel();
-        this.tower.animate()
+
+        this.gltf = await this.loadModel('./models/agave-pianta.glb');
         for(let i = 0; i<this.agaveQuantity ;i++){
             const deg = 360 / this.agaveQuantity * i
             const px = this.distanceFromBottle * Math.cos(THREE.MathUtils.degToRad(deg))
             const pz = this.distanceFromBottle *  Math.sin(THREE.MathUtils.degToRad(deg));
             
-            const agave = new Agave(
-                this,
-                {
-                    radian : -.06,
-                    y: 0,
-                    x: px,
-                    z: pz
-                },
-                {
-                    ...this.gltf,
-                    scene: this.gltf.scene.clone()
-                },
-                this.clipPlanes
-            );
+            const agave = new Agave(this, { radian : -.06, y: 0, x: px, z: pz }, { ...this.gltf, scene: this.gltf.scene.clone() });
             this.agaveGroup.add(agave.modelGroup)
         }
-
-        // const agave = new Agave(
-        //     this,
-        //     {
-                
-        //         x: 2,
-        //         x: 2,
-        //         y: -.4
-        //     },
-        //     {
-        //         ...this.gltf,
-        //         scene: this.gltf.scene.clone()
-        //     },
-        //     this.clipPlanes
-        // );
-        // this.agaveGroup.add(agave.modelGroup)
 
         this.mainGroup.add(this.agaveGroup);
         
@@ -207,16 +175,8 @@ export default class ThreeClass {
     }
 
     initRenderer() {
-        
-        // this.clippingPlanes.top = new THREE.Plane(new THREE.Vector3(0, -1, 0), 4.3)
-        // this.clippingPlanes.bottom = new THREE.Plane(new THREE.Vector3(0, -1, 0), 0)
-        // this.clippingPlanes.bottom.negate();
-
         this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas });
         this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
-        this.renderer.localClippingEnabled = true;
-        // this.renderer.clippingPlanes = [this.clippingPlanes.bottom];
-
     }
 
     initLights() {
@@ -233,11 +193,11 @@ export default class ThreeClass {
         this.scene.add(light_1);
     }
 
-    async loadModel() {
+    async loadModel(src) {
         return await new Promise((resolve, reject) => {
             const loader = new GLTFLoader();
             return loader.load(
-                './models/agave-pianta.glb',
+                src,
                 (gltf) => {
                     return resolve(gltf);
                 },
