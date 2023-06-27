@@ -25,7 +25,7 @@ export default class Tower {
             height: this.tower.geometry.parameters.height
         }
         this.group.add(this.tower)
-        // this.animate()   
+        this.animate()   
     }
 
     animate(){

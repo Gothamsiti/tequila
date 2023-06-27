@@ -37,9 +37,6 @@ export default class Agave {
             agave_cuore.add( cuore)
         })
         
-        
-        
-        
         this.modelGroup.position.x = this.origin.x ?? 0
         this.modelGroup.position.z = this.origin.z ?? 0
         this.modelGroup.position.y = this.origin.y ?? 0
@@ -54,11 +51,8 @@ export default class Agave {
 
     }
     addToTimeline(){
-        
-
         const leafDummiesPositions = this.leafDummies.map(d => d.position);
         const tl = gsap.timeline({
-            repeat:-1,
             onUpdate : () => {
                 for(const dummy of this.leafDummies){
                     dummy.updateMatrix();
@@ -96,6 +90,8 @@ export default class Agave {
             },
             "-=.75"
         )
+        tl.name = 'agave';
+        this.modelGroup.gsapAnimation = tl
 
     }
 
