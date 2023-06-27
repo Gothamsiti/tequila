@@ -31,7 +31,9 @@ export default class Agave {
             const cuore =  this.gltf.scene.getObjectByName(`agave-${layer.search}001`)
             cuore.children.map((child, i)=> { 
                 child.renderOrder = 3
+                child.material.clippingPlanes = this.clipPlanes;
                 child.material.transparent = true
+                child.material.clipIntersection = true;
             })
 
             agave_cuore.add( cuore)
@@ -44,10 +46,11 @@ export default class Agave {
         const box = new THREE.Box3().setFromObject( this.modelGroup  ); 
         const size = box.getSize(new THREE.Vector3());
         this.groupHeight = size.y
-        this.animate()
-        
         
         this.addToTimeline();
+
+        this.animate()
+
 
     }
     addToTimeline(){
