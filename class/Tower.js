@@ -25,6 +25,7 @@ export default class Tower {
         this.tower.customParameters = {
             height: this.tower.geometry.parameters.height
         }
+        this.tower.position.y = 12;
         this.group.add(this.tower)
         this.addToTimeline()
         this.animate()   
@@ -36,8 +37,8 @@ export default class Tower {
         
     }
     addToTimeline(){
-        const to = {y : 12}
-        const from = {y : 0}
+        const to = {y : 0}
+        const from = {y : this.tower.position.y}
         const tl = gsap.timeline({
             defaults:{
                 ease: 'power4.inOut'
@@ -49,11 +50,12 @@ export default class Tower {
         tl.to(this.tower.position, {
             ...to,
             duration: 1.5,
+            delay: 0,
         })
         tl.to(this.tower.position, {
             ...from,
-            duration: 1.5
-            
+            duration: 1.5,
+            delay:1,
         })
         tl.name='tower'
         this.tower.gsapAnimation = tl
