@@ -6,6 +6,7 @@ import Stats from 'stats-js'
 import Agave from './Agave.js';
 import Bottle from './Bottle.js';
 import Tower from './Tower.js';
+import AnimationsClass from './AnimationsClass.js'
 
 Array.prototype.avarage = function() {
     return this.length ?  this.reduce((a, b) => a + b, 0) / this.length : 0 ;
@@ -93,16 +94,19 @@ export default class ThreeClass {
             const agave = new Agave(this, { radian : -.06, y: 0, x: px, z: pz }, { ...this.gltf, scene: this.gltf.scene.clone() });
             this.agaveGroup.add(agave.modelGroup)
         }
-
         this.mainGroup.add(this.agaveGroup);
+        this.group.add(this.mainGroup)
+        this.scene.add(this.group)
+
+        new AnimationsClass(this)
         
+
+
+
         if(this.debug){
             const axesHelper = new THREE.AxesHelper(5);
             this.mainGroup.add(axesHelper);
         }
-        
-        this.group.add(this.mainGroup)
-        this.scene.add(this.group)
        
     }
 

@@ -39,10 +39,9 @@ export default class Agave {
 
     }
     addToTimeline(){
-        
-
         const leafDummiesPositions = this.leafDummies.map(d => d.position);
         const tl = gsap.timeline({
+            paused: true,
             repeat:-1,
             onUpdate : () => {
                 for(const dummy of this.leafDummies){
@@ -80,6 +79,8 @@ export default class Agave {
             },
             "-=.75"
         )
+        tl.addLabel('agave');
+        this.modelGroup.gsapAnimation = tl
 
     }
 
