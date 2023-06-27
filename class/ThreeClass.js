@@ -80,7 +80,7 @@ export default class ThreeClass {
     }
     async initScene(){
         this.initLights();
-        new Bottle(this, this.mainGroup, {position: { y : 1.1 }})
+        new Bottle(this, this.mainGroup, {position: { y : 0 }})
         this.setUpGroupSceneLimits()
         this.tower = new Tower(this, this.mainGroup, {})
 
