@@ -246,9 +246,10 @@ export default class ThreeClass {
 
     getOpacity(modelHeight, y, offset= 0, ){
         if(y < offset) return 1
-        return  1 - (y ) / (this.sceneHeight + offset + modelHeight)
+        return  1 - (y - offset) / (this.sceneHeight + offset + modelHeight)
     }
 
+    
     setUpGroupSceneLimits(){
        
         const cubeSize = 10;
