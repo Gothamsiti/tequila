@@ -29,17 +29,12 @@ export default class Tower {
     }
 
     animate(){
-        this.tower.material.opacity = this.parent.getOpacity(this.towerHeight, this.tower.position.y)
+        this.tower.material.opacity = this.parent.getOpacity(this.towerHeight, this.tower.position.y,2)
         this.tower.position.y += 0.1 * this.direction;
-        // if(this.tower.position.y >= 4 + this.towerHeight / 2 && this.tower.material.opacity > 0) {
-            
-        //     this.tower.material.opacity -= 0.01 
-            
-        // } 
-        if(this.tower.position.y > 8 || this.tower.position.y < 0 ){
+        if(this.tower.position.y > 11 || this.tower.position.y < 0 ){
             this.direction = this.direction * -1
         }
-            requestAnimationFrame(()=> this.animate())
+        requestAnimationFrame(()=> this.animate())
         
     }
     
