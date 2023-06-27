@@ -253,26 +253,10 @@ export default class ThreeClass {
        
         const cubeSize = 10;
         const CubeGeometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
-        // const trasparentMaterial = new THREE.MeshPhongMaterial( {color: 0xffff00, } );
         const trasparentMaterial = new THREE.MeshPhongMaterial( {color: 0xffff00, colorWrite: false} );
         const cube = new THREE.Mesh(CubeGeometry, trasparentMaterial)
         cube.position.y= -cubeSize/2;
         this.mainGroup.add(cube)
-        // this.clipPlanes[0].negate()
-        // this.clipPlanes[0].negate()
-        
-        // this.clipPlanes= [
-        //     new THREE.Plane(new THREE.Vector3(0, -1 ,0 ) , 4),
-            
-        // ]
-        // if(this.debug){
-        //     const helpers = new THREE.Group()
-        //     helpers.add(new THREE.PlaneHelper(this.clipPlanes[0], 15, 0xff0000))
-        //     helpers.visible = true
-        //     helpers.name='helpers'
-
-        //     this.scene.add(helpers)
-        // }
 
     }
 }
