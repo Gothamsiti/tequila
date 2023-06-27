@@ -8,6 +8,8 @@ export default class Agave {
         this.origin = origin;
         this.gltf = gltf;
         this.parent = parent;
+        this.direction = 1;
+        this.groupHeight = null;
         this.modelGroup = new THREE.Group();
         this.layers = [
             { search: '01', rotationOffset: 110, angle : 0 , quantity: 9, mesh : null, from: {}, to: { position: {x:.2, y:0, z: .2}, rotation: {x: -10, y: 0, z: 0}}},
@@ -40,32 +42,35 @@ export default class Agave {
             cuore.children.map((child, i)=> { 
                 child.renderOrder = 3
                 child.material.clippingPlanes = this.clipPlanes;
+                child.material.transparent = true
                 child.material.clipIntersection = true;
-                
             })
+
             agave_cuore.add( cuore)
         })
         
-       
+        
         
         
         this.modelGroup.position.x = this.origin.x ?? 0
         this.modelGroup.position.z = this.origin.z ?? 0
         this.modelGroup.position.y = this.origin.y ?? 0
         this.modelGroup.add(agave_cuore);
-
+        const box = new THREE.Box3().setFromObject( this.modelGroup  ); 
+        const size = box.getSize(new THREE.Vector3());
+        this.groupHeight = size.y
+        this.animate()
         const leafDummiesPositions = this.leafDummies.map(d => d.position);
-        // const leafDummiesRotations = this.leafDummies.map(d => d.rotation);
-        console.log('length ',this.leafDummies.length)
         const tl = gsap.timeline({
             repeat:-1,
             onUpdate : () => {
                 for(const dummy of this.leafDummies){
                     dummy.updateMatrix();
+                    // this.modelGroup.position.y += 0.002 * this.direction;
                     dummy.parentMesh.setMatrixAt(dummy.dummyIndex, dummy.matrix);
                     dummy.parentMesh.instanceMatrix.needsUpdate = true;
                 }
-            }
+            },
         })
         tl.to(
             leafDummiesPositions,
@@ -113,6 +118,19 @@ export default class Agave {
         )
 
 
+    }
+
+    animate(){
+
+        this.modelGroup.children[6].children.map(cuore=> cuore.children.map((child)=> {
+            child.material.opacity = this.parent.getOpacity(this.groupHeight, this.modelGroup.position.y, 4)
+        }))
+
+        // if(this.modelGroup.position.y > 8 || this.modelGroup.position.y < 0 ){
+        //     this.direction = this.direction * -1
+        // }
+
+        requestAnimationFrame(()=> this.animate())
     }
 
 }

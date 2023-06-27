@@ -23,24 +23,21 @@ export default class Tower {
         }); 
         this.tower = new THREE.Mesh( geometry, material ); 
         
-
+        this.tower.customParameters = {
+            height: this.tower.geometry.parameters.height
+        }
         this.group.add(this.tower)
-        this.animate()   
+        // this.animate()   
     }
 
     animate(){
-        
-            this.tower.position.y += 0.1;
-            console.log('animating')
-        if(this.tower.position.y >= 4 + this.towerHeight / 2 && this.tower.material.opacity > 0) {
+        this.tower.material.opacity = this.parent.getOpacity(this.towerHeight, this.tower.position.y)
+        this.tower.position.y += 0.1;
+        // if(this.tower.position.y >= 4 + this.towerHeight / 2 && this.tower.material.opacity > 0) {
             
-            this.tower.material.opacity -= 0.01 
+        //     this.tower.material.opacity -= 0.01 
             
-        } 
-        
-    
-        console.log(this.tower.material.opacity)
-    
+        // } 
         if( this.tower.material.opacity >= 0){
             requestAnimationFrame(()=> this.animate())
         }

@@ -20,11 +20,10 @@ export default class ThreeClass {
         this.camera = null;
         this.renderer = null;
         this.tower = null;
-
+        this.sceneHeight = 4;
         this.controls = null;
         this.stats = null;
         this.debug = true;
-
         this.agavePositionsDeg = []
         this.agaveModels = []
         this.distanceFromBottle = 3;
@@ -87,7 +86,7 @@ export default class ThreeClass {
         this.setUpGroupSceneLimits()
         this.tower = new Tower(this, this.mainGroup, {})
         this.gltf = await this.loadModel();
-        
+        this.tower.animate()
         for(let i = 0; i<this.agaveQuantity ;i++){
             const deg = 360 / this.agaveQuantity * i
             const px = this.distanceFromBottle * Math.cos(THREE.MathUtils.degToRad(deg))
@@ -284,6 +283,12 @@ export default class ThreeClass {
         requestAnimationFrame(() => this.animate());
 
     }
+
+    getOpacity(modelHeight, y, offset= 0, ){
+        if(y < offset) return 1
+        return  1 - (y ) / (this.sceneHeight + offset + modelHeight)
+    }
+
     setUpGroupSceneLimits(){
        
         const cubeSize = 10;
