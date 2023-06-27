@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import gsap from 'gsap' 
 
 export default class Tower {
     constructor(parent, group, settings){
@@ -25,17 +26,39 @@ export default class Tower {
             height: this.tower.geometry.parameters.height
         }
         this.group.add(this.tower)
+        this.addToTimeline()
         this.animate()   
     }
 
     animate(){
-        this.tower.material.opacity = this.parent.getOpacity(this.towerHeight, this.tower.position.y,3)
-        this.tower.position.y += 0.1 * this.direction;
-        if(this.tower.position.y > 15 || this.tower.position.y < 0 ){
-            this.direction = this.direction * -1
-        }
+        this.tower.material.opacity = this.parent.getOpacity(this.towerHeight, this.tower.position.y,2)
         requestAnimationFrame(()=> this.animate())
         
+    }
+    addToTimeline(){
+        const to = {y : 12}
+        const from = {y : 0}
+        const tl = gsap.timeline({
+            defaults:{
+                ease: 'power4.inOut'
+            },
+            onUpdate:()=> {
+                console.log('upldating')
+            }
+        })
+        tl.to(this.tower.position, {
+            ...to,
+            duration: 1.5,
+        })
+        tl.to(this.tower.position, {
+            ...from,
+            duration: 1.5
+            
+        })
+        tl.name='tower'
+        this.tower.gsapAnimation = tl
+
+
     }
     
 
