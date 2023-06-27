@@ -19,7 +19,7 @@ export default class ThreeClass {
         this.camera = null;
         this.renderer = null;
         this.tower = null;
-        this.sceneHeight = 4;
+        this.sceneHeight = null;
         this.controls = null;
         this.stats = null;
         this.debug = true;
@@ -74,7 +74,7 @@ export default class ThreeClass {
         }
 
         await this.initScene();
-        
+        this.tower.animate()
         this.animate();
     }
     async initScene(){
@@ -256,6 +256,7 @@ export default class ThreeClass {
         const trasparentMaterial = new THREE.MeshPhongMaterial( {color: 0xffff00, colorWrite: false} );
         const cube = new THREE.Mesh(CubeGeometry, trasparentMaterial)
         cube.position.y= -cubeSize/2;
+        this.sceneHeight = 4;
         this.mainGroup.add(cube)
 
     }
