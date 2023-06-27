@@ -12,14 +12,11 @@ export default class Tower {
     }
 
     async init(){
-        console.log(this.parent.clipPlanes)
         const geometry = new THREE.CylinderGeometry( 2, 2, this.towerHeight, 10 ); 
         const material = new THREE.MeshBasicMaterial( {
             color: 0xffff00, 
             side: THREE.DoubleSide,
             transparent : true,
-            clippingPlanes : this.parent.clipPlanes,
-            clipIntersection : true,
         }); 
         this.tower = new THREE.Mesh( geometry, material ); 
         
@@ -30,8 +27,7 @@ export default class Tower {
 
     animate(){
         
-            this.tower.position.y += 0.1;
-            console.log('animating')
+        this.tower.position.y += 0.1;
         if(this.tower.position.y >= 4 + this.towerHeight / 2 && this.tower.material.opacity > 0) {
             
             this.tower.material.opacity -= 0.01 
@@ -39,7 +35,6 @@ export default class Tower {
         } 
         
     
-        console.log(this.tower.material.opacity)
     
         if( this.tower.material.opacity >= 0){
             requestAnimationFrame(()=> this.animate())
