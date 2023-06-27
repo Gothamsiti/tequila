@@ -7,6 +7,7 @@ export default class Bottle {
         this.group = group;
         this.settings = settings
         this.bottle = null;
+        this.bottleScale =2.4;
         this.init()
     }
 
@@ -15,7 +16,11 @@ export default class Bottle {
         
         const trasparentMaterial = new THREE.MeshPhongMaterial( {color: 0xffff00 , colorWrite: false} );
         this.bottle.scene.children[0].material =  trasparentMaterial;
-        this.bottle.scene.position.y = this.settings.position.y
+        this.bottle.scene.scale.set(this.bottleScale, this.bottleScale, this.bottleScale) 
+        const box = new THREE.Box3().setFromObject( this.bottle.scene  ); 
+        const size = box.getSize(new THREE.Vector3());
+        console.log('bottole size ', size.y * this.bottleScale /2)
+        this.bottle.scene.position.y = this.settings.position.y + size.y /2 
         this.group.add(this.bottle.scene)
 
 

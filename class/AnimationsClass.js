@@ -22,6 +22,9 @@ export default class AnimationsClass {
                 if(i == 'agave'){
                     this.masterTimeline.add(this.animations[i][k], 0)
                 }
+                if(i == 'tower'){
+                    this.masterTimeline.add(this.animations[i][k], 3)
+                }
             }
         }
     }

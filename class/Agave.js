@@ -59,7 +59,6 @@ export default class Agave {
             onUpdate : () => {
                 for(const dummy of this.leafDummies){
                     dummy.updateMatrix();
-                    // this.modelGroup.position.y += 0.002 * this.direction;
                     dummy.parentMesh.setMatrixAt(dummy.dummyIndex, dummy.matrix);
                     dummy.parentMesh.instanceMatrix.needsUpdate = true;
                 }
