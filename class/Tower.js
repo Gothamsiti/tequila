@@ -6,6 +6,7 @@ export default class Tower {
         this.parent = parent;
         this.group = group;
         this.settings = settings
+        this.direction = 1;
         this.tower = null;
         this.towerHeight  = 5
         this.init()
@@ -28,10 +29,12 @@ export default class Tower {
     }
 
     animate(){
-        this.tower.material.opacity = this.parent.getOpacity(this.towerHeight, this.tower.position.y)
-        this.tower.position.y += 0.1;
-        
-            requestAnimationFrame(()=> this.animate())
+        this.tower.material.opacity = this.parent.getOpacity(this.towerHeight, this.tower.position.y,2)
+        this.tower.position.y += 0.1 * this.direction;
+        if(this.tower.position.y > 11 || this.tower.position.y < 0 ){
+            this.direction = this.direction * -1
+        }
+        requestAnimationFrame(()=> this.animate())
         
     }
     

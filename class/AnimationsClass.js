@@ -19,7 +19,9 @@ export default class AnimationsClass {
 
         for(var i in this.animations){
             for(var k in this.animations[i]){
-                this.masterTimeline.add(this.animations[i][k])
+                if(i == 'agave'){
+                    this.masterTimeline.add(this.animations[i][k], 0)
+                }
             }
         }
     }

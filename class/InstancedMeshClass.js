@@ -21,8 +21,6 @@ export default class InstancedMeshClass {
     this.init();
   }
   init() {
-    this.material.clippingPlanes = this.parent.clipPlanes;
-    this.material.clipIntersection = true;;
     this.mesh = new THREE.InstancedMesh(this.geometry, this.material, this.count);
     this.setInstancedMeshPositions()
     this.mesh.renderOrder=3
