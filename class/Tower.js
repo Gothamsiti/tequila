@@ -43,9 +43,6 @@ export default class Tower {
             defaults:{
                 ease: 'power4.inOut'
             },
-            onUpdate:()=> {
-                console.log('upldating')
-            }
         })
         tl.to(this.tower.position, {
             ...to,

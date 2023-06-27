@@ -23,6 +23,7 @@ export default class ThreeClass {
         this.sceneHeight = null;
         this.controls = null;
         this.stats = null;
+        this.maxAvarageSize = 25;
         this.debug = true;
         this.agavePositionsDeg = []
         this.agaveModels = []
@@ -166,16 +167,16 @@ export default class ThreeClass {
 
         this.avarageScale.push(detail.scale)
          
-        if(this.avaragePX.length >=  20) this.avaragePX.shift();
-        if(this.avaragePY.length >=  20) this.avaragePY.shift();
-        if(this.avaragePZ.length >=  20) this.avaragePZ.shift();
+        if(this.avaragePX.length >=  this.maxAvarageSize) this.avaragePX.shift();
+        if(this.avaragePY.length >=  this.maxAvarageSize) this.avaragePY.shift();
+        if(this.avaragePZ.length >=  this.maxAvarageSize) this.avaragePZ.shift();
 
-        if(this.avarageRX.length >=  20) this.avarageRX.shift();
-        if(this.avarageRY.length >=  20) this.avarageRY.shift();
-        if(this.avarageRZ.length >=  20) this.avarageRZ.shift();
-        if(this.avarageRW.length >=  20) this.avarageRW.shift();
+        if(this.avarageRX.length >=  this.maxAvarageSize) this.avarageRX.shift();
+        if(this.avarageRY.length >=  this.maxAvarageSize) this.avarageRY.shift();
+        if(this.avarageRZ.length >=  this.maxAvarageSize) this.avarageRZ.shift();
+        if(this.avarageRW.length >=  this.maxAvarageSize) this.avarageRW.shift();
 
-        if(this.avarageScale.length >=  20) this.avarageScale.shift();
+        if(this.avarageScale.length >=  this.maxAvarageSize) this.avarageScale.shift();
     }
 
     initRenderer() {
