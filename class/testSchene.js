@@ -51,17 +51,16 @@ export default class CubeScene {
         const mesh = gltf.scene.children[0];
         this.scene.add(mesh);
         const cube = mesh.getObjectByName('Cube')
+
+
         const influences = cube.morphTargetInfluences;
         const dictionary = cube.morphTargetDictionary;
-        console.log(influences,dictionary);
         const gui = new GUI();
 
         for ( const [ key, value ] of Object.entries( dictionary ) ) {
-
             gui.add( influences, value, 0, 1, 0.01 )
                 .name( key )
                 .listen( influences );
-
         }
 
         
