@@ -73,6 +73,9 @@ export default class Agave {
         const agaveTl = {
             step1: {
                 rotation: { y: THREE.MathUtils.degToRad(90) }
+            },
+            step2: {
+                rotation: { y: THREE.MathUtils.degToRad(180) }
             }
         }
 
@@ -131,11 +134,18 @@ export default class Agave {
             duration: 2.4,            
         },
         '0')
+        tl.to(this.modelGroup.rotation, {
+            ...agaveTl.step2.rotation,
+            duration: 1.6,            
+        },
+        '3.4')
         tl.to(this.group.position, {
             ...agaveGroupTl.step2.position,
             duration: 1,       
             ease: "power4.in",     
-        },)
+        },
+        "4"
+        )
         
         tl.addLabel('agave')
         tl.name = 'agave';

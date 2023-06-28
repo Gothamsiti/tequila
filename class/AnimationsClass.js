@@ -26,7 +26,6 @@ export default class AnimationsClass {
 
         
         this.animationTurns.map(item=> item.timeFinished = this.calcTimeFinished(item.name))
-        console.log(this.animationTurns)
 
         this.animationTurns.map((turn) => {
             for (let i in this.animations[turn.name]) {
@@ -52,13 +51,10 @@ export default class AnimationsClass {
     }
     calcTimeFinished(name,duration){
         const turn = this.animationTurns.find((item)=> item.name == name)
-        console.log('turn', turn)
         let turnDuration = turn.duration;
-        console.log('duration = ', turnDuration)
         if(!turn.goAfter) {
             return turnDuration
         }
-        console.log('go after', turn.goAfter)
         return turnDuration+ this.calcTimeFinished(turn.goAfter, turn.duration)
     }
 }
