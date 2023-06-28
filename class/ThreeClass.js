@@ -5,12 +5,13 @@ import Stats from 'stats-js'
 
 import Agave from './Agave.js';
 import Bottle from './Bottle.js';
-import Tower from './Oven.js';
+import Oven from './Oven.js';
 import AnimationsClass from './AnimationsClass.js'
+import OvenBaase from './OvenBase.js';
 
-const avarage = function(array) {
-    return array.length ?  array.reduce((a, b) => a + b, 0) / array.length : 0 ;
-}
+// Object.defineProperty(Array.prototype, 'avarage', {
+//     value: function(){ return this.length ?  this.reduce((a, b) => a + b, 0) / this.length : 0 ; }
+// });
 
 export default class ThreeClass {
     constructor(isAr = false, canvas) {
@@ -19,7 +20,7 @@ export default class ThreeClass {
         this.scene = null;
         this.camera = null;
         this.renderer = null;
-        this.tower = null;
+        this.oven = null;
         this.sceneHeight = null;
         this.controls = null;
         this.stats = null;
@@ -83,7 +84,8 @@ export default class ThreeClass {
         this.initLights();
         new Bottle(this, this.mainGroup, {position: { y : 0 }})
         this.setUpGroupSceneLimits()
-        this.tower = new Tower(this, this.mainGroup, {})
+        this.oven = new Oven(this, this.mainGroup, {})
+        this.ovenBase = new OvenBaase(this, this.mainGroup, {})
 
         this.gltf = await this.loadModel('./models/agave-pianta.glb');
         for(let i = 0; i<this.agaveQuantity ;i++){
@@ -132,7 +134,7 @@ export default class ThreeClass {
     handleTargetFound(detail) {
         console.log('=== FOUND ===')
         // this.rotationOffset = this.calcRotationOffset(detail.metadata);
-        this.tower.animate()
+        this.oven.opacityWatcher()
         this.group.visible = true;
         this.avaragePX = [detail.position.x];
         this.avaragePY = [detail.position.y];
@@ -221,9 +223,9 @@ export default class ThreeClass {
         if (this.stats) this.stats.begin();
 
         if(this.mainGroup){
-            this.mainGroup.position.set(avarage(this.avaragePX), avarage(this.avaragePY), avarage(this.avaragePZ));
-            this.mainGroup.quaternion.set(avarage(this.avarageRX), avarage(this.avarageRY), avarage(this.avarageRZ), avarage(this.avarageRW));
-            this.mainGroup.scale.set(avarage(this.avarageScale) / 2, avarage(this.avarageScale) / 2, avarage(this.avarageScale) / 2);
+            // this.mainGroup.position.set(this.avaragePX.avarage(), this.avaragePY.avarage(), this.avaragePZ.avarage());
+            // this.mainGroup.quaternion.set(this.avarageRX.avarage(), this.avarageRY.avarage(), this.avarageRZ.avarage(), this.avarageRW.avarage());
+            // this.mainGroup.scale.set(this.avarageScale.avarage() / 2, this.avarageScale.avarage() / 2, this.avarageScale.avarage() / 2);
 
         }
 

@@ -1,41 +1,46 @@
-import gsap from 'gsap' 
+import gsap from 'gsap'
 export default class AnimationsClass {
-    constructor(parent){
-        this.masterTimeline = gsap.timeline({ repeat:-1 })
+    constructor(parent) {
+        this.masterTimeline = gsap.timeline({ repeat: -1 })
         this.parent = parent;
         this.animations = {};
         this.init();
-        this.animationTurns =[]
+        this.animationTurns = []
     }
-    init(){
+    init() {
         this.animationTurns = [
-            {name : 'agave', index: 0, goAfter : null },
-            {name : 'oven', index: 1, goAfter: 'agave' }
+            { name: 'agave', goAfter: null , timeFinished: 0},
+            { name: 'oven',  goAfter: 'agave', timeFinished: 0 },
+            { name: 'ovenBase', goAfter: 'agave', timeFinished: 0 }
         ]
         this.parent.scene.traverse(child => {
-            if(child.gsapAnimation){
-                if(!this.animations[child.gsapAnimation.name]){
-                    this.animations[child.gsapAnimation.name] = [child.gsapAnimation]
-                }else{
-                    this.animations[child.gsapAnimation.name].push(child.gsapAnimation)
+            if (child.gsapAnimation) {
+                if (!this.animations[child.gsapAnimation.name]) {
+                    this.animations[child.gsapAnimation.name] = []
                 }
+                this.animations[child.gsapAnimation.name].push(child.gsapAnimation)
+                const turn = this.animationTurns.find(item => item.name == child.gsapAnimation.name );
+                turn.duration = child.gsapAnimation.labels[child.gsapAnimation.name]
             }
         })
 
         
+        this.animationTurns.map(item=> item.timeFinished = this.calcTimeFinished(item.name))
+        console.log(this.animationTurns)
 
-        this.animationTurns.map((turn)=> {
-            for(let i in this.animations[turn.name]){
+        this.animationTurns.map((turn) => {
+            for (let i in this.animations[turn.name]) {
+                this.masterTimeline.add(this.animations[turn.name][i], turn.goAfter ? this.animationTurns.find(item=> item.name == turn.goAfter).timeFinished : 0)
                 // console.log('animations', turn.name,this.animations[turn.name][0].labels  , turn.goAfter,turn.goAfter ?  this.animations[turn.goAfter][0].labels : 0)
-                this.masterTimeline.add(this.animations[turn.name][i], turn.goAfter ? this.animations[turn.goAfter][i].labels[turn.goAfter] : 0 )
             }
         })
-        
+
+
         // for(var i in this.animations){
         //     for(var k in this.animations[i]){
         //         if(i == 'agave'){  
         //             console.log('agave', 'k',k)
-                    
+
         //             this.masterTimeline.add(this.animations[i][k],0)
         //         }
         //         if(i == 'oven'){
@@ -44,5 +49,16 @@ export default class AnimationsClass {
         //         }
         //     }
         // }
+    }
+    calcTimeFinished(name,duration){
+        const turn = this.animationTurns.find((item)=> item.name == name)
+        console.log('turn', turn)
+        let turnDuration = turn.duration;
+        console.log('duration = ', turnDuration)
+        if(!turn.goAfter) {
+            return turnDuration
+        }
+        console.log('go after', turn.goAfter)
+        return turnDuration+ this.calcTimeFinished(turn.goAfter, turn.duration)
     }
 }
