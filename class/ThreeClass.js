@@ -180,7 +180,7 @@ export default class ThreeClass {
     }
 
     initRenderer() {
-        this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas });
+        this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true });
         this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
     }
 
