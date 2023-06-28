@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
+import gsap from 'gsap' 
 
 export default class CubeScene {
     constructor(canvas){
@@ -17,9 +18,9 @@ export default class CubeScene {
         this.scene.background = new THREE.Color(0xeeeeff);
         this.camera = new THREE.PerspectiveCamera(75, this.canvas.clientWidth / this.canvas.clientHeight, 0.1, 1000);
         // this.camera.position.y = 7
-        this.camera.position.x = 4;
-        this.camera.position.y = 7;
-        this.camera.position.z = 4;
+        this.camera.position.x = 5;
+        this.camera.position.y = 4;
+        this.camera.position.z = 5;
         
         this.initRenderer()
         if (this.debug) {
@@ -48,23 +49,82 @@ export default class CubeScene {
 
     async initScene(){
         const gltf = await this.loadModel();
-        const mesh = gltf.scene.children[0];
-        this.scene.add(mesh);
-        const cube = mesh.getObjectByName('Cube')
+        const group = new THREE.Group()
 
+        this.silo = {};
 
-        const influences = cube.morphTargetInfluences;
-        const dictionary = cube.morphTargetDictionary;
+        this.silo.sx = gltf.scene.children[0].children[0]
+        this.silo.dx = gltf.scene.children[1].children[0]
+        
+        group.add(this.silo.sx)
+        group.add(this.silo.dx)
+        this.scene.add(group);
         const gui = new GUI();
 
-        for ( const [ key, value ] of Object.entries( dictionary ) ) {
-            gui.add( influences, value, 0, 1, 0.01 )
-                .name( key )
-                .listen( influences );
+        for(var i in this.silo){
+            const gui_group = gui.addFolder(i);
+            const influences = this.silo[i].morphTargetInfluences;
+            const dictionary = this.silo[i].morphTargetDictionary;
+            for ( const [ key, value ] of Object.entries( dictionary ) ) {
+                gui_group.add( influences, value, 0, 1, 0.01 ).name( key ).listen( influences );
+            }
         }
 
-        
-        // this.scene.add(model)
+        this.gsapAnimation();
+    }
+
+    gsapAnimation(){
+        const toAnimate = this.silo.sx.morphTargetInfluences;
+        const dictionary = this.silo.sx.morphTargetDictionary;
+
+        const obj = {};
+        for ( const [ key, value ] of Object.entries( dictionary ) ) {
+            obj[key] = toAnimate[value];
+        }
+        const tl = gsap.timeline({repeat: -1, repeatDelay: .5, yoyo: true});
+
+        tl.to(obj,
+            {
+                alambicco: 1,
+                duration: 2,
+                onUpdate : () => {
+                    const index = dictionary.alambicco;
+                    this.silo.sx.morphTargetInfluences[index] = obj.alambicco;
+                    this.silo.dx.morphTargetInfluences[index] = obj.alambicco;
+                }
+            })
+
+        tl.to(obj,
+            {
+                alambicco: 0,
+                botte: 1,
+                duration: 2,
+                onUpdate : () => {
+                    const index_alambicco = dictionary.alambicco;
+                    this.silo.sx.morphTargetInfluences[index_alambicco] = obj.alambicco;
+                    this.silo.dx.morphTargetInfluences[index_alambicco] = obj.alambicco;
+
+                    const index_botte = dictionary.botte;
+                    this.silo.sx.morphTargetInfluences[index_botte] = obj.botte;
+                    this.silo.dx.morphTargetInfluences[index_botte] = obj.botte;
+                }
+            })
+
+        tl.to(obj,
+            {
+                botte: 0,
+                botte_aperta: 1,
+                duration: 2,
+                onUpdate : () => {
+                    const index_botte = dictionary.botte;
+                    this.silo.sx.morphTargetInfluences[index_botte] = obj.botte;
+                    this.silo.dx.morphTargetInfluences[index_botte] = obj.botte;
+
+                    const index_botte_aperta = dictionary.botte_aperta;
+                    this.silo.sx.morphTargetInfluences[index_botte_aperta] = obj.botte_aperta;
+                    this.silo.dx.morphTargetInfluences[index_botte_aperta] = obj.botte_aperta;
+                }
+            })
     }
 
     initRenderer(){
@@ -83,7 +143,7 @@ export default class CubeScene {
         return await new Promise((resolve, reject) => {
             const loader = new GLTFLoader();
             return loader.load(
-                './models/cubo-shapekeys.glb',
+                './models/silo.glb',
                 (gltf) => {
                     return resolve(gltf);
                 },
