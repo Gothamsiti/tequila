@@ -49,7 +49,7 @@ export default class Agave {
         
         this.addToTimeline();
 
-        this.animate()
+        // this.opacityWatcher()
 
 
     }
@@ -99,17 +99,17 @@ export default class Agave {
 
     }
 
-    animate(){
+    // opacityWatcher(){
 
-        this.modelGroup.children[6].children.map(cuore=> cuore.children.map((child)=> {
-            child.material.opacity = this.parent.getOpacity(this.groupHeight, this.modelGroup.position.y, 4)
-        }))
+    //     this.modelGroup.children[6].children.map(cuore=> cuore.children.map((child)=> {
+    //         child.material.opacity = this.parent.getOpacity(this.groupHeight, this.modelGroup.position.y, 4)
+    //     }))
 
-        // if(this.modelGroup.position.y > 8 || this.modelGroup.position.y < 0 ){
-        //     this.direction = this.direction * -1
-        // }
+    //     // if(this.modelGroup.position.y > 8 || this.modelGroup.position.y < 0 ){
+    //     //     this.direction = this.direction * -1
+    //     // }
 
-        requestAnimationFrame(()=> this.animate())
-    }
+    //     requestAnimationFrame(()=> this.opacityWatcher())
+    // }
 
 }
