@@ -7,6 +7,7 @@ export default class Agave {
         this.origin = origin;
         this.gltf = gltf;
         this.parent = parent;
+        this.group = this.parent.agaveGroup
         this.direction = 1;
         this.groupHeight = null;
         this.modelGroup = new THREE.Group();
@@ -46,7 +47,8 @@ export default class Agave {
         const box = new THREE.Box3().setFromObject( this.modelGroup  ); 
         const size = box.getSize(new THREE.Vector3());
         this.groupHeight = size.y
-        
+        this.group.add(this.modelGroup)
+        this.group.scale.set(.01,.01,.01)
         this.addToTimeline();
 
         // this.opacityWatcher()
@@ -55,8 +57,29 @@ export default class Agave {
     }
     addToTimeline(){
         const leafDummiesPositions = this.leafDummies.map(d => d.position);
+
+        const agaveGroupTl = {
+            from: { scale : { x : this.group.scale.x }},
+            step1: {
+                scale: { x :1 },
+                rotation: { y: THREE.MathUtils.degToRad(360/5) }
+            },
+            step2: {
+                
+                position: { y: -2 }
+            }
+        }
+
+        const agaveTl = {
+            step1: {
+                rotation: { y: THREE.MathUtils.degToRad(90) }
+            }
+        }
+
+
         const tl = gsap.timeline({
             onUpdate : () => {
+                this.group.scale.set(agaveGroupTl.from.scale.x,agaveGroupTl.from.scale.x,agaveGroupTl.from.scale.x)
                 for(const dummy of this.leafDummies){
                     dummy.updateMatrix();
                     dummy.parentMesh.setMatrixAt(dummy.dummyIndex, dummy.matrix);
@@ -64,6 +87,12 @@ export default class Agave {
                 }
             },
         })
+        tl.to(agaveGroupTl.from.scale, {
+            ...agaveGroupTl.step1.scale,
+            duration: 1,            
+        },
+        '0')
+
         tl.to(
             leafDummiesPositions,
             { 
@@ -92,6 +121,22 @@ export default class Agave {
             },
             "-=.75"
         )
+        tl.to(this.group.rotation, {
+            ...agaveGroupTl.step1.rotation,
+            duration: 2.4,            
+        },
+        '0')
+        tl.to(this.modelGroup.rotation, {
+            ...agaveTl.step1.rotation,
+            duration: 2.4,            
+        },
+        '0')
+        tl.to(this.group.position, {
+            ...agaveGroupTl.step2.position,
+            duration: 1,       
+            ease: "power4.in",     
+        },)
+        
         tl.addLabel('agave')
         tl.name = 'agave';
         this.modelGroup.gsapAnimation = tl

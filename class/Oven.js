@@ -67,17 +67,13 @@ export default class Oven {
 
     }
     addToTimeline() {
-        const groupTL = {
-            from: { position: { y: this.oven.position.y } },
-            to: { position: { y: 0 } },
-        }
         const tl = gsap.timeline({
             defaults: {
                 ease: 'power2.inOut'
             },
         })
 
-
+        // setup degli step 
         const layersTL = this.oven.children
                         .map((layer, i) => (
                             { 
@@ -104,6 +100,10 @@ export default class Oven {
                                 } 
                             }))
 
+
+
+        // esecuzione tl
+        
         layersTL.map((layer, i) => {
             tl.to(this.oven.children[i].position, {
                 ...layer.step1.position,

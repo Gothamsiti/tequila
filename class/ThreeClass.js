@@ -9,9 +9,9 @@ import Oven from './Oven.js';
 import AnimationsClass from './AnimationsClass.js'
 import OvenBaase from './OvenBase.js';
 
-Object.defineProperty(Array.prototype, 'avarage', {
-    value: function(){ return this.length ?  this.reduce((a, b) => a + b, 0) / this.length : 0 ; }
-});
+// Object.defineProperty(Array.prototype, 'avarage', {
+//     value: function(){ return this.length ?  this.reduce((a, b) => a + b, 0) / this.length : 0 ; }
+// });
 
 export default class ThreeClass {
     constructor(isAr = false, canvas) {
@@ -94,7 +94,7 @@ export default class ThreeClass {
             const pz = this.distanceFromBottle *  Math.sin(THREE.MathUtils.degToRad(deg));
             
             const agave = new Agave(this, { radian : -.06, y: 0, x: px, z: pz }, { ...this.gltf, scene: this.gltf.scene.clone() });
-            this.agaveGroup.add(agave.modelGroup)
+            
         }
         this.mainGroup.add(this.agaveGroup);
         this.group.add(this.mainGroup)
@@ -223,9 +223,9 @@ export default class ThreeClass {
         if (this.stats) this.stats.begin();
 
         if(this.mainGroup){
-            this.mainGroup.position.set(this.avaragePX.avarage(), this.avaragePY.avarage(), this.avaragePZ.avarage());
-            this.mainGroup.quaternion.set(this.avarageRX.avarage(), this.avarageRY.avarage(), this.avarageRZ.avarage(), this.avarageRW.avarage());
-            this.mainGroup.scale.set(this.avarageScale.avarage() / 2, this.avarageScale.avarage() / 2, this.avarageScale.avarage() / 2);
+            // this.mainGroup.position.set(this.avaragePX.avarage(), this.avaragePY.avarage(), this.avaragePZ.avarage());
+            // this.mainGroup.quaternion.set(this.avarageRX.avarage(), this.avarageRY.avarage(), this.avarageRZ.avarage(), this.avarageRW.avarage());
+            // this.mainGroup.scale.set(this.avarageScale.avarage() / 2, this.avarageScale.avarage() / 2, this.avarageScale.avarage() / 2);
 
         }
 
