@@ -8,71 +8,64 @@ export default class Oven {
         this.settings = settings
         this.direction = 1;
         this.oven = null;
+        this.door = null
         this.animationDuration = 3
         this.ovenHeight = 5
         this.init()
     }
 
     async init() {
-        // const geometry = new THREE.CylinderGeometry( 2, 2, this.ovenHeight, 10 ); 
-        // const material = new THREE.MeshBasicMaterial( {
-        //     color: 0xffff00, 
-        //     side: THREE.DoubleSide,
-        //     transparent : true,
-        // }); 
-        // this.oven = new THREE.Mesh( geometry, material ); 
 
-        // this.oven.customParameters = {
-        //     height: this.oven.geometry.parameters.height
-        // }
         const gltf = await this.parent.loadModel('/models/forno.glb')
-
-        // console.log(gltf)
         this.oven = gltf.scene
-
-        this.group.add(this.oven)
-
         const box = new THREE.Box3().setFromObject(this.oven);
         const size = box.getSize(new THREE.Vector3());
         this.ovenHeight = size.y;
-
+        this.door = this.oven.getObjectByName(`door`);
+        
+        this.group.add(this.door)
         this.oven.traverse(node => {
             if (node.type == "Mesh") {
                 node.position.y = 10
                 node.material.transparent = true
+                
             }
         })
-
-
-        // this.group.add(oven.children[0].clone())
-        // this.group.add(oven.children[1].clone())
-        // this.group.add(oven.children[2].clone())
-        // this.group.add(oven.children[3].clone())
-
-        this.oven.position.y = 0;
-        // this.group.add(this.oven)
+        this.door.traverse(node => {
+            if (node.type == "Mesh") {
+                node.material.transparent = true
+                
+            }
+        })
+        this.group.add(this.oven)
         this.addToTimeline()
         this.opacityWatcher()
     }
     opacityWatcher() {
-        let counter = 0;
-
+        
         this.oven.traverse((node )=> {
             if (node.type == "Mesh") {
-                node.material.opacity = this.parent.getOpacity(1, node.position.y, 4 + (counter*.2))
-                counter+=1
+                
+                node.material.opacity = this.parent.getOpacity(this.ovenHeight/2, node.position.y, 2)
+            }
+        })
+        this.door.traverse((node )=> {
+            if (node.type == "Mesh") {
+                node.material.opacity = this.parent.getOpacity(this.ovenHeight/2, this.door.position.y,2)
             }
         })
         requestAnimationFrame(() => this.opacityWatcher())
 
     }
-    addToTimeline() {
-        const tl = gsap.timeline({
-            defaults: {
-                ease: 'power2.inOut'
-            },
-        })
 
+    addToTimeline() {
+        
+        const doorTl = {
+            from: { position: {y : this.door.position.y}, rotation: { y : this.door.rotation.y }},
+            step1: { position: {y : 0 }, rotation: { y :  THREE.MathUtils.degToRad(180) }},
+            step2: { position: {y : 10 }, rotation: { y : THREE.MathUtils.degToRad(360) }}
+            
+        }
         // setup degli step 
         const layersTL = this.oven.children
                         .map((layer, i) => (
@@ -103,7 +96,14 @@ export default class Oven {
 
 
         // esecuzione tl
-        
+        const tl = gsap.timeline({
+            defaults: {
+                ease: 'power2.inOut'
+            },
+        })
+
+
+        // LAYER DI MURA
         layersTL.map((layer, i) => {
             tl.to(this.oven.children[i].position, {
                 ...layer.step1.position,
@@ -128,7 +128,6 @@ export default class Oven {
             },
             `3.${(this.oven.children.length -i) *1 }`
             )
-
             tl.to(this.oven.children[i].rotation, {
                 ...layer.step2.rotation,
                 duration: 2
@@ -137,6 +136,36 @@ export default class Oven {
             )
 
         })
+        // FINE LAYER DI MURA
+
+        // DOOR 
+       
+
+        tl.to(this.door.position, {
+            ...doorTl.step1.position,
+            duration: this.animationDuration,
+        },
+        `0`
+        )
+        tl.to(this.door.rotation, {
+            ...doorTl.step1.rotation,
+            duration: this.animationDuration,
+        },
+        `.5`
+        )
+
+        tl.to(this.door.position, {
+            ...doorTl.step2.position,
+            duration: this.animationDuration,
+        },
+        `3.4`
+        )
+        tl.to(this.door.rotation, {
+            ...doorTl.step2.rotation,
+            duration: 2,
+        },
+        `3.4`
+        )
 
      
         tl.addLabel('oven')

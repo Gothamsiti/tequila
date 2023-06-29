@@ -72,10 +72,10 @@ export default class Agave {
 
         const agaveTl = {
             step1: {
-                rotation: { y: THREE.MathUtils.degToRad(90) }
+                rotation: { y: THREE.MathUtils.degToRad(270) }
             },
             step2: {
-                rotation: { y: THREE.MathUtils.degToRad(180) }
+                rotation: { y: THREE.MathUtils.degToRad(540) }
             }
         }
 
@@ -142,7 +142,7 @@ export default class Agave {
         tl.to(this.group.position, {
             ...agaveGroupTl.step2.position,
             duration: 1,       
-            ease: "power4.in",     
+            ease: "power2.in",     
         },
         "4"
         )
