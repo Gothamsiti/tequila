@@ -9,10 +9,11 @@ import Oven from './Oven.js';
 import AnimationsClass from './AnimationsClass.js'
 import OvenBaase from './OvenBase.js';
 
-Object.defineProperty(Array.prototype, 'avarage', {
-    value: function(){ return this.length ?  this.reduce((a, b) => a + b, 0) / this.length : 0 ; }
-});
-
+if(!Array.prototype.avarage){
+    Object.defineProperty(Array.prototype, 'avarage', {
+        value: function(){ return this.length ?  this.reduce((a, b) => a + b, 0) / this.length : 0 ; }
+    });
+}
 export default class ThreeClass {
     constructor(isAr = false, canvas) {
         this.isAr = isAr;
@@ -33,8 +34,8 @@ export default class ThreeClass {
         this.agaveQuantity = 5;
         this.gltf = null;
 
-        this.mixer = null;
-        this.clock = null;
+        this.clock = new THREE.Clock();
+        this.renderCounter = 0;
 
         this.agaveGroup = new THREE.Group();
         this.mainGroup = new THREE.Group();
@@ -61,13 +62,13 @@ export default class ThreeClass {
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color(0xffffff);
 
-        this.camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
-        this.camera.position.x = 4;
+        // this.camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, .1, 1000);
+        this.camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 1, 20); // improve performance
+        this.camera.position.x = 5;
         
-        this.camera.position.y = 7
-        this.camera.position.z = 4;
+        this.camera.position.y = 4
+        this.camera.position.z = 5;
         this.initRenderer()
-        this.clock = new THREE.Clock();
 
         if (this.debug) {
             this.controls = new OrbitControls(this.camera, this.renderer.domElement);
@@ -114,7 +115,6 @@ export default class ThreeClass {
 
     async initAr(XR8scene, XR8camera, XR8renderer){
         this.scene = XR8scene;
-
         this.initRenderer() // o questo renderer
         // this.renderer = XR8renderer; // oppure questo
 
@@ -133,8 +133,7 @@ export default class ThreeClass {
 
     handleTargetFound(detail) {
         console.log('=== FOUND ===')
-        // this.rotationOffset = this.calcRotationOffset(detail.metadata);
-        this.oven.opacityWatcher()
+
         this.group.visible = true;
         this.avaragePX = [detail.position.x];
         this.avaragePY = [detail.position.y];
@@ -154,10 +153,6 @@ export default class ThreeClass {
     handleTargetUpdate(detail) {
         console.log('=== UPDATE ===');
 
-        
-        // this.rotationOffset = this.calcRotationOffset(detail.metadata);
-        
-     
         this.avaragePX.push(detail.position.x)
         this.avaragePY.push(detail.position.y)
         this.avaragePZ.push(detail.position.z)
@@ -182,8 +177,11 @@ export default class ThreeClass {
     }
 
     initRenderer() {
-        this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true });
+        let antiAlias = false; //improve performance 
+
+        this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: antiAlias, powerPreference: 'high-performance'});
         this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
+        this.renderer.setPixelRatio(window.devicePixelRatio * 0.5) // imporove performance 
     }
 
     initLights() {
@@ -192,12 +190,12 @@ export default class ThreeClass {
 
         const light_1 = new THREE.PointLight(0xffffff, 1, 100);
         light_1.position.set(0, 10, 0);
+        this.scene.add(light_1);
         if (this.debug) {
-            // const axesHelper = new THREE.AxesHelper(5);
-            // light_1.add(axesHelper);
+            const axesHelper = new THREE.AxesHelper(5);
+            light_1.add(axesHelper);
         }
 
-        this.scene.add(light_1);
     }
 
     async loadModel(src) {
@@ -220,17 +218,15 @@ export default class ThreeClass {
     }
 
     ARanimate(){
-        if (this.stats) this.stats.begin();
-
+        if(this.stats) this.stats.begin();
+        this.renderCounter++;
+        
         if(this.mainGroup){
             this.mainGroup.position.set(this.avaragePX.avarage(), this.avaragePY.avarage(), this.avaragePZ.avarage());
             this.mainGroup.quaternion.set(this.avarageRX.avarage(), this.avarageRY.avarage(), this.avarageRZ.avarage(), this.avarageRW.avarage());
             this.mainGroup.scale.set(this.avarageScale.avarage() / 2, this.avarageScale.avarage() / 2, this.avarageScale.avarage() / 2);
-
         }
-
         
-        this.renderer.render(this.scene, this.camera);
         if (this.stats) this.stats.end();
         requestAnimationFrame(() => { this.ARanimate() });
     }
@@ -238,8 +234,6 @@ export default class ThreeClass {
     animate() {
         if (this.stats) this.stats.begin();
         
-        //this.agaveGroup.rotateY(0.01);
-        //this.agaveGroup.children.map((child)=> child.rotateY(-0.04) )
         if (this.debug) {
             if(this.controls) this.controls.update();
 
