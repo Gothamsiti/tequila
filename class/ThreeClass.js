@@ -2,7 +2,8 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import Stats from 'stats-js'
-
+import { avaragePositions, avarageRotations, avarageScales } from '~/utils/avarages.js';
+import { opacities } from '~/utils/opacities.js';
 import Agave from './Agave.js';
 import Bottle from './Bottle.js';
 import Oven from './Oven.js';
@@ -25,7 +26,7 @@ export default class ThreeClass {
         this.sceneHeight = null;
         this.controls = null;
         this.stats = null;
-        this.maxAvarageSize = 25;
+        this.maxAvarageSize = 20;
         this.debug = true;
         this.agavePositionsDeg = []
         this.agaveModels = []
@@ -33,9 +34,9 @@ export default class ThreeClass {
 
         this.agaveQuantity = 5;
         this.gltf = null;
-
+        
+        this.mixer = null;
         this.clock = new THREE.Clock();
-        this.renderCounter = 0;
 
         this.agaveGroup = new THREE.Group();
         this.mainGroup = new THREE.Group();
@@ -63,7 +64,7 @@ export default class ThreeClass {
         this.scene.background = new THREE.Color(0xffffff);
 
         // this.camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, .1, 1000);
-        this.camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 1, 20); // improve performance
+        this.camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, .1, 20); // improve performance
         this.camera.position.x = 5;
         
         this.camera.position.y = 4
@@ -79,6 +80,7 @@ export default class ThreeClass {
 
         await this.initScene();
         // this.tower.animate()
+        
         this.animate();
     }
     async initScene(){
@@ -87,7 +89,7 @@ export default class ThreeClass {
         this.setUpGroupSceneLimits()
         this.oven = new Oven(this, this.mainGroup, {})
         this.ovenBase = new OvenBaase(this, this.mainGroup, {})
-
+        this.mainGroup.scale.set(.25,.25,.25)
         this.gltf = await this.loadModel('./models/agave-pianta.glb');
         for(let i = 0; i<this.agaveQuantity ;i++){
             const deg = 360 / this.agaveQuantity * i
@@ -103,8 +105,6 @@ export default class ThreeClass {
 
         new AnimationsClass(this)
         
-
-
 
         if(this.debug){
             const axesHelper = new THREE.AxesHelper(5);
@@ -162,7 +162,7 @@ export default class ThreeClass {
         this.avarageRZ.push(detail.rotation.z)
         this.avarageRW.push(detail.rotation.w)
 
-        this.avarageScale.push(detail.scale)
+        // this.avarageScale.push(detail.scale)
          
         if(this.avaragePX.length >=  this.maxAvarageSize) this.avaragePX.shift();
         if(this.avaragePY.length >=  this.maxAvarageSize) this.avaragePY.shift();
@@ -173,7 +173,7 @@ export default class ThreeClass {
         if(this.avarageRZ.length >=  this.maxAvarageSize) this.avarageRZ.shift();
         if(this.avarageRW.length >=  this.maxAvarageSize) this.avarageRW.shift();
 
-        if(this.avarageScale.length >=  this.maxAvarageSize) this.avarageScale.shift();
+        // if(this.avarageScale.length >=  this.maxAvarageSize) this.avarageScale.shift();
     }
 
     initRenderer() {
@@ -217,18 +217,17 @@ export default class ThreeClass {
         })
     }
 
-    ARanimate(){
-        if(this.stats) this.stats.begin();
-        this.renderCounter++;
-        
-        if(this.mainGroup){
-            this.mainGroup.position.set(this.avaragePX.avarage(), this.avaragePY.avarage(), this.avaragePZ.avarage());
-            this.mainGroup.quaternion.set(this.avarageRX.avarage(), this.avarageRY.avarage(), this.avarageRZ.avarage(), this.avarageRW.avarage());
-            this.mainGroup.scale.set(this.avarageScale.avarage() / 2, this.avarageScale.avarage() / 2, this.avarageScale.avarage() / 2);
+    ARanimate(time){
+        if (this.stats) this.stats.begin();
+        if(time%2 ){
+            this.memoSetAvarages()
+        }else {
+            this.renderer.render(this.scene, this.camera)
         }
-        
+        // this.renderer.render(this.scene, this.camera);
         if (this.stats) this.stats.end();
-        requestAnimationFrame(() => { this.ARanimate() });
+        requestAnimationFrame( (time)=> this.ARanimate(time) );
+        
     }
 
     animate() {
@@ -241,16 +240,60 @@ export default class ThreeClass {
         
         this.renderer.render(this.scene, this.camera);
         if (this.stats) this.stats.end();
-        requestAnimationFrame(() => this.animate());
-
+        requestAnimationFrame( ()=> this.animate() );
     }
 
     getOpacity(modelHeight, y, offset= 0, ){
         if(y < offset) return 1
         return  1 - (y - offset) / (this.sceneHeight + modelHeight)
     }
-
+    memoGetOpacity (modelHeight, y, offset= 0, ){
+        if(y < offset) return 1
+        const memoizedIndex =`${modelHeight}${y}${offset}` 
+        if(opacities[memoizedIndex]) return opacities[memoizedIndex]
+        opacities[memoizedIndex] =  1 - (y - offset) / (this.sceneHeight + modelHeight)
+        return opacities[memoizedIndex]
+    }
     
+
+
+
+    setAvarages(){
+        this.mainGroup.position.set(this.avaragePX.avarage(), this.avaragePY.avarage(), this.avaragePZ.avarage());
+        this.mainGroup.quaternion.set(this.avarageRX.avarage(), this.avarageRY.avarage(), this.avarageRZ.avarage(), this.avarageRW.avarage());
+        // this.mainGroup.scale.set(this.avarageScale.avarage() / 2, this.avarageScale.avarage() / 2, this.avarageScale.avarage() / 2);
+    }
+    memoSetAvarages(){
+        if(this.mainGroup ){
+            const avaragePXMemoIndex = this.avaragePX.join('-')
+            const avaragePZMemoIndex = this.avaragePY.join('-')
+            const avaragePYMemoIndex = this.avaragePZ.join('-')
+            const avarageRXMemoIndex = this.avarageRX.join('-')
+            const avarageRYMemoIndex = this.avarageRY.join('-')
+            const avarageRZMemoIndex = this.avarageRZ.join('-')
+            const avarageRWMemoIndex = this.avarageRW.join('-')
+            const avarageScaleMemoIndex = this.avarageScale.join('-')
+            if(! avaragePositions.x[avaragePXMemoIndex] ) { avaragePositions.x[avaragePXMemoIndex] = this.avaragePX.avarage()}
+            if(! avaragePositions.y[avaragePYMemoIndex] ) { avaragePositions.y[avaragePYMemoIndex] = this.avaragePY.avarage()}
+            if(! avaragePositions.z[avaragePZMemoIndex] ) { avaragePositions.z[avaragePZMemoIndex] = this.avaragePZ.avarage()}
+            if(! avarageRotations.x[avarageRXMemoIndex] ) { avarageRotations.x[avarageRXMemoIndex] = this.avarageRX.avarage()}
+            if(! avarageRotations.y[avarageRYMemoIndex] ) { avarageRotations.y[avarageRYMemoIndex] = this.avarageRY.avarage()}
+            if(! avarageRotations.z[avarageRZMemoIndex] ) { avarageRotations.z[avarageRZMemoIndex] = this.avarageRZ.avarage()}
+            if(! avarageRotations.w[avarageRWMemoIndex] ) { avarageRotations.w[avarageRWMemoIndex] = this.avarageRW.avarage()}
+            // if(! avarageScales[avarageScaleMemoIndex]) {  avarageScales[avarageScaleMemoIndex] = this.avarageScale.avarage()}
+            this.mainGroup.position.set(
+                avaragePositions.x[avaragePXMemoIndex], 
+                avaragePositions.y[avaragePYMemoIndex], 
+                avaragePositions.z[avaragePZMemoIndex]);
+            this.mainGroup.quaternion.set(
+                avarageRotations.x[avarageRXMemoIndex], 
+                avarageRotations.y[avarageRYMemoIndex], 
+                avarageRotations.z[avarageRZMemoIndex], 
+                avarageRotations.w[avarageRWMemoIndex]);
+        // this.mainGroup.scale.set(avarageScales[avarageScaleMemoIndex] / 2, avarageScales[avarageScaleMemoIndex] / 2, avarageScales[avarageScaleMemoIndex] / 2);
+        }
+    }
+
     setUpGroupSceneLimits(){
        
         const cubeSize = 10;

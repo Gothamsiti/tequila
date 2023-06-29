@@ -46,7 +46,7 @@ export default class OvenBaase {
         this.ovenBase.traverse(node=>{
             if(node.type=="Mesh"){
                 
-                node.material.opacity = this.parent.getOpacity(this.ovenBaseHeight, this.ovenBase.position.y, 4 )
+                node.material.opacity = this.parent.memoGetOpacity(this.ovenBaseHeight/2, this.ovenBase.position.y, 4 )
             }
         } )
         requestAnimationFrame(()=> this.opacityWacher())
@@ -75,7 +75,7 @@ export default class OvenBaase {
 
         tl.to(this.ovenBase.position, {
             ...groupTL.step1.position,
-            ease: 'power4.Out',
+            ease: 'power2.Out',
             delay: 0,
             duration: 2,
         })
@@ -100,7 +100,7 @@ export default class OvenBaase {
         tl.to(this.ovenBase.position, {
             ...groupTL.step2.position,
             duration: this.animationDuration,
-            ease: 'power4.inOut',
+            ease: 'power2.inOut',
             
         },
         `-=1.5`
