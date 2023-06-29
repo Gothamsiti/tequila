@@ -8,6 +8,7 @@ export default class OvenBaase {
         this.settings = settings
         this.direction = 1;
         this.ovenBase = null;
+        this.rondella = null;
         this.animationDuration = 3
         this.ovenBaseHeight  = 5
         this.init()
@@ -34,10 +35,10 @@ export default class OvenBaase {
     }
 
     setMillstone(){
-        const rondella = this.ovenBase.getObjectByName(`macina-cilindro`);
-        const box = new THREE.Box3().setFromObject( rondella); 
+        this.rondella = this.ovenBase.getObjectByName(`macina-cilindro`);
+        const box = new THREE.Box3().setFromObject( this.rondella); 
         const size = box.getSize(new THREE.Vector3());
-        rondella.position.y += size.y /2
+        this.rondella.position.y += size.y /2
         
     }
 
@@ -63,7 +64,10 @@ export default class OvenBaase {
             step1: { scale : {x :1} , rotation : { y : THREE.MathUtils.degToRad(90)}},
             step2: { scale : {x :millstone.scale.x} }
         }
-
+        const rondellaTl = {
+            from : {rotation : {z : this.rondella.rotation.x}},
+            step1: { rotation : { z :  THREE.MathUtils.degToRad(270)}}
+        }
         const tl = gsap.timeline({
             defaults:{
                 onUpdate:()=> {
@@ -113,6 +117,10 @@ export default class OvenBaase {
         },
         "-=1.5"
         )
+        tl.to(this.rondella.rotation,{
+            ...rondellaTl.step1.rotation,
+            duration: 2
+        }, '4')
         tl.addLabel('ovenBase')
         tl.name='ovenBase'
         this.ovenBase.gsapAnimation = tl

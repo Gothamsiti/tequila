@@ -68,10 +68,10 @@ export default class ThreeClass {
         this.scene.background = new THREE.Color(0xffffff);
 
         this.camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
-        this.camera.position.x = 4;
+        this.camera.position.x = 2;
         
-        this.camera.position.y = 7
-        this.camera.position.z = 4;
+        this.camera.position.y = 4
+        this.camera.position.z = 2;
         this.initRenderer()
         this.clock = new THREE.Clock();
 
@@ -83,7 +83,6 @@ export default class ThreeClass {
         }
 
         await this.initScene();
-        // this.tower.animate()
         
         this.animate();
     }

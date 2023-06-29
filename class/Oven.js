@@ -22,7 +22,7 @@ export default class Oven {
         const size = box.getSize(new THREE.Vector3());
         this.ovenHeight = size.y;
         this.door = this.oven.getObjectByName(`door`);
-        
+        this.door.scale.set(.01,.01,.01)
         this.group.add(this.door)
         this.oven.traverse(node => {
             if (node.type == "Mesh") {
@@ -61,9 +61,10 @@ export default class Oven {
     addToTimeline() {
         
         const doorTl = {
-            from: { position: {y : this.door.position.y}, rotation: { y : this.door.rotation.y }},
-            step1: { position: {y : 0 }, rotation: { y :  THREE.MathUtils.degToRad(180) }},
-            step2: { position: {y : 10 }, rotation: { y : THREE.MathUtils.degToRad(360) }}
+            from: { position: {y : this.door.position.y}, scale: {x: this.door.scale.x},rotation: { y : this.door.rotation.y , }},
+            // step1: { position: {y : 0, x :-0.2, z: -0.2 }, rotation: { y :  THREE.MathUtils.degToRad(180) }},
+            step1: { position: {y : 0, z: -.15, x:0}, scale: {x: 1},rotation: { y :  THREE.MathUtils.degToRad(180), }},
+            step2: { position: {y : 10 ,}, rotation: { y : THREE.MathUtils.degToRad(360) }}
             
         }
         // setup degli step 
@@ -98,7 +99,10 @@ export default class Oven {
         // esecuzione tl
         const tl = gsap.timeline({
             defaults: {
-                ease: 'power2.inOut'
+                ease: 'power2.inOut',
+                onUpdate: ()=> {
+                    this.door.scale.set(doorTl.from.scale.x,doorTl.from.scale.x,doorTl.from.scale.x)
+                }
             },
         })
 
@@ -140,7 +144,6 @@ export default class Oven {
 
         // DOOR 
        
-
         tl.to(this.door.position, {
             ...doorTl.step1.position,
             duration: this.animationDuration,
@@ -152,6 +155,13 @@ export default class Oven {
             duration: this.animationDuration,
         },
         `.5`
+        )
+        tl.to(doorTl.from.scale, {
+            ...doorTl.step1.scale,
+            ease:"power2.in",
+            duration: .3,
+        },
+        `2.1`
         )
 
         tl.to(this.door.position, {
