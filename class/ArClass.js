@@ -6,6 +6,7 @@ export default class ArClass{
     }
     init(){
         const fullWindowCanvas = new FullWindowCanvas();
+        XR8.XrController.configure({ disableWorldTracking: true });
         XR8.addCameraPipelineModules([ 
             XR8.GlTextureRenderer.pipelineModule(),         // Draws the camera feed.
             XR8.Threejs.pipelineModule(),                   // Creates a ThreeJS AR Scene.

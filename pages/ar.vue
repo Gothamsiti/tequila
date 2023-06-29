@@ -35,7 +35,6 @@ onMounted(() => {
     // if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
     window.THREE = THREE;
     const onxrloaded = () => {
-        XR8.XrController.configure({ disableWorldTracking: false });
         const arClass = new ArClass();
         arClass.init();
     }
