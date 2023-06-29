@@ -61,12 +61,12 @@ export default class OvenBaase {
         const millstone = this.ovenBase.getObjectByName(`macina-braccio`);
         const millstoneTL = {
             from: { scale : {x : millstone.scale.x} , rotation : { y : 0}},
-            step1: { scale : {x :1} , rotation : { y : THREE.MathUtils.degToRad(90)}},
+            step1: { scale : {x :1} , rotation : { y : THREE.MathUtils.degToRad(150)}},
             step2: { scale : {x :millstone.scale.x} }
         }
         const rondellaTl = {
             from : {rotation : {z : this.rondella.rotation.x}},
-            step1: { rotation : { z :  THREE.MathUtils.degToRad(270)}}
+            step1: { rotation : { z :  THREE.MathUtils.degToRad(-270)}}
         }
         const tl = gsap.timeline({
             defaults:{
@@ -89,15 +89,15 @@ export default class OvenBaase {
             delay: 2.4,
             duration: .2
         },
-        "-=1"
+        
         )
         tl.to(millstone.rotation, {
             ...millstoneTL.step1.rotation,
             ease: "none",
-            delay: 0,
-            duration: 2.1
+            
+            duration: 4
         },
-        "4"
+        "7"
         )
         
 
@@ -112,15 +112,15 @@ export default class OvenBaase {
         tl.to(millstoneTL.from.scale, {
             ...millstoneTL.step2.scale,
             
-            delay: 0,
+            
             duration: .2
         },
         "-=1.5"
         )
         tl.to(this.rondella.rotation,{
             ...rondellaTl.step1.rotation,
-            duration: 2
-        }, '4')
+            duration: 3
+        }, '7')
         tl.addLabel('ovenBase')
         tl.name='ovenBase'
         this.ovenBase.gsapAnimation = tl

@@ -65,10 +65,10 @@ export default class ThreeClass {
 
         // this.camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, .1, 1000);
         this.camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, .1, 20); // improve performance
-        this.camera.position.x = 5;
+        this.camera.position.x = 2;
         
-        this.camera.position.y = 4
-        this.camera.position.z = 5;
+        this.camera.position.y = 1
+        this.camera.position.z = 2;
         this.initRenderer()
 
         if (this.debug) {
@@ -180,7 +180,10 @@ export default class ThreeClass {
 
         this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: antiAlias, powerPreference: 'high-performance'});
         this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
-        this.renderer.setPixelRatio(window.devicePixelRatio * 0.5) // imporove performance 
+        if(this.isAr){
+
+            this.renderer.setPixelRatio(window.devicePixelRatio * 0.5) // imporove performance 
+        }
     }
 
     initLights() {

@@ -63,7 +63,7 @@ export default class Oven {
         const doorTl = {
             from: { position: {y : this.door.position.y}, scale: {x: this.door.scale.x},rotation: { y : this.door.rotation.y , }},
             // step1: { position: {y : 0, x :-0.2, z: -0.2 }, rotation: { y :  THREE.MathUtils.degToRad(180) }},
-            step1: { position: {y : 0, z: -.15, x:0}, scale: {x: 1},rotation: { y :  THREE.MathUtils.degToRad(180), }},
+            step1: { position: {y : 0, z: -.1, x:0}, scale: {x: 1},rotation: { y :  THREE.MathUtils.degToRad(180), }},
             step2: { position: {y : 10 ,}, rotation: { y : THREE.MathUtils.degToRad(360) }}
             
         }
@@ -130,13 +130,13 @@ export default class Oven {
                 ...layer.from.position,
                 duration: this.animationDuration,
             },
-            `3.${(this.oven.children.length -i) *1 }`
+            `5.${(this.oven.children.length -i) *1 }`
             )
             tl.to(this.oven.children[i].rotation, {
                 ...layer.step2.rotation,
                 duration: 2
             },
-                `3.4`
+                `5.4`
             )
 
         })
@@ -168,13 +168,13 @@ export default class Oven {
             ...doorTl.step2.position,
             duration: this.animationDuration,
         },
-        `3.4`
+        `5.4`
         )
         tl.to(this.door.rotation, {
             ...doorTl.step2.rotation,
             duration: 2,
         },
-        `3.4`
+        `5.4`
         )
 
      
