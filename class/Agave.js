@@ -62,10 +62,10 @@ export default class Agave {
             from: { scale : { x : this.group.scale.x }},
             step1: {
                 scale: { x :1 },
-                rotation: { y: THREE.MathUtils.degToRad(270) }
+                rotation: { y: THREE.MathUtils.degToRad(130) }
             },
             step2: {
-                
+                rotation: { y: THREE.MathUtils.degToRad(270) },
                 position: { y: -2 },
                 scale: {x: 0.01},
             },
@@ -126,11 +126,18 @@ export default class Agave {
         )
         tl.to(this.group.rotation, {
             ...agaveGroupTl.step1.rotation,
-            duration: 8,      
+            duration: 4,      
             ease: "power2.out"  
             
         },
         '0')
+        tl.to(this.group.rotation, {
+            ...agaveGroupTl.step2.rotation,
+            duration: 4,      
+            ease: "power2.in"  
+            
+        },
+        '4')
         tl.to(this.modelGroup.rotation, {
             ...agaveTl.step1.rotation,
             duration: 8,            
