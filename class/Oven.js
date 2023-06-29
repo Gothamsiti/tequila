@@ -46,12 +46,12 @@ export default class Oven {
         this.oven.traverse((node )=> {
             if (node.type == "Mesh") {
                 
-                node.material.opacity = this.parent.getOpacity(this.ovenHeight/2, node.position.y, 2)
+                node.material.opacity = this.parent.memoGetOpacity(this.ovenHeight/2, node.position.y, 2)
             }
         })
         this.door.traverse((node )=> {
             if (node.type == "Mesh") {
-                node.material.opacity = this.parent.getOpacity(this.ovenHeight/2, this.door.position.y,2)
+                node.material.opacity = this.parent.memoGetOpacity(this.ovenHeight/2, this.door.position.y,2)
             }
         })
         requestAnimationFrame(() => this.opacityWatcher())
