@@ -75,6 +75,9 @@ export default class Agave {
 
         const agaveTl = {
             step1: {
+                rotation: { y: THREE.MathUtils.degToRad(-210) }
+            },
+            step2: {
                 rotation: { y: THREE.MathUtils.degToRad(-420) }
             },
         }
@@ -140,9 +143,17 @@ export default class Agave {
         '4')
         tl.to(this.modelGroup.rotation, {
             ...agaveTl.step1.rotation,
-            duration: 8,            
+            duration: 6,            
+            ease: "power4.out"  
         },
         '0')
+        tl.to(this.modelGroup.rotation, {
+            ...agaveTl.step1.rotation,
+            duration: 1,  
+            
+            ease: "power4.in"  
+        },
+        '7')
         tl.to(agaveGroupTl.from.scale, {
             ...agaveGroupTl.step2.scale,
             duration: 1,    
