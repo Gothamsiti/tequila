@@ -10,8 +10,8 @@ export default class AnimationsClass {
     init() {
         this.animationTurns = [
             { name: 'agave', goAfter: null, timeFinished: 0, offsetStart: 0 },
-            { name: 'oven', goAfter: 'agave', timeFinished: 0, offsetStart: 0 },
-            { name: 'ovenBase', goAfter: 'agave', timeFinished: 0, offsetStart: -1.5 }
+            { name: 'oven', goAfter: 'agave', timeFinished: 0, offsetStart: -2 },
+            { name: 'ovenBase', goAfter: 'agave', timeFinished: 0, offsetStart: -3 }
         ]
         this.parent.scene.traverse(child => {
             if (child.gsapAnimation) {
