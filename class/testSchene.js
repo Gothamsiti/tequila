@@ -70,7 +70,7 @@ export default class CubeScene {
             }
         }
 
-        this.gsapAnimation();
+       // this.gsapAnimation();
     }
 
     gsapAnimation(){

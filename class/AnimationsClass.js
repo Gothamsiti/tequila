@@ -11,7 +11,8 @@ export default class AnimationsClass {
         this.animationTurns = [
             { name: 'agave', goAfter: null, timeFinished: 0, offsetStart: 0 },
             { name: 'oven', goAfter: 'agave', timeFinished: 0, offsetStart: -2 },
-            { name: 'ovenBase', goAfter: 'agave', timeFinished: 0, offsetStart: -3 }
+            { name: 'ovenBase', goAfter: 'agave', timeFinished: 0, offsetStart: -3 },
+            { name: 'silo', goAfter: 'ovenBase', timeFinished: 0, offsetStart: -3 }
         ]
         this.parent.scene.traverse(child => {
             if (child.gsapAnimation) {
@@ -20,7 +21,7 @@ export default class AnimationsClass {
                 }
                 this.animations[child.gsapAnimation.name].push(child.gsapAnimation)
                 const turn = this.animationTurns.find(item => item.name == child.gsapAnimation.name);
-                turn.duration = child.gsapAnimation.labels[child.gsapAnimation.name]
+                if(turn) turn.duration = child.gsapAnimation.labels[child.gsapAnimation.name]
             }
         })
 

@@ -28,7 +28,7 @@ export default class ThreeClass {
         this.controls = null;
         this.stats = null;
         this.maxAvarageSize = 30;
-        this.debug = false;
+        this.debug = true;
         this.agavePositionsDeg = []
         this.sceneYOffset = -.45
         this.sceneScale = .425
@@ -91,7 +91,7 @@ export default class ThreeClass {
         new Bottle(this, this.mainGroup, {position: { y : 0 }})
         this.oven = new Oven(this, this.mainGroup, {})
         this.ovenBase = new OvenBaase(this, this.mainGroup, {})
-        this.silo = new Silo(this, this.mainGroup, {})
+        this.silo = new Silo(this, this.mainGroup, {position: {y: -1 }})
         this.mainGroup.scale.set(this.sceneScale, this.sceneScale, this.sceneScale)
         this.mainGroup.position.y = this.sceneYOffset;
         this.gltf = await this.loadModel('./models/agave-pianta.glb');
