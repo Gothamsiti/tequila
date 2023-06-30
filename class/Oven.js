@@ -53,7 +53,7 @@ export default class Oven {
         })
         this.door.traverse((node )=> {
             if (node.type == "Mesh") {
-                node.material.opacity = this.parent.memoGetOpacity(this.ovenHeight/2, this.door.position.y,2)
+                node.material.opacity = this.parent.memoGetOpacity(this.ovenHeight/2, this.door.position.y,1)
             }
         })
         requestAnimationFrame(() => this.opacityWatcher())
@@ -65,8 +65,8 @@ export default class Oven {
         const doorTl = {
             from: { position: {y : this.door.position.y}, scale: {x: this.door.scale.x},rotation: { y : this.door.rotation.y , }},
             // step1: { position: {y : 0, x :-0.2, z: -0.2 }, rotation: { y :  THREE.MathUtils.degToRad(180) }},
-            step1: { position: {y : 0, z: -.1, x:0}, scale: {x: this.ovenScale},rotation: { y :  THREE.MathUtils.degToRad(180), }},
-            step2: { position: {y : 10 ,}, rotation: { y : THREE.MathUtils.degToRad(360) }}
+            step1: { position: {y : 0, z: -.07,}, scale: {x: this.ovenScale},rotation: { y :  THREE.MathUtils.degToRad(180), }},
+            step2: { position: {y : 9.08 ,}, rotation: { y : THREE.MathUtils.degToRad(360) }}
             
         }
         // setup degli step 

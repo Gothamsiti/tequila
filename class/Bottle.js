@@ -14,15 +14,13 @@ export default class Bottle {
     async init(){
         this.bottle = await this.parent.loadModel('./models/bottiglia.glb')
         
-        const trasparentMaterial = new THREE.MeshPhongMaterial( {color: 0xffAAAA , colorWrite: true} );
+        const trasparentMaterial = new THREE.MeshPhongMaterial( {color: 0xffAAAA , colorWrite: this.parent.debug} );
         this.bottle.scene.children[0].material =  trasparentMaterial;
         this.bottle.scene.scale.set(this.bottleScale, this.bottleScale, this.bottleScale) 
         const box = new THREE.Box3().setFromObject( this.bottle.scene  ); 
         const size = box.getSize(new THREE.Vector3());
         this.bottle.scene.position.y = this.settings.position.y + size.y /2 
         this.group.add(this.bottle.scene)
-
-
     }
 
 }

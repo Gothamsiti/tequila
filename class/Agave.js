@@ -10,7 +10,7 @@ export default class Agave {
         this.group = this.parent.agaveGroup
         this.direction = 1;
         this.agaveScale = .5
-        this.distanceFromBottle = 2;
+        this.distanceFromBottle = 1.5;
         this.groupHeight = null;
         this.modelGroup = new THREE.Group();
         this.layers = [
@@ -108,7 +108,6 @@ export default class Agave {
                     dummy.parentMesh.setMatrixAt(dummy.dummyIndex, dummy.matrix);
                     dummy.parentMesh.instanceMatrix.needsUpdate = true;
                 }
-                console.log(agaveTl.from.distanceFromBottle)
                 this.modelGroup.position.x = agaveTl.from.distanceFromBottle.distance * Math.cos(THREE.MathUtils.degToRad(this.origin.deg))
                 this.modelGroup.position.z = agaveTl.from.distanceFromBottle.distance * Math.sin(THREE.MathUtils.degToRad(this.origin.deg))
             },

@@ -12,6 +12,7 @@ export default class OvenBaase {
         this.rondella = null;
         this.animationDuration = 3
         this.ovenBaseHeight  = 5
+        this.seeds = null;
         this.init()
     }
 
@@ -20,11 +21,17 @@ export default class OvenBaase {
         const gltf = await this.parent.loadModel('/models/forno_base.glb')
         this.ovenBase = gltf.scene
         this.ovenBase.scale.set(this.ovenBaseScale, this.ovenBaseScale, this.ovenBaseScale)
+        
         this.group.add(this.ovenBase)
         this.ovenBase.traverse(node=>{
             if(node.type=="Mesh"){
-                node.position.y = 0
+                
+                node.position.y = 0.02
                 node.material.transparent = true
+                if(node.name=='Circle002_1'){
+                    this.seeds = node
+                    this.seeds.position.y = -1;
+                }
             }
         } )
         
@@ -66,6 +73,11 @@ export default class OvenBaase {
             step1: { scale : {x :1} , rotation : { y : THREE.MathUtils.degToRad(150)}},
             step2: { scale : {x :millstone.scale.x} }
         }
+        const seedsTL = {
+            from: { position:{ y : this.seeds.position.y}},
+            step1: { position:{ y : 0}}
+        }
+        
         const rondellaTl = {
             from : {rotation : {z : this.rondella.rotation.x}},
             step1: { rotation : { z :  THREE.MathUtils.degToRad(-270)}}
@@ -92,6 +104,14 @@ export default class OvenBaase {
             duration: .2
         },
         
+        )
+        tl.to(this.seeds.position, {
+            ...seedsTL.step1.position,
+            
+            ease: "power4.in",
+            duration: .2
+        },
+        "4.5"
         )
         tl.to(millstone.rotation, {
             ...millstoneTL.step1.rotation,

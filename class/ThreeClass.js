@@ -29,7 +29,7 @@ export default class ThreeClass {
         this.maxAvarageSize = 30;
         this.debug = true;
         this.agavePositionsDeg = []
-        this.sceneYOffset = -.4
+        this.sceneYOffset = -.45
         this.sceneScale = .425
         this.agaveModels = []
         
@@ -194,10 +194,10 @@ export default class ThreeClass {
         const light_1 = new THREE.PointLight(0xffffff, 1, 100);
         light_1.position.set(-2, 4, 2);
         this.mainGroup.add(light_1);
-        if (this.debug) {
-            const axesHelper = new THREE.AxesHelper(5);
-            light_1.add(axesHelper);
-        }
+        // if (this.debug) {
+        //     const axesHelper = new THREE.AxesHelper(5);
+        //     light_1.add(axesHelper);
+        // }
 
     }
 
