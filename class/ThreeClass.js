@@ -28,7 +28,7 @@ export default class ThreeClass {
         this.controls = null;
         this.stats = null;
         this.maxAvarageSize = 30;
-        this.debug = true;
+        this.debug = false;
         this.agavePositionsDeg = []
         this.sceneYOffset = -.45
         this.sceneScale = .425
@@ -318,12 +318,12 @@ export default class ThreeClass {
     setUpGroupSceneLimits(){
         this.sceneHeight = 4;
        
-        // const cubeSize = 10;
-        // const CubeGeometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
-        // const trasparentMaterial = new THREE.MeshPhongMaterial( {color: 0xffff00, colorWrite: false} );
-        // const cube = new THREE.Mesh(CubeGeometry, trasparentMaterial)
-        // cube.position.y= -cubeSize/2;
-        // this.mainGroup.add(cube)
+        const cubeSize = 10;
+        const CubeGeometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
+        const trasparentMaterial = new THREE.MeshPhongMaterial( {color: 0xffff00, colorWrite: false} );
+        const cube = new THREE.Mesh(CubeGeometry, trasparentMaterial)
+        cube.position.y= -cubeSize/2;
+        this.mainGroup.add(cube)
 
     }
 }
