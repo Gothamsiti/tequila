@@ -32,7 +32,7 @@ export default class ThreeClass {
         this.sceneYOffset = -.4
         this.sceneScale = .425
         this.agaveModels = []
-        this.distanceFromBottle = 3;
+        
 
         this.agaveQuantity = 5;
         this.gltf = null;
@@ -67,10 +67,10 @@ export default class ThreeClass {
 
         // this.camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, .1, 1000);
         this.camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, .1, 20); // improve performance
-        this.camera.position.x = 2;
+        this.camera.position.z = 4;
         
         this.camera.position.y = 1
-        this.camera.position.z = 2;
+        
         this.initRenderer()
 
         if (this.debug) {
@@ -86,8 +86,8 @@ export default class ThreeClass {
     }
     async initScene(){
         this.initLights();
-        new Bottle(this, this.mainGroup, {position: { y : 0 }})
         this.setUpGroupSceneLimits()
+        new Bottle(this, this.mainGroup, {position: { y : 0 }})
         this.oven = new Oven(this, this.mainGroup, {})
         this.ovenBase = new OvenBaase(this, this.mainGroup, {})
         this.mainGroup.scale.set(this.sceneScale, this.sceneScale, this.sceneScale)
@@ -95,10 +95,8 @@ export default class ThreeClass {
         this.gltf = await this.loadModel('./models/agave-pianta.glb');
         for(let i = 0; i<this.agaveQuantity ;i++){
             const deg = 360 / this.agaveQuantity * i
-            const px = this.distanceFromBottle * Math.cos(THREE.MathUtils.degToRad(deg))
-            const pz = this.distanceFromBottle *  Math.sin(THREE.MathUtils.degToRad(deg));
             
-            new Agave(this, { radian : -.06, y: 0, x: px, z: pz }, { ...this.gltf, scene: this.gltf.scene.clone() });
+            new Agave(this, { radian : -.06, y: 0,  deg, }, { ...this.gltf, scene: this.gltf.scene.clone() });
             
         }
         this.mainGroup.add(this.agaveGroup);

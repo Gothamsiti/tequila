@@ -24,6 +24,7 @@ export default class InstancedMeshClass {
     this.mesh = new THREE.InstancedMesh(this.geometry, this.material, this.count);
     this.setInstancedMeshPositions()
     this.mesh.renderOrder=3
+    
     this.mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage); //per animare
     if (this.parent.debug) {
       const axesHelper = new THREE.AxesHelper(5)
@@ -34,7 +35,7 @@ export default class InstancedMeshClass {
     this.animate();
   }
   setInstancedMeshPositions() {
-    const distnce = 3;
+    
 
     const deltaDegrees = 360 / this.count;
     const offsetDegrees = this.layer.rotationOffset + 360 - deltaDegrees / 2;

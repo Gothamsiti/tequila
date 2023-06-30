@@ -8,6 +8,7 @@ export default class OvenBaase {
         this.settings = settings
         this.direction = 1;
         this.ovenBase = null;
+        this.ovenBaseScale = .9;
         this.rondella = null;
         this.animationDuration = 3
         this.ovenBaseHeight  = 5
@@ -18,6 +19,7 @@ export default class OvenBaase {
 
         const gltf = await this.parent.loadModel('/models/forno_base.glb')
         this.ovenBase = gltf.scene
+        this.ovenBase.scale.set(this.ovenBaseScale, this.ovenBaseScale, this.ovenBaseScale)
         this.group.add(this.ovenBase)
         this.ovenBase.traverse(node=>{
             if(node.type=="Mesh"){
@@ -86,7 +88,7 @@ export default class OvenBaase {
         tl.to(millstoneTL.from.scale, {
             ...millstoneTL.step1.scale,
             
-            delay: 6,
+            delay: 2.5,
             duration: .2
         },
         
@@ -95,9 +97,9 @@ export default class OvenBaase {
             ...millstoneTL.step1.rotation,
             ease: "none",
             
-            duration: 4
+            duration: 3
         },
-        "8.5"
+        "7"
         )
         
 

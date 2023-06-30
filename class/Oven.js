@@ -11,6 +11,7 @@ export default class Oven {
         this.door = null
         this.animationDuration = 3
         this.ovenHeight = 5
+        this.ovenScale = .9
         this.init()
     }
 
@@ -23,6 +24,7 @@ export default class Oven {
         this.ovenHeight = size.y;
         this.door = this.oven.getObjectByName(`door`);
         this.door.scale.set(.01,.01,.01)
+        this.oven.scale.set(this.ovenScale,this.ovenScale,this.ovenScale)
         this.group.add(this.door)
         this.oven.traverse(node => {
             if (node.type == "Mesh") {
@@ -63,7 +65,7 @@ export default class Oven {
         const doorTl = {
             from: { position: {y : this.door.position.y}, scale: {x: this.door.scale.x},rotation: { y : this.door.rotation.y , }},
             // step1: { position: {y : 0, x :-0.2, z: -0.2 }, rotation: { y :  THREE.MathUtils.degToRad(180) }},
-            step1: { position: {y : 0, z: -.1, x:0}, scale: {x: 1},rotation: { y :  THREE.MathUtils.degToRad(180), }},
+            step1: { position: {y : 0, z: -.1, x:0}, scale: {x: this.ovenScale},rotation: { y :  THREE.MathUtils.degToRad(180), }},
             step2: { position: {y : 10 ,}, rotation: { y : THREE.MathUtils.degToRad(360) }}
             
         }
@@ -101,6 +103,9 @@ export default class Oven {
             defaults: {
                 ease: 'power2.inOut',
                 onUpdate: ()=> {
+                    
+                    this.door.visible =this.door.scale.x == this.ovenScale
+                    
                     this.door.scale.set(doorTl.from.scale.x,doorTl.from.scale.x,doorTl.from.scale.x)
                 }
             },
