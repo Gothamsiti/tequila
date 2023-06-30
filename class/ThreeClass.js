@@ -7,6 +7,7 @@ import { opacities } from '~/utils/opacities.js';
 import Agave from './Agave.js';
 import Bottle from './Bottle.js';
 import Oven from './Oven.js';
+import Silo from './Silo.js';
 import AnimationsClass from './AnimationsClass.js'
 import OvenBaase from './OvenBase.js';
 
@@ -91,6 +92,7 @@ export default class ThreeClass {
         new Bottle(this, this.mainGroup, {position: { y : 0 }})
         this.oven = new Oven(this, this.mainGroup, {})
         this.ovenBase = new OvenBaase(this, this.mainGroup, {})
+        this.silo = new Silo(this, this.mainGroup, {position: {y: -1 }})
         this.mainGroup.scale.set(this.sceneScale, this.sceneScale, this.sceneScale)
         this.mainGroup.position.y = this.sceneYOffset;
         this.gltf = await this.loadModel('./models/agave-pianta.glb');
