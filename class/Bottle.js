@@ -1,5 +1,4 @@
 import * as THREE from 'three'
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 export default class Bottle {
     constructor(parent, group, settings){
@@ -14,7 +13,7 @@ export default class Bottle {
     async init(){
         this.bottle = await this.parent.loadModel('./models/bottiglia.glb')
         
-        const trasparentMaterial = new THREE.MeshPhongMaterial( {color: 0xffff00 , colorWrite: false} );
+        const trasparentMaterial = new THREE.MeshPhongMaterial( {color: 0xffff00 , colorWrite: true} );
         this.bottle.scene.children[0].material =  trasparentMaterial;
         this.bottle.scene.scale.set(this.bottleScale, this.bottleScale, this.bottleScale) 
         const box = new THREE.Box3().setFromObject( this.bottle.scene  ); 

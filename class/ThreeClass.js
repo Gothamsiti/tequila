@@ -7,6 +7,7 @@ import { opacities } from '~/utils/opacities.js';
 import Agave from './Agave.js';
 import Bottle from './Bottle.js';
 import Oven from './Oven.js';
+import Silo from './Silo.js';
 import AnimationsClass from './AnimationsClass.js'
 import OvenBaase from './OvenBase.js';
 
@@ -88,6 +89,9 @@ export default class ThreeClass {
         this.setUpGroupSceneLimits()
         this.oven = new Oven(this, this.mainGroup, {})
         this.ovenBase = new OvenBaase(this, this.mainGroup, {})
+        this.silo = new Silo(this, this.mainGroup, {})
+
+
         this.mainGroup.scale.set(.25,.25,.25)
         this.gltf = await this.loadModel('./models/agave-pianta.glb');
         for(let i = 0; i<this.agaveQuantity ;i++){
