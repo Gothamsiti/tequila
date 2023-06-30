@@ -27,7 +27,7 @@ export default class ThreeClass {
         this.controls = null;
         this.stats = null;
         this.maxAvarageSize = 30;
-        this.debug = false;
+        this.debug = true;
         this.agavePositionsDeg = []
         this.sceneYOffset = -.45
         this.sceneScale = .425
@@ -86,6 +86,7 @@ export default class ThreeClass {
     }
     async initScene(){
         this.initLights();
+        // this.initARLights();
         this.setUpGroupSceneLimits()
         new Bottle(this, this.mainGroup, {position: { y : 0 }})
         this.oven = new Oven(this, this.mainGroup, {})
@@ -188,16 +189,31 @@ export default class ThreeClass {
     }
 
     initLights() {
-        const ambientLight = new THREE.AmbientLight(0x404040); // soft white light
+        const ambientLight = new THREE.AmbientLight(0x202020); // soft white light
+        ambientLight.position.y = -1
         this.scene.add(ambientLight);
 
-        const light_1 = new THREE.PointLight(0xffffff, 1, 100);
+        const light_1 = new THREE.PointLight(0xFFFFFF, 1, 100);
         light_1.position.set(-2, 4, 2);
         this.mainGroup.add(light_1);
-        // if (this.debug) {
-        //     const axesHelper = new THREE.AxesHelper(5);
-        //     light_1.add(axesHelper);
-        // }
+        if (this.debug) {
+            const axesHelper = new THREE.AxesHelper(5);
+            light_1.add(axesHelper);
+        }
+
+    }
+    initARLights() {
+        const ambientLight = new THREE.AmbientLight(0x202020); // soft white light
+        ambientLight.position.y = -1
+        this.scene.add(ambientLight);
+
+        const light_1 = new THREE.PointLight(0xff4040, 1, 100);
+        light_1.position.set(-2, 0, 0);
+        this.mainGroup.add(light_1);
+        if (this.debug) {
+            const axesHelper = new THREE.AxesHelper(5);
+            light_1.add(axesHelper);
+        }
 
     }
 
@@ -300,12 +316,12 @@ export default class ThreeClass {
     setUpGroupSceneLimits(){
         this.sceneHeight = 4;
        
-        const cubeSize = 10;
-        const CubeGeometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
-        const trasparentMaterial = new THREE.MeshPhongMaterial( {color: 0xffff00, colorWrite: false} );
-        const cube = new THREE.Mesh(CubeGeometry, trasparentMaterial)
-        cube.position.y= -cubeSize/2;
-        this.mainGroup.add(cube)
+        // const cubeSize = 10;
+        // const CubeGeometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
+        // const trasparentMaterial = new THREE.MeshPhongMaterial( {color: 0xffff00, colorWrite: false} );
+        // const cube = new THREE.Mesh(CubeGeometry, trasparentMaterial)
+        // cube.position.y= -cubeSize/2;
+        // this.mainGroup.add(cube)
 
     }
 }

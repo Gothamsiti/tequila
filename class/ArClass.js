@@ -49,6 +49,7 @@ export default class ArClass{
         this.threeClass.handleTargetFound(e.detail)
     }
     handleTargetUpdate(e){
+        console.log(e)
         this.threeClass.handleTargetUpdate(e.detail)
     }
     handleTargetLost(e){

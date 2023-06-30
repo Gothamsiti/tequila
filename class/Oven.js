@@ -36,6 +36,7 @@ export default class Oven {
         this.door.traverse(node => {
             if (node.type == "Mesh") {
                 node.material.transparent = true
+                node.position.z+= 0.4
                 
             }
         })
@@ -65,8 +66,9 @@ export default class Oven {
         const doorTl = {
             from: { position: {y : this.door.position.y}, scale: {x: this.door.scale.x},rotation: { y : this.door.rotation.y , }},
             // step1: { position: {y : 0, x :-0.2, z: -0.2 }, rotation: { y :  THREE.MathUtils.degToRad(180) }},
-            step1: { position: {y : 0, z: -.07,}, scale: {x: this.ovenScale},rotation: { y :  THREE.MathUtils.degToRad(180), }},
-            step2: { position: {y : 9.08 ,}, rotation: { y : THREE.MathUtils.degToRad(360) }}
+            step1: { position: {y : 0, z: .1 }, scale: {x: this.ovenScale},rotation: { y :  THREE.MathUtils.degToRad(180),  }},
+            step2: { position: { z: .35 } },
+            step3: { position: {y : 9.08 ,z: 0}, rotation: { y : THREE.MathUtils.degToRad(360) }}
             
         }
         // setup degli step 
@@ -161,6 +163,14 @@ export default class Oven {
         },
         `.5`
         )
+        tl.to(this.door.position, {
+            ...doorTl.step2.position,
+            duration: 1,
+            ease:"power1.out",
+
+        },
+        `2.5`
+        )
         tl.to(doorTl.from.scale, {
             ...doorTl.step1.scale,
             ease:"power2.in",
@@ -170,16 +180,16 @@ export default class Oven {
         )
 
         tl.to(this.door.position, {
-            ...doorTl.step2.position,
+            ...doorTl.step3.position,
             duration: this.animationDuration,
         },
-        `5.4`
+        `5.35`
         )
         tl.to(this.door.rotation, {
-            ...doorTl.step2.rotation,
+            ...doorTl.step3.rotation,
             duration: 2,
         },
-        `5.4`
+        `5.35`
         )
 
      

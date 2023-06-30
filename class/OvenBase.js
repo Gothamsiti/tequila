@@ -137,7 +137,7 @@ export default class OvenBaase {
             
             duration: .2
         },
-        "-=1.5"
+        "-=.2"
         )
         tl.to(this.rondella.rotation,{
             ...rondellaTl.step1.rotation,
