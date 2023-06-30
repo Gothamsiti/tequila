@@ -26,9 +26,11 @@ export default class ThreeClass {
         this.sceneHeight = null;
         this.controls = null;
         this.stats = null;
-        this.maxAvarageSize = 20;
+        this.maxAvarageSize = 30;
         this.debug = true;
         this.agavePositionsDeg = []
+        this.sceneYOffset = -.4
+        this.sceneScale = .425
         this.agaveModels = []
         this.distanceFromBottle = 3;
 
@@ -88,14 +90,15 @@ export default class ThreeClass {
         this.setUpGroupSceneLimits()
         this.oven = new Oven(this, this.mainGroup, {})
         this.ovenBase = new OvenBaase(this, this.mainGroup, {})
-        this.mainGroup.scale.set(.25,.25,.25)
+        this.mainGroup.scale.set(this.sceneScale, this.sceneScale, this.sceneScale)
+        this.mainGroup.position.y = this.sceneYOffset;
         this.gltf = await this.loadModel('./models/agave-pianta.glb');
         for(let i = 0; i<this.agaveQuantity ;i++){
             const deg = 360 / this.agaveQuantity * i
             const px = this.distanceFromBottle * Math.cos(THREE.MathUtils.degToRad(deg))
             const pz = this.distanceFromBottle *  Math.sin(THREE.MathUtils.degToRad(deg));
             
-            const agave = new Agave(this, { radian : -.06, y: 0, x: px, z: pz }, { ...this.gltf, scene: this.gltf.scene.clone() });
+            new Agave(this, { radian : -.06, y: 0, x: px, z: pz }, { ...this.gltf, scene: this.gltf.scene.clone() });
             
         }
         this.mainGroup.add(this.agaveGroup);
@@ -153,7 +156,7 @@ export default class ThreeClass {
         console.log('=== UPDATE ===');
 
         this.avaragePX.push(detail.position.x)
-        this.avaragePY.push(detail.position.y)
+        this.avaragePY.push(detail.position.y + this.sceneYOffset)
         this.avaragePZ.push(detail.position.z)
 
         this.avarageRX.push(detail.rotation.x)
@@ -191,8 +194,8 @@ export default class ThreeClass {
         this.scene.add(ambientLight);
 
         const light_1 = new THREE.PointLight(0xffffff, 1, 100);
-        light_1.position.set(0, 10, 0);
-        this.scene.add(light_1);
+        light_1.position.set(-2, 4, 2);
+        this.mainGroup.add(light_1);
         if (this.debug) {
             const axesHelper = new THREE.AxesHelper(5);
             light_1.add(axesHelper);
@@ -290,7 +293,7 @@ export default class ThreeClass {
             this.mainGroup.quaternion.set(
                 avarageRotations.x[avarageRXMemoIndex], 
                 avarageRotations.y[avarageRYMemoIndex], 
-                avarageRotations.z[avarageRZMemoIndex], 
+                avarageRotations.z[avarageRZMemoIndex]-0.002, 
                 avarageRotations.w[avarageRWMemoIndex]);
         // this.mainGroup.scale.set(avarageScales[avarageScaleMemoIndex] / 2, avarageScales[avarageScaleMemoIndex] / 2, avarageScales[avarageScaleMemoIndex] / 2);
         }

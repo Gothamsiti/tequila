@@ -65,9 +65,9 @@ export default class Agave {
                 rotation: { y: THREE.MathUtils.degToRad(130) }
             },
             step2: {
-                rotation: { y: THREE.MathUtils.degToRad(270) },
-                position: { y: -2 },
-                scale: {x: 0.01},
+                rotation: { y: THREE.MathUtils.degToRad(300) },
+                position: { y: 0 },
+                scale: {x: 0.42},
             },
             
             
@@ -84,6 +84,9 @@ export default class Agave {
 
 
         const tl = gsap.timeline({
+            onStart: ()=> {
+                this.modelGroup.visible=true;
+            },
             onUpdate : () => {
                 this.group.scale.set(agaveGroupTl.from.scale.x,agaveGroupTl.from.scale.x,agaveGroupTl.from.scale.x)
                 for(const dummy of this.leafDummies){
@@ -92,6 +95,9 @@ export default class Agave {
                     dummy.parentMesh.instanceMatrix.needsUpdate = true;
                 }
             },
+            onComplete: ()=> {
+                this.modelGroup.visible=false;
+            }
         })
         tl.to(agaveGroupTl.from.scale, {
             ...agaveGroupTl.step1.scale,
@@ -134,32 +140,34 @@ export default class Agave {
             
         },
         '0')
-        tl.to(this.group.rotation, {
-            ...agaveGroupTl.step2.rotation,
-            duration: 4,      
-            ease: "power2.in"  
-            
-        },
-        '4')
         tl.to(this.modelGroup.rotation, {
             ...agaveTl.step1.rotation,
             duration: 6,            
             ease: "power4.out"  
         },
         '0')
-        tl.to(this.modelGroup.rotation, {
-            ...agaveTl.step1.rotation,
-            duration: 1,  
+
+
+        tl.to(this.group.rotation, {
+            ...agaveGroupTl.step2.rotation,
+            duration: 6,      
+            ease: "power2.inOut"  
             
-            ease: "power4.in"  
         },
-        '7')
+        '4')
+        tl.to(this.modelGroup.rotation, {
+            ...agaveTl.step2.rotation,
+            duration: 6,  
+            
+            ease: "power4.inOut"  
+        },
+        '4')
         tl.to(agaveGroupTl.from.scale, {
             ...agaveGroupTl.step2.scale,
-            duration: 1,    
+            duration: 2,    
             ease: "power2.in",     
         },
-        '7')
+        '5')
         tl.to(this.group.position, {
             ...agaveGroupTl.step2.position,
             duration: 1,       

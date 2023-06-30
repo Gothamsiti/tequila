@@ -47,7 +47,7 @@ export default class OvenBaase {
         this.ovenBase.traverse(node=>{
             if(node.type=="Mesh"){
                 
-                node.material.opacity = this.parent.memoGetOpacity(this.ovenBaseHeight/2, this.ovenBase.position.y, 4 )
+                node.material.opacity = this.parent.memoGetOpacity(this.ovenBaseHeight/2, this.ovenBase.position.y, 6 )
             }
         } )
         requestAnimationFrame(()=> this.opacityWacher())
@@ -56,7 +56,7 @@ export default class OvenBaase {
     addToTimeline(){
         const groupTL = {
             step1 :{position : {y : .4}},
-            step2 :{position: {y : 10}},
+            step2 :{position: {y : 15}},
             }
         const millstone = this.ovenBase.getObjectByName(`macina-braccio`);
         const millstoneTL = {
@@ -86,7 +86,7 @@ export default class OvenBaase {
         tl.to(millstoneTL.from.scale, {
             ...millstoneTL.step1.scale,
             
-            delay: 2.4,
+            delay: 6,
             duration: .2
         },
         
@@ -97,7 +97,7 @@ export default class OvenBaase {
             
             duration: 4
         },
-        "7"
+        "8.5"
         )
         
 
@@ -120,7 +120,7 @@ export default class OvenBaase {
         tl.to(this.rondella.rotation,{
             ...rondellaTl.step1.rotation,
             duration: 3
-        }, '7')
+        }, '9')
         tl.addLabel('ovenBase')
         tl.name='ovenBase'
         this.ovenBase.gsapAnimation = tl
