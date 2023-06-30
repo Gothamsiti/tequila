@@ -25,14 +25,16 @@ export default class Silo {
         this.siloGroup.position.y = this.settings.position.y;
 
         this.group.add(this.siloGroup);
-        const gui = new GUI();
+        if(this.parent.deug){
+            const gui = new GUI();
+            for(var i in this.silo){
 
-        for(var i in this.silo){
-            const gui_group = gui.addFolder(i);
-            const influences = this.silo[i].morphTargetInfluences;
-            const dictionary = this.silo[i].morphTargetDictionary;
-            for ( const [ key, value ] of Object.entries( dictionary ) ) {
-                gui_group.add( influences, value, 0, 1, 0.01 ).name( key ).listen( influences );
+                const gui_group = gui.addFolder(i);
+                const influences = this.silo[i].morphTargetInfluences;
+                const dictionary = this.silo[i].morphTargetDictionary;
+                for ( const [ key, value ] of Object.entries( dictionary ) ) {
+                    gui_group.add( influences, value, 0, 1, 0.01 ).name( key ).listen( influences );
+                }
             }
         }
 
