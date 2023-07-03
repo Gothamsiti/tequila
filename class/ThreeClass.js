@@ -28,7 +28,7 @@ export default class ThreeClass {
         this.controls = null;
         this.stats = null;
         this.maxAvarageSize = 30;
-        this.debug = false;
+        this.debug = true;
         this.agavePositionsDeg = []
         this.sceneYOffset = -.45
         this.sceneScale = .425
@@ -68,9 +68,9 @@ export default class ThreeClass {
 
         // this.camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, .1, 1000);
         this.camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, .1, 20); // improve performance
-        this.camera.position.z = 4;
+        this.camera.position.z = 5;
         
-        this.camera.position.y = 1
+        this.camera.position.y = 2
         
         this.initRenderer()
 

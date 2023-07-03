@@ -25,7 +25,7 @@ export default class Silo {
         this.siloGroup.position.y = this.settings.position.y;
 
         this.group.add(this.siloGroup);
-        if(this.parent.deug){
+        if(this.parent.debug){
             const gui = new GUI();
             for(var i in this.silo){
 
