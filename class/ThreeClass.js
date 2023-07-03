@@ -34,7 +34,8 @@ export default class ThreeClass {
         this.sceneScale = .425
         this.agaveModels = []
         
-
+        this.arAmbientLight = null;
+        this.arPointLight = null;
         this.agaveQuantity = 5;
         this.gltf = null;
         
@@ -68,9 +69,9 @@ export default class ThreeClass {
 
         // this.camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, .1, 1000);
         this.camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, .1, 20); // improve performance
-        this.camera.position.z = 4;
+        this.camera.position.z = 5;
         
-        this.camera.position.y = 1
+        this.camera.position.y = 2
         
         this.initRenderer()
 
@@ -86,8 +87,11 @@ export default class ThreeClass {
         this.animate();
     }
     async initScene(){
-        this.initLights();
-        // this.initARLights();
+        if(this.isAr){
+            this.initARLights();
+        }else {
+            this.initLights();
+        }
         this.setUpGroupSceneLimits()
         new Bottle(this, this.mainGroup, {position: { y : 0 }})
         this.oven = new Oven(this, this.mainGroup, {})
@@ -121,7 +125,7 @@ export default class ThreeClass {
         this.scene = XR8scene;
         this.initRenderer() // o questo renderer
         // this.renderer = XR8renderer; // oppure questo
-
+        
         this.camera = XR8camera;
         this.renderer.autoClear = false;
         this.group.visible = false;
@@ -197,7 +201,7 @@ export default class ThreeClass {
         this.scene.add(ambientLight);
 
         const light_1 = new THREE.PointLight(0xFFFFFF, 1, 100);
-        light_1.position.set(-2, 4, 2);
+        light_1.position.set(0, 4, 2);
         this.mainGroup.add(light_1);
         if (this.debug) {
             const axesHelper = new THREE.AxesHelper(5);
@@ -206,18 +210,30 @@ export default class ThreeClass {
 
     }
     initARLights() {
-        const ambientLight = new THREE.AmbientLight(0x202020); // soft white light
-        ambientLight.position.y = -1
-        this.scene.add(ambientLight);
+        this.arAmbientLight = new THREE.AmbientLight(0x202020); // soft white light
+        this.arAmbientLight.position.y = -1
+        this.scene.add(this.arAmbientLight);
 
-        const light_1 = new THREE.PointLight(0xff4040, 1, 100);
-        light_1.position.set(-2, 0, 0);
-        this.mainGroup.add(light_1);
+        this.arPointLight  = new THREE.PointLight(0xFFFFFF, 1, 100);
+        this.arPointLight.position.set(0, 4, 2);
+        this.mainGroup.add(this.arPointLight);
         if (this.debug) {
             const axesHelper = new THREE.AxesHelper(5);
-            light_1.add(axesHelper);
+            this.arPointLight.add(axesHelper);
         }
 
+    }
+    upadeARLightIntensity(exposure){
+        if(this.arPointLight){
+            const formattedExposure = (exposure +1 ) / 2
+            console.log('exposure', exposure, formattedExposure)
+            this.arPointLight.intensity = formattedExposure
+        }
+        if(this.arAmbientLight){
+            const formattedExposure = (exposure +1 ) / 2
+            console.log('exposure', exposure, formattedExposure)
+            this.arAmbientLight.intensity = formattedExposure
+        }
     }
 
     async loadModel(src) {
