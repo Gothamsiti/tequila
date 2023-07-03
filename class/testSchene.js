@@ -10,7 +10,8 @@ export default class CubeScene {
         this.scene = null;
         this.camera = null;
         this.debug = true
-        this.init()
+        this.init();
+        this.objMorphs = {}
     }
 
     async init(){
@@ -49,82 +50,87 @@ export default class CubeScene {
 
     async initScene(){
         const gltf = await this.loadModel();
-        const group = new THREE.Group()
+        const group = new THREE.Group();
 
-        this.silo = {};
+        const silo = gltf.scene.children.find(c => c.name == "movement-totale");
+        this.perno = {};
 
-        this.silo.sx = gltf.scene.children[0].children[0]
-        this.silo.dx = gltf.scene.children[1].children[0]
+        this.perno.dx = silo.children[2]
+        this.perno.sx = silo.children[3]
         
-        group.add(this.silo.sx)
-        group.add(this.silo.dx)
+        group.add(this.perno.sx)
+        group.add(this.perno.dx)
         this.scene.add(group);
+
         const gui = new GUI();
 
-        for(var i in this.silo){
+        for(var i in this.perno){
             const gui_group = gui.addFolder(i);
-            const influences = this.silo[i].morphTargetInfluences;
-            const dictionary = this.silo[i].morphTargetDictionary;
-            for ( const [ key, value ] of Object.entries( dictionary ) ) {
-                gui_group.add( influences, value, 0, 1, 0.01 ).name( key ).listen( influences );
-            }
+            this.perno[i].traverse(child => {
+                if(child.morphTargetDictionary){
+                    const influences = child.morphTargetInfluences;
+                    const dictionary = child.morphTargetDictionary;
+                    for ( const [ key, value ] of Object.entries( dictionary ) ) {
+                        if(!this.objMorphs[key]) this.objMorphs[key] = influences[value]
+                        gui_group.add( influences, value, 0, 1, 0.01 ).name( key ).listen( influences );
+                    }
+                }
+            })
+
+            
         }
 
-       // this.gsapAnimation();
+       this.gsapAnimation();
     }
 
     gsapAnimation(){
-        const toAnimate = this.silo.sx.morphTargetInfluences;
-        const dictionary = this.silo.sx.morphTargetDictionary;
-
-        const obj = {};
-        for ( const [ key, value ] of Object.entries( dictionary ) ) {
-            obj[key] = toAnimate[value];
+        /* const dictionary = {
+            anelliAlambicco : undefined,
+            alambiccoDx : undefined,
+            alambiccoSx : undefined,
+            anelliBotti : undefined,
+            botteDx : undefined,
+            botteSx : undefined
         }
-        const tl = gsap.timeline({repeat: -1, repeatDelay: .5, yoyo: true});
 
-        tl.to(obj,
-            {
-                alambicco: 1,
-                duration: 2,
-                onUpdate : () => {
-                    const index = dictionary.alambicco;
-                    this.silo.sx.morphTargetInfluences[index] = obj.alambicco;
-                    this.silo.dx.morphTargetInfluences[index] = obj.alambicco;
+
+        for(var i in this.perno){
+            this.perno[i].traverse(child => {
+                if(child.morphTargetDictionary){
+                    if(dictionary.anelliAlambicco === undefined && child.morphTargetDictionary['anelli-alambicco'] !== undefined) dictionary.anelliAlambicco = child.morphTargetDictionary['anelli-alambicco'];
+                    if(dictionary.alambiccoDx === undefined && child.morphTargetDictionary['alambicco-dx'] !== undefined) dictionary.alambiccoDx = child.morphTargetDictionary['alambicco-dx'];
+                    if(dictionary.alambiccoSx === undefined && child.morphTargetDictionary['alambicco-sx'] !== undefined) dictionary.alambiccoSx = child.morphTargetDictionary['alambicco-sx'];
+                    if(dictionary.anelliBotti === undefined && child.morphTargetDictionary['anelli-botti'] !== undefined) dictionary.anelliBotti = child.morphTargetDictionary['anelli-botti'];
+                    if(dictionary.botteDx === undefined && child.morphTargetDictionary['botte-dx'] !== undefined) dictionary.botteDx = child.morphTargetDictionary['botte-dx'];
+                    if(dictionary.botteSx === undefined && child.morphTargetDictionary['botte-sx'] !== undefined) dictionary.botteSx = child.morphTargetDictionary['botte-sx'];
+
                 }
             })
+        }
 
-        tl.to(obj,
+
+        const tl = gsap.timeline({repeat: 0, repeatDelay: .5, yoyo: true});
+
+
+        tl.to(this.objMorphs,
             {
-                alambicco: 0,
-                botte: 1,
+                'anelli-alambicco': 1,
+                'alambicco-dx': 1,
+                'alambicco-sx': 1,
                 duration: 2,
                 onUpdate : () => {
-                    const index_alambicco = dictionary.alambicco;
-                    this.silo.sx.morphTargetInfluences[index_alambicco] = obj.alambicco;
-                    this.silo.dx.morphTargetInfluences[index_alambicco] = obj.alambicco;
-
-                    const index_botte = dictionary.botte;
-                    this.silo.sx.morphTargetInfluences[index_botte] = obj.botte;
-                    this.silo.dx.morphTargetInfluences[index_botte] = obj.botte;
+                    for(var i in this.perno){
+                        this.perno[i].traverse(child => {
+                            if(child.morphTargetDictionary){
+                                child.morphTargetInfluences[dictionary.anelliAlambicco] = this.objMorphs['anelli-alambicco']
+                                child.morphTargetInfluences[dictionary.alambiccoDx] = this.objMorphs['alambicco-dx']
+                                child.morphTargetInfluences[dictionary.alambiccoSx] = this.objMorphs['alambicco-sx']
+                        })
+                    }
                 }
             })
-
-        tl.to(obj,
-            {
-                botte: 0,
-                botte_aperta: 1,
-                duration: 2,
-                onUpdate : () => {
-                    const index_botte = dictionary.botte;
-                    this.silo.sx.morphTargetInfluences[index_botte] = obj.botte;
-                    this.silo.dx.morphTargetInfluences[index_botte] = obj.botte;
-
-                    const index_botte_aperta = dictionary.botte_aperta;
-                    this.silo.sx.morphTargetInfluences[index_botte_aperta] = obj.botte_aperta;
-                    this.silo.dx.morphTargetInfluences[index_botte_aperta] = obj.botte_aperta;
-                }
-            })
+        */
+        
     }
 
     initRenderer(){
@@ -143,7 +149,7 @@ export default class CubeScene {
         return await new Promise((resolve, reject) => {
             const loader = new GLTFLoader();
             return loader.load(
-                './models/silo.glb',
+                './models/silo_new.glb',
                 (gltf) => {
                     return resolve(gltf);
                 },
