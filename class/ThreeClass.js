@@ -96,13 +96,14 @@ export default class ThreeClass {
         new Bottle(this, this.mainGroup, {position: { y : 0 }})
         this.oven = new Oven(this, this.mainGroup, {})
         this.ovenBase = new OvenBaase(this, this.mainGroup, {})
-        this.silo = new Silo(this, this.mainGroup, {position: {y: -1 }})
+        this.silo = new Silo(this, this.mainGroup, {position: {y: -6 }, rotation: {y: THREE.MathUtils.degToRad(-90)}})
+
         this.mainGroup.scale.set(this.sceneScale, this.sceneScale, this.sceneScale)
         this.mainGroup.position.y = this.sceneYOffset;
+
         this.gltf = await this.loadModel('./models/agave-pianta.glb');
         for(let i = 0; i<this.agaveQuantity ;i++){
             const deg = 360 / this.agaveQuantity * i
-            
             new Agave(this, { radian : -.06, y: 0,  deg, }, { ...this.gltf, scene: this.gltf.scene.clone() });
             
         }

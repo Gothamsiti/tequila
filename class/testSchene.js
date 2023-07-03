@@ -50,17 +50,23 @@ export default class CubeScene {
 
     async initScene(){
         const gltf = await this.loadModel();
-        const group = new THREE.Group();
+        this.group = new THREE.Group();
 
         const silo = gltf.scene.children.find(c => c.name == "movement-totale");
-        this.perno = {};
 
-        this.perno.dx = silo.children[2]
-        this.perno.sx = silo.children[3]
+        this.perno = {};
+        this.perno.dx = silo.getObjectByName('perno-dx')
+        this.perno.sx = silo.getObjectByName('perno-sx')
+
+        this.base = silo.getObjectByName('silo_base');
+        this.gambe = silo.getObjectByName('gambe');
         
-        group.add(this.perno.sx)
-        group.add(this.perno.dx)
-        this.scene.add(group);
+        this.group.add(this.perno.sx)
+        this.group.add(this.perno.dx)
+        this.group.add(this.base)
+        this.group.add(this.gambe)
+
+        this.scene.add(this.group);
 
         const gui = new GUI();
 
@@ -76,61 +82,103 @@ export default class CubeScene {
                     }
                 }
             })
-
-            
         }
 
-       this.gsapAnimation();
+        this.gsapAnimation();
     }
 
     gsapAnimation(){
-        /* const dictionary = {
-            anelliAlambicco : undefined,
-            alambiccoDx : undefined,
-            alambiccoSx : undefined,
-            anelliBotti : undefined,
-            botteDx : undefined,
-            botteSx : undefined
-        }
+        var morphs = this.initMorph();
+        const tl = gsap.timeline({
+            repeat: -1,
+            repeatDelay: .5,
+            yoyo: true,
+            onUpdate : () => {
+                const currentLabel = tl.currentLabel();
+                if(currentLabel == 'group_in'){
+                    this.group.position.y = group_in.positionY;
+                    this.group.rotation.y = THREE.MathUtils.degToRad(group_in.rotationY);
+                }
 
+                if(currentLabel == 'morph'){
+                    this.perno.dx.traverse(child => {
+                        if(child.morphTargetDictionary){
+                            if(child.morphTargetDictionary['alambicco-dx'] !== undefined) child.morphTargetInfluences[morphs.dx['alambicco-dx'].index] = morphs.dx['alambicco-dx'].value;
+                            if(child.morphTargetDictionary['anelli-alambicco'] !== undefined) child.morphTargetInfluences[morphs.dx['anelli-alambicco'].index] = morphs.dx['anelli-alambicco'].value;
+                            if(child.morphTargetDictionary['anelli-botti'] !== undefined) child.morphTargetInfluences[morphs.dx['anelli-botti'].index] = morphs.dx['anelli-botti'].value;
+                            if(child.morphTargetDictionary['botte-dx'] !== undefined) child.morphTargetInfluences[morphs.dx['botte-dx'].index] = morphs.dx['botte-dx'].value;
+                        }
+                    })
+                    this.perno.sx.traverse(child => {
+                        if(child.morphTargetDictionary){
+                            if(child.morphTargetDictionary['alambicco-sx'] !== undefined) child.morphTargetInfluences[morphs.sx['alambicco-sx'].index] = morphs.sx['alambicco-sx'].value;
+                            if(child.morphTargetDictionary['anelli-alambicco'] !== undefined) child.morphTargetInfluences[morphs.sx['anelli-alambicco'].index] = morphs.sx['anelli-alambicco'].value;
+                            if(child.morphTargetDictionary['anelli-botti'] !== undefined) child.morphTargetInfluences[morphs.sx['anelli-botti'].index] = morphs.sx['anelli-botti'].value;
+                            if(child.morphTargetDictionary['botte-sx'] !== undefined) child.morphTargetInfluences[morphs.sx['botte-sx'].index] = morphs.sx['botte-sx'].value;
+                        }
+                    })
+                }
+            }
+        });
 
+        tl.addLabel('group_in');
+        const group_in = {positionY: 0, rotationY: 0}
+        tl.to(group_in,{ positionY: 1, rotationY: 90, duration: 2})
+
+        tl.addLabel('morph')
+        tl.to([
+                morphs.dx['anelli-alambicco'],
+                morphs.sx['anelli-alambicco'],
+                morphs.dx['alambicco-dx'],
+                morphs.sx['alambicco-sx'],
+            ],{
+                value: 1,
+                duration: 2
+        })
+        tl.to([
+            morphs.dx['anelli-alambicco'],
+            morphs.sx['anelli-alambicco'],
+            morphs.dx['alambicco-dx'],
+            morphs.sx['alambicco-sx'],
+        ],{
+            value: 0,
+            duration: 2
+        })
+        tl.to([
+            morphs.dx['anelli-botti'],
+            morphs.sx['anelli-botti'],
+            morphs.dx['botte-dx'],
+            morphs.sx['botte-sx'],
+        ],{
+            value: 1,
+            duration: 2
+        },'<')
+        
+        tl.addLabel('base_move');
+        tl.to(this.base.position,{y:-.1, duration: 2},'<')
+        tl.to(this.gambe.position,{y:-.3, duration: 2},'<')
+    }
+    
+    initMorph(){
+        var morphs = {};
         for(var i in this.perno){
+            if(!morphs[i]) morphs[i] = {}
             this.perno[i].traverse(child => {
                 if(child.morphTargetDictionary){
-                    if(dictionary.anelliAlambicco === undefined && child.morphTargetDictionary['anelli-alambicco'] !== undefined) dictionary.anelliAlambicco = child.morphTargetDictionary['anelli-alambicco'];
-                    if(dictionary.alambiccoDx === undefined && child.morphTargetDictionary['alambicco-dx'] !== undefined) dictionary.alambiccoDx = child.morphTargetDictionary['alambicco-dx'];
-                    if(dictionary.alambiccoSx === undefined && child.morphTargetDictionary['alambicco-sx'] !== undefined) dictionary.alambiccoSx = child.morphTargetDictionary['alambicco-sx'];
-                    if(dictionary.anelliBotti === undefined && child.morphTargetDictionary['anelli-botti'] !== undefined) dictionary.anelliBotti = child.morphTargetDictionary['anelli-botti'];
-                    if(dictionary.botteDx === undefined && child.morphTargetDictionary['botte-dx'] !== undefined) dictionary.botteDx = child.morphTargetDictionary['botte-dx'];
-                    if(dictionary.botteSx === undefined && child.morphTargetDictionary['botte-sx'] !== undefined) dictionary.botteSx = child.morphTargetDictionary['botte-sx'];
-
-                }
-            })
-        }
-
-
-        const tl = gsap.timeline({repeat: 0, repeatDelay: .5, yoyo: true});
-
-
-        tl.to(this.objMorphs,
-            {
-                'anelli-alambicco': 1,
-                'alambicco-dx': 1,
-                'alambicco-sx': 1,
-                duration: 2,
-                onUpdate : () => {
-                    for(var i in this.perno){
-                        this.perno[i].traverse(child => {
-                            if(child.morphTargetDictionary){
-                                child.morphTargetInfluences[dictionary.anelliAlambicco] = this.objMorphs['anelli-alambicco']
-                                child.morphTargetInfluences[dictionary.alambiccoDx] = this.objMorphs['alambicco-dx']
-                                child.morphTargetInfluences[dictionary.alambiccoSx] = this.objMorphs['alambicco-sx']
-                        })
+                    let keys = Object.keys(child.morphTargetDictionary);
+                    for(var k in keys){
+                        if(!morphs[i][keys[k]]){
+                            morphs[i][keys[k]] = {
+                                index: child.morphTargetDictionary[keys[k]],
+                                value: child.morphTargetInfluences[k]
+                            }
+                        }
                     }
                 }
             })
-        */
-        
+        }
+
+        return morphs;
     }
 
     initRenderer(){
