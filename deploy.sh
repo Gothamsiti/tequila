@@ -1,3 +1,4 @@
+source "$HOME/.nvm/nvm.sh"
 nvm use 16.18.1
 node -v
 npm ci
