@@ -94,7 +94,6 @@ export default class ThreeClass {
         }
         this.setUpGroupSceneLimits()
 
-
         this.mainGroup.scale.set(this.sceneScale, this.sceneScale, this.sceneScale)
         this.mainGroup.position.y = this.sceneYOffset;
 

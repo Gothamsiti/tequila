@@ -15,6 +15,7 @@ export default class Bottle {
         
         const trasparentMaterial = new THREE.MeshPhongMaterial( {color: 0xffAAAA , colorWrite: !this.parent.isAr} );
         this.bottle.scene.children[0].material =  trasparentMaterial;
+        
         this.bottle.scene.scale.set(this.bottleScale, this.bottleScale, this.bottleScale) 
         const box = new THREE.Box3().setFromObject( this.bottle.scene  ); 
         const size = box.getSize(new THREE.Vector3());

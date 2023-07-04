@@ -10,6 +10,7 @@ onMounted(() => {
     const threeClass = new ThreeClass(false, mainThree.value);
 
 })
+
 </script>
 <style lang="scss">
 #main{
