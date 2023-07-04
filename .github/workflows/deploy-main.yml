@@ -18,3 +18,5 @@ jobs:
             cd apps/tequila
             git pull
             echo 'Pulled repo succesfully'
+            npm ci
+            npm run build 
