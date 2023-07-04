@@ -1,0 +1,20 @@
+name: DEPLOY-MAIN
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build And Deploy on development
+        uses: appleboy/ssh-action@v0.1.2
+        with:
+          host: ${{secrets.SSH_HOST}}
+          key: ${{secrets.SSH_KEY}}
+          username: ${{secrets.SSH_USERNAME}}
+          port: 22
+          script: |
+            cd apps/tequila
+            git pull
+            echo 'Pulled repo succesfully'
