@@ -17,5 +17,4 @@ jobs:
           script: |
             cd apps/tequila
             git pull
-            npm ci
-            npm run build
+            sh deploy.sh
