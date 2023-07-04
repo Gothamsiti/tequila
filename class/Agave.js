@@ -22,9 +22,9 @@ export default class Agave {
             { search: '06', rotationOffset: 130, angle : THREE.MathUtils.degToRad(130), quantity: 3, mesh : null, from: {}, to: { position: {x:.3, y:0, z:.3}, rotation: {x: -10, y: 0, z: 0}}},
         ]
         this.leafDummies = [];
+        this.inited = false;
         this.init()
     }
-
 
     init() {
         const agave_cuore = new THREE.Group();        
@@ -54,18 +54,14 @@ export default class Agave {
         const size = box.getSize(new THREE.Vector3());
         this.groupHeight = size.y
         this.group.add(this.modelGroup)
-        this.group.scale.set(.01,.01,.01)
-        this.addToTimeline();
-
-        // this.opacityWatcher()
-
-
+        this.group.scale.set(.01,.01,.01);
+        
+        this.inited = true;
     }
-    addToTimeline(){
-        const leafDummiesPositions = this.leafDummies.map(d => d.position);
-
+    addToTimeline(context){
+        const leafDummiesPositions = context.leafDummies.map(d => d.position);
         const agaveGroupTl = {
-            from: { scale : { x : this.group.scale.x },},
+            from: { scale : { x : context.group.scale.x },},
             step1: {
                 scale: { x :1 },
                 rotation: { y: THREE.MathUtils.degToRad(150) }
@@ -73,67 +69,46 @@ export default class Agave {
             step2: {
                 rotation: { y: THREE.MathUtils.degToRad(360) },
                 position: { y: 0 },
-                
             },
             step3: {
                 rotation: { y: THREE.MathUtils.degToRad(510) },
-               
-                
-            },
-            
-            
+            }
         }
 
         const agaveTl = {
-            from : {distanceFromBottle:{ distance : this.distanceFromBottle}, rotation : { y : this.modelGroup.rotation.y}},
-            step1: {
-                
-                rotation: { y: THREE.MathUtils.degToRad(-270) }
-            },
-            step2: {
-                distanceFromBottle:{distance : 1.2 },
-                rotation: { y: THREE.MathUtils.degToRad(-630) }
-            },
+            from : {distanceFromBottle:{ distance : context.distanceFromBottle}, rotation : { y : context.modelGroup.rotation.y}},
+            step1: { rotation: { y: THREE.MathUtils.degToRad(-270) } },
+            step2: { distanceFromBottle:{distance : 1.2 }, rotation: { y: THREE.MathUtils.degToRad(-630) } }
         }
 
-
         const tl = gsap.timeline({
-            onStart: ()=> {
-                this.modelGroup.visible=true;
-            },
+            onStart: () => { context.modelGroup.visible = true; },
             onUpdate : () => {
-                this.group.scale.set(agaveGroupTl.from.scale.x,agaveGroupTl.from.scale.x,agaveGroupTl.from.scale.x)
-                for(const dummy of this.leafDummies){
+                context.group.scale.set(agaveGroupTl.from.scale.x,agaveGroupTl.from.scale.x,agaveGroupTl.from.scale.x)
+                for(const dummy of context.leafDummies){
                     dummy.updateMatrix();
                     dummy.parentMesh.setMatrixAt(dummy.dummyIndex, dummy.matrix);
                     dummy.parentMesh.instanceMatrix.needsUpdate = true;
                 }
-                this.modelGroup.position.x = agaveTl.from.distanceFromBottle.distance * Math.cos(THREE.MathUtils.degToRad(this.origin.deg))
-                this.modelGroup.position.z = agaveTl.from.distanceFromBottle.distance * Math.sin(THREE.MathUtils.degToRad(this.origin.deg))
+                context.modelGroup.position.x = agaveTl.from.distanceFromBottle.distance * Math.cos(THREE.MathUtils.degToRad(context.origin.deg))
+                context.modelGroup.position.z = agaveTl.from.distanceFromBottle.distance * Math.sin(THREE.MathUtils.degToRad(context.origin.deg))
             },
-            onComplete: ()=> {
-                this.modelGroup.visible=false;
-            }
+            onComplete: ()=> { context.modelGroup.visible = false; }
         })
-        tl.to(agaveGroupTl.from.scale, {
-            ...agaveGroupTl.step1.scale,
-            duration: 3,            
-        },
-        '0')
-
+        tl.to(agaveGroupTl.from.scale, { ...agaveGroupTl.step1.scale, duration: 3, }, '0')
         tl.to(
             leafDummiesPositions,
             { 
                 x : i => {  
-                    const deg = this.leafDummies[i].offsetDegrees - i * this.leafDummies[i].deltaDegrees;
-                    return -this.leafDummies[i].layer.to.position.x * Math.cos(THREE.MathUtils.degToRad(deg))
+                    const deg = context.leafDummies[i].offsetDegrees - i * context.leafDummies[i].deltaDegrees;
+                    return -context.leafDummies[i].layer.to.position.x * Math.cos(THREE.MathUtils.degToRad(deg))
                 },
                 z : i => {  
-                    const deg = this.leafDummies[i].offsetDegrees - i * this.leafDummies[i].deltaDegrees;
-                    return -this.leafDummies[i].layer.to.position.z * Math.sin(THREE.MathUtils.degToRad(deg))
+                    const deg = context.leafDummies[i].offsetDegrees - i * context.leafDummies[i].deltaDegrees;
+                    return -context.leafDummies[i].layer.to.position.z * Math.sin(THREE.MathUtils.degToRad(deg))
                 },
                 y : i => {
-                    return this.leafDummies[i].layer.to.position.y * Math.sin(this.leafDummies[i].layer.angle)
+                    return context.leafDummies[i].layer.to.position.y * Math.sin(context.leafDummies[i].layer.angle)
                 },
                 stagger: .02,
                 duration : .6,
@@ -149,14 +124,14 @@ export default class Agave {
             },
             "-=.75"
         )
-        tl.to(this.group.rotation, {
+        tl.to(context.group.rotation, {
             ...agaveGroupTl.step1.rotation,
             duration: 4,      
             ease: "power2.out"  
             
         },
         '0')
-        tl.to(this.modelGroup.rotation, {
+        tl.to(context.modelGroup.rotation, {
             ...agaveTl.step1.rotation,
             duration: 4,            
             ease: "power4.out"  
@@ -164,21 +139,18 @@ export default class Agave {
         '0')
 
 
-        tl.to(this.group.rotation, {
+        tl.to(context.group.rotation, {
             ...agaveGroupTl.step2.rotation,
             duration: 5,      
             ease: "power2.in"  
-            
         },
         '4')
-        tl.to(this.modelGroup.rotation, {
+        tl.to(context.modelGroup.rotation, {
             ...agaveTl.step2.rotation,
             duration: 7,  
-            
             ease: "power4.inOut"  
         },
         '4')
-
        
         tl.to(agaveTl.from.distanceFromBottle, {
             ...agaveTl.step2.distanceFromBottle,
@@ -187,39 +159,20 @@ export default class Agave {
         },
         "5"
         )
-        tl.to(this.group.position, {
+        tl.to(context.group.position, {
             ...agaveGroupTl.step2.position,
             duration: 1,       
             ease: "power2.in",     
         },
         "7.5"
         )
-        tl.to(this.group.rotation, {
+        tl.to(context.group.rotation, {
             ...agaveGroupTl.step3.rotation,
-            duration: 2,  
-            
-            // ease: "power4"  
+            duration: 2,
         },
         '9')
         
-        tl.addLabel('agave')
-        tl.name = 'agave';
-        this.modelGroup.gsapAnimation = tl
 
-
+        return tl
     }
-
-    // opacityWatcher(){
-
-    //     this.modelGroup.children[6].children.map(cuore=> cuore.children.map((child)=> {
-    //         child.material.opacity = this.parent.getOpacity(this.groupHeight, this.modelGroup.position.y, 4)
-    //     }))
-
-    //     // if(this.modelGroup.position.y > 8 || this.modelGroup.position.y < 0 ){
-    //     //     this.direction = this.direction * -1
-    //     // }
-
-    //     requestAnimationFrame(()=> this.opacityWatcher())
-    // }
-
 }

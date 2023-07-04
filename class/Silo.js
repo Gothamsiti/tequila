@@ -13,12 +13,11 @@ export default class Silo {
         this.oblo = null;
         this.objMorphs = {}
         this.perno = {};
-
+        this.inited = false;
         this.init()
     }
     async init(){
         const model = await this.parent.loadModel('./models/silo.glb');
-        console.log(model)
 
         this.siloGroup = new THREE.Group();
         this.siloGroup.position.y = this.settings.position.y;
@@ -69,23 +68,21 @@ export default class Silo {
                     }
                 })
             }
-
         }
-
-        this.addToTimeline();
+        this.inited = true;
     }
-    addToTimeline(){
-        var morphs = this.initMorph();
+    addToTimeline(context){
+        var morphs = context.initMorph(context);
         const tl = gsap.timeline({
             onUpdate : () => {
                 const currentLabel = tl.currentLabel();
                 if(currentLabel == 'group_in'){
-                    this.siloGroup.position.y = group_in.positionY;
-                    this.siloGroup.rotation.y = THREE.MathUtils.degToRad(group_in.rotationY);
+                    context.siloGroup.position.y = group_in.positionY;
+                    context.siloGroup.rotation.y = THREE.MathUtils.degToRad(group_in.rotationY);
                 }
 
                 if(currentLabel == 'morph'){
-                    this.perno.dx.traverse(child => {
+                    context.perno.dx.traverse(child => {
                         if(child.morphTargetDictionary){
                             if(child.morphTargetDictionary['alambicco-dx'] !== undefined) child.morphTargetInfluences[morphs.dx['alambicco-dx'].index] = morphs.dx['alambicco-dx'].value;
                             if(child.morphTargetDictionary['anelli-alambicco'] !== undefined) child.morphTargetInfluences[morphs.dx['anelli-alambicco'].index] = morphs.dx['anelli-alambicco'].value;
@@ -93,7 +90,7 @@ export default class Silo {
                             if(child.morphTargetDictionary['botte-dx'] !== undefined) child.morphTargetInfluences[morphs.dx['botte-dx'].index] = morphs.dx['botte-dx'].value;
                         }
                     })
-                    this.perno.sx.traverse(child => {
+                    context.perno.sx.traverse(child => {
                         if(child.morphTargetDictionary){
                             if(child.morphTargetDictionary['alambicco-sx'] !== undefined) child.morphTargetInfluences[morphs.sx['alambicco-sx'].index] = morphs.sx['alambicco-sx'].value;
                             if(child.morphTargetDictionary['anelli-alambicco'] !== undefined) child.morphTargetInfluences[morphs.sx['anelli-alambicco'].index] = morphs.sx['anelli-alambicco'].value;
@@ -104,17 +101,17 @@ export default class Silo {
                 }
 
                 if(currentLabel == 'fade_out'){
-                    this.perno.dx.traverse(child => {
+                    context.perno.dx.traverse(child => {
                         if(child.material) child.material.opacity = opacity.value;
                     })
-                    this.perno.sx.traverse(child => {
+                    context.perno.sx.traverse(child => {
                         if(child.material) child.material.opacity = opacity.value;
                     })
                 }
             },
             onComplete : () => {
                 //RESET ALLA SITUAZIONE INIZIALE
-                this.perno.dx.traverse(child => {
+                context.perno.dx.traverse(child => {
                     if(child.material) child.material.opacity = 1;
                     if(child.morphTargetDictionary){
                         if(child.morphTargetDictionary['alambicco-dx'] !== undefined) child.morphTargetInfluences[morphs.dx['alambicco-dx'].index] = 0;
@@ -123,7 +120,7 @@ export default class Silo {
                         if(child.morphTargetDictionary['botte-dx'] !== undefined) child.morphTargetInfluences[morphs.dx['botte-dx'].index] = 0;
                     }
                 })
-                this.perno.sx.traverse(child => {
+                context.perno.sx.traverse(child => {
                     if(child.material) child.material.opacity = 1;
                     if(child.morphTargetDictionary){
                         if(child.morphTargetDictionary['alambicco-sx'] !== undefined) child.morphTargetInfluences[morphs.sx['alambicco-sx'].index] = 0;
@@ -132,20 +129,19 @@ export default class Silo {
                         if(child.morphTargetDictionary['botte-sx'] !== undefined) child.morphTargetInfluences[morphs.sx['botte-sx'].index] = 0;
                     }
                 })
-                this.perno.sx.rotation.y = 0;
-                this.perno.dx.rotation.y = 0;
-                this.siloGroup.position.y = this.settings.position.y;
-
+                context.perno.sx.rotation.y = 0;
+                context.perno.dx.rotation.y = 0;
+                context.siloGroup.position.y = context.settings.position.y;
             }
         });
 
         tl.addLabel('group_in'); //ENTRA IL GRUPPO
-        const group_in = {positionY: this.siloGroup.position.y, rotationY: 0}
+        const group_in = {positionY: context.siloGroup.position.y, rotationY: 0}
         tl.to(group_in,{ positionY: 0, rotationY: 0, duration: 2})
 
         tl.addLabel('ladder_in'); //ENTRA LA SCALA
-        tl.to(this.ladder.rotation,{ z: THREE.MathUtils.degToRad(20), duration: 2, ease: 'bounce.out' }, '<+=1')
-        tl.to(this.ladder.position,{ y: 0, duration: .5, ease: 'bounce.out' }, '<')
+        tl.to(context.ladder.rotation,{ z: THREE.MathUtils.degToRad(20), duration: 2, ease: 'bounce.out' }, '<+=1')
+        tl.to(context.ladder.position,{ y: 0, duration: .5, ease: 'bounce.out' }, '<')
 
 
         tl.addLabel('morph')
@@ -160,12 +156,12 @@ export default class Silo {
         },'+=3')
 
         //ENTRA OBLO
-        tl.to(this.oblo.rotation,{ z: THREE.MathUtils.degToRad(90) },'<')
-        tl.to(this.oblo.position,{ z: 1 },'<')
+        tl.to(context.oblo.rotation,{ z: THREE.MathUtils.degToRad(90) },'<')
+        tl.to(context.oblo.position,{ z: 1 },'<')
 
         //CADE LA SCALA
-        tl.to(this.ladder.rotation,{ z: THREE.MathUtils.degToRad(-90), duration: 1 }, '<')
-        tl.to(this.ladder.position,{ y: -.1, duration: 1 }, '<')
+        tl.to(context.ladder.rotation,{ z: THREE.MathUtils.degToRad(-90), duration: 1 }, '<')
+        tl.to(context.ladder.position,{ y: -.1, duration: 1 }, '<')
 
 
         tl.to([ // DA ALAMBICCO A BOTTE
@@ -188,29 +184,27 @@ export default class Silo {
         },'<')
 
         //ESCE OBLO
-        tl.to(this.oblo.rotation,{ z: 0 },'<')
-        tl.to(this.oblo.position,{ z: 0 },'<')
+        tl.to(context.oblo.rotation,{ z: 0 },'<')
+        tl.to(context.oblo.position,{ z: 0 },'<')
         
         tl.addLabel('base_move'); // LA BASE ESCE 
-        tl.to(this.baseGroup.position,{y:-1, duration: 1},'<')
+        tl.to(context.baseGroup.position,{y:-1, duration: 1},'<')
 
         // IL BARILE SI APRE
-        tl.to(this.perno.dx.rotation,{ y: THREE.MathUtils.degToRad(45)},'+=3')
-        tl.to(this.perno.sx.rotation,{ y: THREE.MathUtils.degToRad(-45)},'<')
+        tl.to(context.perno.dx.rotation,{ y: THREE.MathUtils.degToRad(45)},'+=3')
+        tl.to(context.perno.sx.rotation,{ y: THREE.MathUtils.degToRad(-45)},'<')
 
         tl.addLabel('fade_out');
         const opacity = {value: 1}
         tl.to(opacity, { value: 0 },'+=3')
 
-        tl.addLabel('silo')
-        tl.name = 'silo';
-        this.siloGroup.gsapAnimation = tl
+        return tl
     }
-    initMorph(){
+    initMorph(context){
         var morphs = {};
-        for(var i in this.perno){
+        for(var i in context.perno){
             if(!morphs[i]) morphs[i] = {}
-            this.perno[i].traverse(child => {
+            context.perno[i].traverse(child => {
                 if(child.morphTargetDictionary){
                     let keys = Object.keys(child.morphTargetDictionary);
                     for(var k in keys){

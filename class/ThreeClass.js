@@ -23,13 +23,13 @@ export default class ThreeClass {
         this.scene = null;
         this.camera = null;
         this.renderer = null;
-        this.oven = null;
+
         this.sceneHeight = null;
         this.controls = null;
         this.stats = null;
         this.maxAvarageSize = 30;
         this.debug = false;
-        this.agavePositionsDeg = []
+
         this.sceneYOffset = -.45
         this.sceneScale = .425
         this.agaveModels = []
@@ -93,20 +93,23 @@ export default class ThreeClass {
             this.initLights();
         }
         this.setUpGroupSceneLimits()
-        new Bottle(this, this.mainGroup, {position: { y : 0 }})
-        this.oven = new Oven(this, this.mainGroup, {})
-        this.ovenBase = new OvenBaase(this, this.mainGroup, {})
-        this.silo = new Silo(this, this.mainGroup, {position: {y: -6 }, rotation: {y: THREE.MathUtils.degToRad(-90)}})
 
         this.mainGroup.scale.set(this.sceneScale, this.sceneScale, this.sceneScale)
         this.mainGroup.position.y = this.sceneYOffset;
 
         this.gltf = await this.loadModel('./models/agave-pianta.glb');
+        this.agaves = [];
         for(let i = 0; i<this.agaveQuantity ;i++){
             const deg = 360 / this.agaveQuantity * i
-            new Agave(this, { radian : -.06, y: 0,  deg, }, { ...this.gltf, scene: this.gltf.scene.clone() });
-            
+            const agave = new Agave(this, { radian : -.06, y: 0,  deg, }, { ...this.gltf, scene: this.gltf.scene.clone() });
+            this.agaves.push(agave);
         }
+
+        this.bottle = new Bottle(this, this.mainGroup, {position: { y : 0 }})
+        this.oven = new Oven(this, this.mainGroup, {})
+        this.ovenBase = new OvenBaase(this, this.mainGroup, {})
+        this.silo = new Silo(this, this.mainGroup, {position: {y: -6 }, rotation: {y: THREE.MathUtils.degToRad(-90)}})
+
         this.mainGroup.add(this.agaveGroup);
         this.group.add(this.mainGroup)
         this.scene.add(this.group)
