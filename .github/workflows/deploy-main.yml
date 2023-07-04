@@ -17,4 +17,4 @@ jobs:
           script: |
             cd apps/tequila
             git pull
-            deploy.sh
+            sh deploy.sh
