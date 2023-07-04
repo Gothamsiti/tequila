@@ -28,7 +28,7 @@ export default class ThreeClass {
         this.controls = null;
         this.stats = null;
         this.maxAvarageSize = 30;
-        this.debug = true;
+        this.debug = false;
 
         this.sceneYOffset = -.45
         this.sceneScale = .425
@@ -199,26 +199,28 @@ export default class ThreeClass {
     }
 
     initLights() {
-        const ambientLight = new THREE.AmbientLight(0x202020); // soft white light
-        ambientLight.position.y = -1
-        this.scene.add(ambientLight);
+        // const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.5); // soft white light
+        // // const ambientLight = new THREE.AmbientLight(0x202020); // soft white light
+        // ambientLight.position.y = 6
+        // this.scene.add(ambientLight);
 
-        const light_1 = new THREE.PointLight(0xFFFFFF, 1, 100);
-        light_1.position.set(0, 4, 2);
+        const light_1 = new THREE.PointLight(0xFFFFFF, 1, 100)
+        light_1.position.set(0, 15, 15);
         this.mainGroup.add(light_1);
         if (this.debug) {
             const axesHelper = new THREE.AxesHelper(5);
             light_1.add(axesHelper);
+            
         }
 
     }
     initARLights() {
-        this.arAmbientLight = new THREE.AmbientLight(0x202020); // soft white light
-        this.arAmbientLight.position.y = -1
-        this.scene.add(this.arAmbientLight);
+        // this.arAmbientLight = new THREE.AmbientLight(0x202020); // soft white light
+        // this.arAmbientLight.position.y = -1
+        // this.scene.add(this.arAmbientLight);
 
         this.arPointLight  = new THREE.PointLight(0xFFFFFF, 1, 100);
-        this.arPointLight.position.set(0, 4, 2);
+        this.arPointLight.position.set(0, 4, 4);
         this.mainGroup.add(this.arPointLight);
         if (this.debug) {
             const axesHelper = new THREE.AxesHelper(5);

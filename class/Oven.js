@@ -192,13 +192,13 @@ export default class Oven {
                 ...layer.from.position,
                 duration: context.animationDuration,
             },
-            `5.${(context.oven.children.length -i) *1 }`
+            `6.${(context.oven.children.length -i) *1 }`
             )
             tl.to(context.oven.children[i].rotation, {
                 ...layer.step2.rotation,
                 duration: 2
             },
-            `5.4`
+            `6.4`
             )
 
         })
@@ -232,25 +232,25 @@ export default class Oven {
         tl.to(context.light,{
             ...lightTl.step1,
             ease: "bounce.inOut",
-            duration: 1
+            duration: 1.5
         },"3.5")
         tl.to(context.light,{
             ...lightTl.step2,
             ease: "bounce.inOut",
-            duration: 1
-        },"4.5")
+            duration: 1.5
+        },"5.5")
         tl.to(context.ring.material, {
             ...ringTL.step2.material,
             duration: .2,
             ease: "power2.out"
         },
-        "5.3")
+        "6.3")
         tl.to(context.ring.position, {
             ...ringTL.step2.position,
             duration: .2,
             ease: "power2.out"
         },
-        "5.3")
+        "6.3")
         tl.to(context.door.position, {
             ...doorTl.step2.position,
             duration: 1,
@@ -269,13 +269,13 @@ export default class Oven {
             ...doorTl.step3.position,
             duration: context.animationDuration,
         },
-        `5.35`
+        `6.35`
         )
         tl.to(context.door.rotation, {
             ...doorTl.step3.rotation,
             duration: 2,
         },
-        `5.35`
+        `6.35`
         )
 
         
