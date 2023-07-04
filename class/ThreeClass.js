@@ -114,7 +114,8 @@ export default class ThreeClass {
         this.group.add(this.mainGroup)
         this.scene.add(this.group)
 
-        new AnimationsClass(this)
+        const animations = new AnimationsClass(this);
+        animations.masterTl.play()
         
 
         if(this.debug){
@@ -188,12 +189,11 @@ export default class ThreeClass {
     }
 
     initRenderer() {
-        let antiAlias = false; //improve performance 
+        let antiAlias = !!this.debug; //improve performance 
 
         this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: antiAlias, powerPreference: 'high-performance'});
         this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
         if(this.isAr){
-
             this.renderer.setPixelRatio(window.devicePixelRatio * 0.5) // imporove performance 
         }
     }

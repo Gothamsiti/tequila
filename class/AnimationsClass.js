@@ -34,13 +34,40 @@ export default class AnimationsClass {
         this.coreografie.push({name: 'ovenBase', tween: this.ovenBase.addToTimeline, context: this.ovenBase});
         this.coreografie.push({name: 'silo', tween: this.silo.addToTimeline, context: this.silo});
 
-        this.masterTl = gsap.timeline({repeat: -1});
+        this.masterTl = gsap.timeline({paused: true, repeat: -1});
 
         for(var o in this.regia){
             for(var c in this.coreografie){
                 if(this.regia[o].name != this.coreografie[c].name) continue;
                 this.addToTimeline(this.coreografie[c], this.regia[o], o)
             }
+        }
+        if(this.parent.debug){
+            const controls = document.getElementById('controls');
+            if(controls){
+                const playBtn = controls.getElementsByClassName('play')[0];
+                if(playBtn){
+                    playBtn.addEventListener('click',() => {
+                        this.masterTl.play();
+                    })
+                }
+                const pauseBtn = controls.getElementsByClassName('pause')[0];
+                if(pauseBtn){
+                    pauseBtn.addEventListener('click',() => {
+                        this.masterTl.pause();
+
+                    })
+                }
+                const stop = controls.getElementsByClassName('stop')[0];
+                if(stop){
+                    stop.addEventListener('click',() => {
+                        this.masterTl.seek(0,false);
+                        this.masterTl.pause();
+                    })
+                }
+            }
+
+
         }
     }
     addToTimeline(coreografia, turno, index){
