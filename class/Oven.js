@@ -12,6 +12,8 @@ export default class Oven {
         this.animationDuration = 3
         this.ovenHeight = 5
         this.ovenScale = .9
+        this.light= null;
+        this.ring =null;
         this.init()
     }
 
@@ -26,6 +28,9 @@ export default class Oven {
         this.door.scale.set(.01,.01,.01)
         this.oven.scale.set(this.ovenScale,this.ovenScale,this.ovenScale)
         this.group.add(this.door)
+        this.initLight()
+        this.initCylinder()
+        
         this.oven.traverse(node => {
             if (node.type == "Mesh") {
                 node.position.y = 10
@@ -61,8 +66,63 @@ export default class Oven {
 
     }
 
-    addToTimeline() {
+    initLight(){
+        this.light = new THREE.PointLight( 0xffee88, 0, 100, 2 );
+        this.light.position.y= 1;
+        this.group.add(this.light)
+    }
+    initCylinder(){
+        // Define the outer and inner radius of the cylinder
+        const outerRadius = 1;
         
+
+        // Create a shape for the outer circle
+        const outerShape = new THREE.Shape();
+        outerShape.absarc(0, 0, outerRadius, 0, Math.PI * 2, false);
+
+        // Create a shape for the inner circle
+        
+
+        // Create a path for the outer shape
+        const outerPath = new THREE.Path(outerShape.getPoints());
+        outerPath.closePath();
+
+        // Create a path for the inner shape
+        
+
+        // Create the final shape by subtracting the inner shape from the outer shape
+        const finalShape = new THREE.Shape();
+        finalShape.moveTo(0, 0);
+        finalShape.holes.push(outerPath);
+
+        // Create the geometry by extruding the final shape
+        const geometry = new THREE.ExtrudeGeometry(finalShape, {
+        depth: 1.9, // Adjust the depth of the cylinder as needed
+        bevelEnabled: false
+        });
+
+        // Create a material
+        const material = new THREE.MeshBasicMaterial({ color: 0xAAAAAA, side: THREE.DoubleSide, transparent: true });
+
+        // Create a mesh and add it to the scene
+        this.ring = new THREE.Mesh(geometry, material);
+        this.ring.renderOrder =2
+        this.ring.rotation.x = THREE.MathUtils.degToRad(90)
+        this.ring.material.opacity= 0;
+        this.ring.position.y= 0;
+        this.group.add(this.ring);
+    }
+    addToTimeline() {
+        const lightTl = {
+            from : { intensity : this.light.intensity },
+            step1: {intensity : 1},
+            step2 : { intensity : 0}
+        }
+        const ringTL = {
+            from: {position: { y : this.ring.position.y }, material: {opacity: this.ring.material.opacity}},
+            step1: {position : { y : 1.9}, material : {opacity : 1 }},
+            step2: {position : { y : 0}, material : {opacity : 0}}
+        }
         const doorTl = {
             from: { position: {y : this.door.position.y}, scale: {x: this.door.scale.x},rotation: { y : this.door.rotation.y , }},
             // step1: { position: {y : 0, x :-0.2, z: -0.2 }, rotation: { y :  THREE.MathUtils.degToRad(180) }},
@@ -163,6 +223,40 @@ export default class Oven {
         },
         `.5`
         )
+        tl.to(this.ring.material, {
+            ...ringTL.step1.material,
+            duration: .2,
+            ease: "power2.out"
+        },
+        "3.3")
+        tl.to(this.ring.position, {
+            ...ringTL.step1.position,
+            duration: .2,
+            ease: "power2.out"
+        },
+        "3.3")
+        tl.to(this.light,{
+            ...lightTl.step1,
+            ease: "bounce.inOut",
+            duration: 1
+        },"3.5")
+        tl.to(this.light,{
+            ...lightTl.step2,
+            ease: "bounce.inOut",
+            duration: 1
+        },"4.5")
+        tl.to(this.ring.material, {
+            ...ringTL.step2.material,
+            duration: .2,
+            ease: "power2.out"
+        },
+        "5.3")
+        tl.to(this.ring.position, {
+            ...ringTL.step2.position,
+            duration: .2,
+            ease: "power2.out"
+        },
+        "5.3")
         tl.to(this.door.position, {
             ...doorTl.step2.position,
             duration: 1,
