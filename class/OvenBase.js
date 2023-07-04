@@ -113,7 +113,7 @@ export default class OvenBaase {
         tl.to(millstone.rotation, {
             ...millstoneTL.step1.rotation,
             ease: "none",
-            duration: 3
+            duration: 5
         },
         "7")
 
@@ -133,7 +133,7 @@ export default class OvenBaase {
 
         tl.to(context.rondella.rotation,{
             ...rondellaTl.step1.rotation,
-            duration: 3
+            duration: 5
         }, '9')
 
         return tl;
