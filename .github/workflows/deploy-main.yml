@@ -21,4 +21,5 @@ jobs:
           script: |
             cd apps/tequila
             git pull
+            node -v
             sh deploy.sh
