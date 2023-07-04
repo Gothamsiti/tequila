@@ -19,6 +19,6 @@ jobs:
             git pull
             echo 'Pulled repo succesfully'
             nvm use 16
-            npm install
+            npm ci
             npm run build 
             echo 'SUCCESFULLY BUILT'
