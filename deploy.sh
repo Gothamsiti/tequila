@@ -1,5 +1,5 @@
 npm ci
-
+node -v
 # Build the project
 npm run build
 
