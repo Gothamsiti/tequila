@@ -192,7 +192,6 @@ export default class CubeScene {
 
     }
 
-
     async loadModel() {
         return await new Promise((resolve, reject) => {
             const loader = new GLTFLoader();
