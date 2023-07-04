@@ -18,6 +18,6 @@ jobs:
             cd apps/tequila
             git pull
             echo 'Pulled repo succesfully'
-            npm i
+            npm install
             npm run build 
             echo 'SUCCESFULLY BUILT'
