@@ -1,5 +1,6 @@
-npm ci
+nvm use 16.18.1
 node -v
+npm ci
 # Build the project
 npm run build
 
