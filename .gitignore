@@ -22,3 +22,4 @@ logs
 !.env.example
 
 *.pem
+sw.*

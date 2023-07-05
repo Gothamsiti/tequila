@@ -118,10 +118,10 @@ export default class ThreeClass {
         animations.masterTl.play()
         
 
-        // if(this.debug){
-        //     const axesHelper = new THREE.AxesHelper(5);
-        //     this.mainGroup.add(axesHelper);
-        // }
+        if(this.debug){
+            const axesHelper = new THREE.AxesHelper(5);
+            this.mainGroup.add(axesHelper);
+        }
        
     }
 

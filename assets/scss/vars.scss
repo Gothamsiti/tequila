@@ -1,0 +1,51 @@
+$white: #ffffff;
+$bkg: #EDEDEC;
+$black: #000000;
+$grey: #767676;
+$contentBkg: #DEDEDE;
+$darkGrey: #505050;
+$lightGrey: #A0A0A0;
+$red: #FF0000;
+$green: #4BB543;
+$mainColor : #333;
+$azure:#0099CD;
+
+$dbr : 3px;
+$de : cubic-bezier(0.955, 0.610, 0.580, 0.935);
+$dt : .4s;
+$dtHalf : .2s;
+@function vh($unit){
+    @return calc(var(--vh, 1vh) * #{$unit});
+}
+@function vw($unit){
+    @return calc(var(--vw, 1vw) * #{$unit});
+}
+@function mw($unit){
+    @return calc(var(--vw, 1vw) * 100 / 48 * #{$unit});
+}
+@function fmw($unit){
+    @return calc(30px * #{$unit});
+}
+@mixin media($w) {
+    @media screen and (max-width:#{$w}px) { @content; }
+}
+@mixin mediaMin($w) {
+    @media screen and (min-width:#{$w}px) { @content; }
+}
+@mixin mediaH($h) {
+    @media screen and (max-height:#{$h}px) { @content; }
+}
+
+@keyframes splash {
+    0% {
+        z-index: 999;
+        opacity: 1;
+    }
+    99% {
+        z-index: 999;
+        opacity: 0;
+    }
+    100% {
+        z-index: 0;
+    }
+}
