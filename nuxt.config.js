@@ -19,6 +19,16 @@ export default defineNuxtConfig({
     },
     meta: {
       viewport:'width=device-width, initial-scale=1'
+    },
+    manifest: {
+      "name": "Tequila",
+      "short_name": "Tequila",
+      "theme_color": "#2196f3",
+      "background_color": "#2196f3",
+      "display": "browser",
+      "orientation": "portrait",
+      "scope": "/",
+      "start_url": "/",
     }
   }, 
   vite: {
