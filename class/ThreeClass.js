@@ -5,7 +5,7 @@ import Stats from 'stats-js'
 import { avaragePositions, avarageRotations, avarageScales } from '~/utils/avarages.js';
 import { opacities } from '~/utils/opacities.js';
 import Agave from '~/class/Agave.js';
-import Bottle from '.~/classBottle.js';
+import Bottle from '~/class/Bottle.js';
 import Oven from '~/class/Oven.js';
 import Silo from '~/class/Silo.js';
 import AnimationsClass from '~/class/AnimationsClass.js'
