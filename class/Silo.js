@@ -110,28 +110,7 @@ export default class Silo {
                 }
             },
             onComplete : () => {
-                //RESET ALLA SITUAZIONE INIZIALE
-                context.perno.dx.traverse(child => {
-                    if(child.material) child.material.opacity = 1;
-                    if(child.morphTargetDictionary){
-                        if(child.morphTargetDictionary['alambicco-dx'] !== undefined) child.morphTargetInfluences[morphs.dx['alambicco-dx'].index] = 0;
-                        if(child.morphTargetDictionary['anelli-alambicco'] !== undefined) child.morphTargetInfluences[morphs.dx['anelli-alambicco'].index] = 0;
-                        if(child.morphTargetDictionary['anelli-botti'] !== undefined) child.morphTargetInfluences[morphs.dx['anelli-botti'].index] = 0;
-                        if(child.morphTargetDictionary['botte-dx'] !== undefined) child.morphTargetInfluences[morphs.dx['botte-dx'].index] = 0;
-                    }
-                })
-                context.perno.sx.traverse(child => {
-                    if(child.material) child.material.opacity = 1;
-                    if(child.morphTargetDictionary){
-                        if(child.morphTargetDictionary['alambicco-sx'] !== undefined) child.morphTargetInfluences[morphs.sx['alambicco-sx'].index] = 0;
-                        if(child.morphTargetDictionary['anelli-alambicco'] !== undefined) child.morphTargetInfluences[morphs.sx['anelli-alambicco'].index] = 0;
-                        if(child.morphTargetDictionary['anelli-botti'] !== undefined) child.morphTargetInfluences[morphs.sx['anelli-botti'].index] = 0;
-                        if(child.morphTargetDictionary['botte-sx'] !== undefined) child.morphTargetInfluences[morphs.sx['botte-sx'].index] = 0;
-                    }
-                })
-                context.perno.sx.rotation.y = 0;
-                context.perno.dx.rotation.y = 0;
-                context.siloGroup.position.y = context.settings.position.y;
+                context.resetTimeline(context)
             }
         });
 
@@ -220,5 +199,31 @@ export default class Silo {
         }
 
         return morphs;
+    }
+    resetTimeline(context){
+        //RESET ALLA SITUAZIONE INIZIALE
+
+        var morphs = context.initMorph(context);
+        context.perno.dx.traverse(child => {
+            if(child.material) child.material.opacity = 1;
+            if(child.morphTargetDictionary){
+                if(child.morphTargetDictionary['alambicco-dx'] !== undefined) child.morphTargetInfluences[morphs.dx['alambicco-dx'].index] = 0;
+                if(child.morphTargetDictionary['anelli-alambicco'] !== undefined) child.morphTargetInfluences[morphs.dx['anelli-alambicco'].index] = 0;
+                if(child.morphTargetDictionary['anelli-botti'] !== undefined) child.morphTargetInfluences[morphs.dx['anelli-botti'].index] = 0;
+                if(child.morphTargetDictionary['botte-dx'] !== undefined) child.morphTargetInfluences[morphs.dx['botte-dx'].index] = 0;
+            }
+        })
+        context.perno.sx.traverse(child => {
+            if(child.material) child.material.opacity = 1;
+            if(child.morphTargetDictionary){
+                if(child.morphTargetDictionary['alambicco-sx'] !== undefined) child.morphTargetInfluences[morphs.sx['alambicco-sx'].index] = 0;
+                if(child.morphTargetDictionary['anelli-alambicco'] !== undefined) child.morphTargetInfluences[morphs.sx['anelli-alambicco'].index] = 0;
+                if(child.morphTargetDictionary['anelli-botti'] !== undefined) child.morphTargetInfluences[morphs.sx['anelli-botti'].index] = 0;
+                if(child.morphTargetDictionary['botte-sx'] !== undefined) child.morphTargetInfluences[morphs.sx['botte-sx'].index] = 0;
+            }
+        })
+        context.perno.sx.rotation.y = 0;
+        context.perno.dx.rotation.y = 0;
+        context.siloGroup.position.y = context.settings.position.y;
     }
 }

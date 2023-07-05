@@ -115,8 +115,7 @@ export default class ThreeClass {
         this.scene.add(this.group)
 
         const animations = new AnimationsClass(this);
-        animations.masterTl.play()
-        
+        animations.playTimeline()
 
         if(this.debug){
             const axesHelper = new THREE.AxesHelper(5);

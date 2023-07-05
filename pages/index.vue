@@ -16,7 +16,6 @@ const debug = ref(false)
 onMounted(() => {
     const threeClass = new ThreeClass(false, mainThree.value);
     debug.value = threeClass.debug
-
 })
 
 </script>
