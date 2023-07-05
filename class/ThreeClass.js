@@ -97,7 +97,7 @@ export default class ThreeClass {
         this.mainGroup.scale.set(this.sceneScale, this.sceneScale, this.sceneScale)
         this.mainGroup.position.y = this.sceneYOffset;
 
-        this.gltf = await this.loadModel('./models/agave-pianta.glb');
+        this.gltf = await this.loadModel('./models/agave_texture.glb');
         this.agaves = [];
         for(let i = 0; i<this.agaveQuantity ;i++){
             const deg = 360 / this.agaveQuantity * i
