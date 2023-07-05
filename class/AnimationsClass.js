@@ -18,9 +18,11 @@ export default class AnimationsClass {
             {name: 'silo', offsetStart: 1, inited: false}
         ]
 
+        this.inited = false;
+
         this.init();
     }
-    init(){
+    async init(){
         this.agaves = this.parent.agaves;
         this.oven = this.parent.oven;
         this.ovenBase = this.parent.ovenBase;
@@ -39,7 +41,7 @@ export default class AnimationsClass {
         for(var o in this.regia){
             for(var c in this.coreografie){
                 if(this.regia[o].name != this.coreografie[c].name) continue;
-                this.addToTimeline(this.coreografie[c], this.regia[o], o)
+                await this.addToTimeline(this.coreografie[c], this.regia[o], o)
             }
         }
         if(this.parent.debug){
@@ -48,7 +50,7 @@ export default class AnimationsClass {
                 const playBtn = controls.getElementsByClassName('play')[0];
                 if(playBtn){
                     playBtn.addEventListener('click',() => {
-                        this.masterTl.play();
+                        this.playTimeline();
                     })
                 }
                 const pauseBtn = controls.getElementsByClassName('pause')[0];
@@ -61,26 +63,26 @@ export default class AnimationsClass {
                 const stop = controls.getElementsByClassName('stop')[0];
                 if(stop){
                     stop.addEventListener('click',() => {
-                        this.masterTl.seek(0,false);
-                        this.masterTl.pause();
+                        this.stopTimeline();
+                        
                     })
                 }
             }
-
-
         }
+
+        this.inited = true;
     }
-    addToTimeline(coreografia, turno, index){
-        if(coreografia.context.inited === false){
-            setTimeout(() => {
-                this.addToTimeline(coreografia, turno, index)
-            }, 100);
-            return;
+    async addToTimeline(coreografia, turno, index){
+        try {
+            await this.isReady(coreografia.context)
+        } catch (error) {
+            console.log(error)
         }
+
         if(!this.regia[index].inited){
             var position = 0;
             if(turno.offsetStart !== undefined){
-                position = turno.offsetStart >= 0 ? '>+'+turno.offsetStart : '>'+turno.offsetStart
+                position = turno.offsetStart >= 0 ? '>+'+turno.offsetStart : '>'+turno.offsetStart;
             }
             this.masterTl.add(coreografia.tween(coreografia.context), position)
             this.masterTl.addLabel(coreografia.name)
@@ -92,4 +94,41 @@ export default class AnimationsClass {
             }
         }
     }
+
+    isReady(context){
+        return new Promise((resolve,reject) => {
+            var counter = 0;
+            if(context.inited === false){
+                const interval = setInterval(() => {
+                    counter++;
+                    if(context.inited){
+                        clearInterval(interval);
+                        return resolve();
+                    }
+                    if(!context.inited && counter >= 20){
+                        clearInterval(interval);
+                        return reject('La classe sta impiegando troppo tempo ad inizializzarsi!')
+                    }
+                }, 100);
+            }else{
+                return resolve();
+            }
+        })
+    }
+
+    playTimeline(){
+        const interval = setInterval(() => {
+            if(this.inited){
+                clearInterval(interval)
+                this.masterTl.play();
+            } 
+        }, 100);
+    }
+    
+    stopTimeline(){
+        this.masterTl.seek(0,false);
+        this.masterTl.pause();
+        this.silo.resetTimeline(this.silo);
+    }
+
 }

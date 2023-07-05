@@ -99,7 +99,7 @@ export default class ThreeClass {
         this.mainGroup.scale.set(this.sceneScale, this.sceneScale, this.sceneScale)
         this.mainGroup.position.y = this.sceneYOffset;
 
-        this.gltf = await this.loadModel('./models/agave-pianta.glb');
+        this.gltf = await this.loadModel('./models/agave_texture.glb');
         this.agaves = [];
         for(let i = 0; i<this.agaveQuantity ;i++){
             this.ready['agave'+i]= false;
@@ -118,8 +118,7 @@ export default class ThreeClass {
         this.scene.add(this.group)
 
         const animations = new AnimationsClass(this);
-        animations.masterTl.play()
-        
+        animations.playTimeline()
 
         if(this.debug){
             const axesHelper = new THREE.AxesHelper(5);
