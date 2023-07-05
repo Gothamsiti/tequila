@@ -21,7 +21,7 @@ export default class Oven {
     }
 
     async init() {
-        const gltf = await this.parent.loadModel('/models/forno.glb')
+        const gltf = await this.parent.loadModel('/models/forno_texture.glb')
         this.oven = gltf.scene
         const box = new THREE.Box3().setFromObject(this.oven);
         const size = box.getSize(new THREE.Vector3());
