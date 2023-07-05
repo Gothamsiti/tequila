@@ -4,6 +4,10 @@
       NuxtLoadingIndicator
       NuxtPage
 </template>
+<script setup>
+useHead({})
+</script>
+
 <style lang="scss">
 body{
   margin: 0;
