@@ -7,6 +7,7 @@ export default class Bottle {
         this.settings = settings
         this.bottle = null;
         this.bottleScale =1.5;
+        this.parent.ready.bottle = false
         this.init()
     }
 
@@ -21,6 +22,7 @@ export default class Bottle {
         const size = box.getSize(new THREE.Vector3());
         this.bottle.scene.position.y = this.settings.position.y + size.y /2 
         this.group.add(this.bottle.scene)
+        this.parent.ready.bottle = true
     }
 
 }

@@ -1,61 +1,95 @@
 <template lang="pug">
-main#main(:class="{debug:debug}")
-    canvas(ref="mainThree")
-    
+main#ar
+    canvas#camerafeed
     #stats
-
-    #controls
-        button.play(v-html="'PLAY'")
-        button.pause(v-html="'PAUSE'")
-        button.stop(v-html="'STOP'")
+    
 </template>
 <script setup>
-import ThreeClass from '~/class/ThreeClass';
-const mainThree = ref();
-const debug = ref(false)
+import ArClass from '~/class/ArClass';
+import * as THREE from 'three';
+
+useHead({
+    meta: [
+        { name: "apple-mobile-web-app-capable", content: "yes" }
+    ],
+    script: [
+        {
+            async: true,
+            src: "https://apps.8thwall.com/xrweb?appKey=Y4I2yWsKJKoiGiw4Av3vRfChial4i6NwjzMDMM5ZI5v1iGPCJqcPkHxAEsfXBc4Yp88ZD"
+        },
+        {
+            src: 'https://cdn.8thwall.com/web/xrextras/xrextras.js',
+        },
+        {
+            src: "https://cdn.8thwall.com/web/landing-page/landing-page.js"
+        },
+        {
+            src: 'https://cdn.8thwall.com/web/coaching-overlay/coaching-overlay.js'
+        }
+    ]
+});
 onMounted(() => {
-    const threeClass = new ThreeClass(false, mainThree.value);
-    debug.value = threeClass.debug
-
+    const el = document.documentElement;
+    // if (el.requestFullscreen) el.requestFullscreen();
+    // if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+    // if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+    const arClass = ref(new ArClass());
+    window.THREE = THREE;
+    const onxrloaded = () => {
+        arClass.value.init();
+    }
+    watch(()=>arClass.value.ready ,(v)=> {
+        console.log('ready', v)
+    }, {deep: true})
+    
+    window.XR8 ? onxrloaded() : window.addEventListener('xrloaded', onxrloaded);
 })
-
 </script>
 <style lang="scss">
-#main{
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
     position: relative;
-    width: 100vw;
-    height: 100vh;
-    &.debug{
-        > #stats, > #controls{
-            opacity: 1;
-            z-index: 1;
-            pointer-events: all;
+    overflow: hidden;
+}
+
+
+#__nuxt {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    > #app{
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        > main#ar {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+            background: rgb(26, 26, 26);
+            > #stats{
+                position: absolute;
+                left: 0;
+                top: 0;
+                z-index: 2;
+            }
+
+            canvas#camerafeed,
+            >video {
+                position: absolute;
+                z-index: 1;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+            }
         }
     }
-    canvas {
-        position: absolute;
-        top:0;
-        left:0;
-        z-index: 1;
-        width: 100%;
-        height: 100%;
-    }
-    > #stats{
-        opacity: 0;
-        pointer-events: none;
-        position: absolute;
-        left: 0;
-        top: 0;
-    }
-    > #controls{
-        opacity: 0;
-        pointer-events: none;
-        position: absolute;
-        bottom: 10px;
-        right: 10px;
-        display: flex;
-        gap: 10px;
-    }
 }
+
 
 </style>

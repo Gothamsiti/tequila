@@ -3,6 +3,8 @@ import ThreeClass from '~/class/ThreeClass'
 export default class ArClass{
     constructor(){
         this.threeClass = null;
+        this.ready =false
+        
     }
     init(){
         const fullWindowCanvas = new FullWindowCanvas();
@@ -24,7 +26,10 @@ export default class ArClass{
         
         const canvas = document.getElementById('camerafeed');
         XR8.run({canvas})
+        
     }
+
+  
 
     initCameraLightPipelineModule(){
         return {
@@ -53,7 +58,7 @@ export default class ArClass{
         const {scene, camera, renderer} = XR8.Threejs.xrScene();
         this.threeClass = new ThreeClass(true, canvas);
         this.threeClass.initAr(scene, camera, renderer)
-
+        this.checkReady()
         canvas.addEventListener('touchmove', (event) => {
             event.preventDefault()
         })
@@ -69,5 +74,19 @@ export default class ArClass{
     }
     handleTargetLost(e){
         this.threeClass.handleTargetLost(e.detail)
+    }
+    async checkReady(){
+        console.log('checking ready')
+        const readyArray = Object.values(this.threeClass.ready)
+        console.log(this.threeClass.ready , "!this.threeClass",!this.threeClass ,"!readyArray", readyArray, 'readyArray.includes(false)',  readyArray.includes(false))
+        if(!this.threeClass || !readyArray.length || readyArray.includes(false)){
+            console.log('***')
+            setTimeout(()=> {
+                console.log('++++++')
+                this.checkReady()
+            }, 200)
+        }else {
+            this.ready = true;
+        }
     }
 }

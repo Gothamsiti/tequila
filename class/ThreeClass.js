@@ -22,13 +22,14 @@ export default class ThreeClass {
         this.canvas = canvas;
         this.scene = null;
         this.camera = null;
+        this.ready= {oven :false, ovenBase : false, silo: false};
         this.renderer = null;
-
+        
         this.sceneHeight = null;
         this.controls = null;
         this.stats = null;
         this.maxAvarageSize = 30;
-        this.debug = true;
+        this.debug = false;
 
         this.sceneYOffset = -.45
         this.sceneScale = .425
@@ -38,7 +39,6 @@ export default class ThreeClass {
         this.arPointLight = null;
         this.agaveQuantity = 5;
         this.gltf = null;
-        
         this.mixer = null;
         this.clock = new THREE.Clock();
 
@@ -63,6 +63,8 @@ export default class ThreeClass {
         };
     }
     async init(canvas) {
+
+        
         this.group.visible = true;
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color(0xffffff);
@@ -100,8 +102,9 @@ export default class ThreeClass {
         this.gltf = await this.loadModel('./models/agave-pianta.glb');
         this.agaves = [];
         for(let i = 0; i<this.agaveQuantity ;i++){
+            this.ready['agave'+i]= false;
             const deg = 360 / this.agaveQuantity * i
-            const agave = new Agave(this, { radian : -.06, y: 0,  deg, }, { ...this.gltf, scene: this.gltf.scene.clone() });
+            const agave = new Agave(this, { radian : -.06, y: 0,  deg, }, { ...this.gltf, scene: this.gltf.scene.clone() }, i);
             this.agaves.push(agave);
         }
 
@@ -109,7 +112,7 @@ export default class ThreeClass {
         this.oven = new Oven(this, this.mainGroup, {})
         this.ovenBase = new OvenBaase(this, this.mainGroup, {})
         this.silo = new Silo(this, this.mainGroup, {position: {y: -6 }, rotation: {y: THREE.MathUtils.degToRad(-90)}})
-
+        console.log(this.ready)
         this.mainGroup.add(this.agaveGroup);
         this.group.add(this.mainGroup)
         this.scene.add(this.group)
@@ -231,7 +234,7 @@ export default class ThreeClass {
     upadeARLightIntensity(exposure){
         if(this.arPointLight){
             const formattedExposure = (exposure +1 ) / 2
-            console.log('exposure', exposure, formattedExposure)
+            // console.log('exposure', exposure, formattedExposure)
             this.arPointLight.intensity = formattedExposure
         }
         if(this.arAmbientLight){

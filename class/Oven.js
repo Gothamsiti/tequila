@@ -14,7 +14,7 @@ export default class Oven {
         this.ovenScale = .9
         this.light = null;
         this.ring = null;
-
+        this.parent.ready.oven = false
         this.inited = false;
 
         this.init()
@@ -50,6 +50,7 @@ export default class Oven {
         this.opacityWatcher();
 
         this.inited = true;
+        this.parent.ready.oven = true
     }
     opacityWatcher() {
         this.oven.traverse((node )=> {
