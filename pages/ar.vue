@@ -5,41 +5,41 @@ main#ar
     
 </template>
 <script setup>
-// import ArClass from '~/class/ArClass';
-// import * as THREE from 'three';
+import ArClass from '~/class/ArClass';
+import * as THREE from 'three';
 
-// useHead({
-//     meta: [
-//         { name: "apple-mobile-web-app-capable", content: "yes" }
-//     ],
-//     script: [
-//         {
-//             async: true,
-//             src: "https://apps.8thwall.com/xrweb?appKey=Y4I2yWsKJKoiGiw4Av3vRfChial4i6NwjzMDMM5ZI5v1iGPCJqcPkHxAEsfXBc4Yp88ZD"
-//         },
-//         {
-//             src: 'https://cdn.8thwall.com/web/xrextras/xrextras.js',
-//         },
-//         {
-//             src: "https://cdn.8thwall.com/web/landing-page/landing-page.js"
-//         },
-//         {
-//             src: 'https://cdn.8thwall.com/web/coaching-overlay/coaching-overlay.js'
-//         }
-//     ]
-// });
-// onMounted(() => {
-//     const el = document.documentElement;
-//     // if (el.requestFullscreen) el.requestFullscreen();
-//     // if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
-//     // if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
-//     window.THREE = THREE;
-//     const onxrloaded = () => {
-//         const arClass = new ArClass();
-//         arClass.init();
-//     }
-//     window.XR8 ? onxrloaded() : window.addEventListener('xrloaded', onxrloaded);
-// })
+useHead({
+    meta: [
+        { name: "apple-mobile-web-app-capable", content: "yes" }
+    ],
+    script: [
+        {
+            async: true,
+            src: "https://apps.8thwall.com/xrweb?appKey=Y4I2yWsKJKoiGiw4Av3vRfChial4i6NwjzMDMM5ZI5v1iGPCJqcPkHxAEsfXBc4Yp88ZD"
+        },
+        {
+            src: 'https://cdn.8thwall.com/web/xrextras/xrextras.js',
+        },
+        {
+            src: "https://cdn.8thwall.com/web/landing-page/landing-page.js"
+        },
+        {
+            src: 'https://cdn.8thwall.com/web/coaching-overlay/coaching-overlay.js'
+        }
+    ]
+});
+onMounted(() => {
+    const el = document.documentElement;
+    // if (el.requestFullscreen) el.requestFullscreen();
+    // if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+    // if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+    window.THREE = THREE;
+    const onxrloaded = () => {
+        const arClass = new ArClass();
+        arClass.init();
+    }
+    window.XR8 ? onxrloaded() : window.addEventListener('xrloaded', onxrloaded);
+})
 </script>
 <style lang="scss">
 html,
