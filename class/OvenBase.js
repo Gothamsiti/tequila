@@ -18,7 +18,7 @@ export default class OvenBaase {
     }
 
     async init(){
-        const gltf = await this.parent.loadModel('/models/forno_base.glb')
+        const gltf = await this.parent.loadModel('/models/forno_base_texture.glb')
         this.ovenBase = gltf.scene
         this.ovenBase.scale.set(this.ovenBaseScale, this.ovenBaseScale, this.ovenBaseScale)
         
