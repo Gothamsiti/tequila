@@ -28,6 +28,7 @@ onMounted(() => {
     &.debug{
         > #stats, > #controls{
             opacity: 1;
+            z-index: 1;
             pointer-events: all;
         }
     }
@@ -35,6 +36,7 @@ onMounted(() => {
         position: absolute;
         top:0;
         left:0;
+        z-index: 1;
         width: 100%;
         height: 100%;
     }
