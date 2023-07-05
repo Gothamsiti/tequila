@@ -10,7 +10,7 @@ main#main(:class="{debug:debug}")
         button.stop(v-html="'STOP'")
 </template>
 <script setup>
-import ThreeClass from '../class/ThreeClass';
+import ThreeClass from '~/class/ThreeClass';
 const mainThree = ref();
 const debug = ref(false)
 onMounted(() => {
