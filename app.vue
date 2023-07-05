@@ -1,6 +1,7 @@
 <template lang="pug">
 #app  
   NuxtLayout
+      VitePwaManifest
       NuxtLoadingIndicator
       NuxtPage
 </template>
