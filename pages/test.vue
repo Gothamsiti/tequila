@@ -4,7 +4,7 @@ main#main
     #stats
 </template>
 <script setup>
-import CubeScene from '~/class/testSchene';
+// import CubeScene from '~/class/testSchene';
 // import ThreeClass from '../class/ThreeClass';
 const mainThree = ref();
 onMounted(() => {
