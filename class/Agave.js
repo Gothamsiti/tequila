@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import InstancedMeshClass from './InstancedMeshClass.js';
+import InstancedMeshClass from '~/class/InstancedMeshClass.js';
 import gsap from 'gsap' 
 
 export default class Agave {

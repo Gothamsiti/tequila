@@ -1,5 +1,5 @@
 import FullWindowCanvas from '~/class/XRExtras/fullWindowCanvas';
-import ThreeClass from './ThreeClass'
+import ThreeClass from '~/class/ThreeClass'
 export default class ArClass{
     constructor(){
         this.threeClass = null;

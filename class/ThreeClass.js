@@ -4,12 +4,12 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import Stats from 'stats-js'
 import { avaragePositions, avarageRotations, avarageScales } from '~/utils/avarages.js';
 import { opacities } from '~/utils/opacities.js';
-import Agave from './Agave.js';
-import Bottle from './Bottle.js';
-import Oven from './Oven.js';
-import Silo from './Silo.js';
-import AnimationsClass from './AnimationsClass.js'
-import OvenBaase from './OvenBase.js';
+import Agave from '~/class/Agave.js';
+import Bottle from '.~/classBottle.js';
+import Oven from '~/class/Oven.js';
+import Silo from '~/class/Silo.js';
+import AnimationsClass from '~/class/AnimationsClass.js'
+import OvenBaase from '~/class/OvenBase.js';
 
 if(!Array.prototype.avarage){
     Object.defineProperty(Array.prototype, 'avarage', {
