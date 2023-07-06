@@ -29,7 +29,7 @@ export default class ThreeClass {
         this.controls = null;
         this.stats = null;
         this.maxAvarageSize = 30;
-        this.debug = false;
+        this.debug = true;
 
         this.sceneYOffset = -.45
         this.sceneScale = .425
@@ -85,7 +85,7 @@ export default class ThreeClass {
         }
 
         await this.initScene();
-        
+        this.animationsClass.playTimeline()
         this.animate();
     }
     async initScene(){
