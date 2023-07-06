@@ -40,7 +40,7 @@
 
 #backgroundGradient {
     position:absolute;
-    background:#669999;
+    background:$blueAgave;
     /* background: linear-gradient(45deg, #669999, #2E5050); */
     background-size: vw(300) 100%;
     animation: gradient 10s ease-in-out infinite;
@@ -61,18 +61,5 @@
         }
     } */
 
-    @keyframes vanish {
-        0%{
-            opacity: 1;
-            z-index: 999;
-        }
-        99%{
-            opacity: 0;
-            z-index: 999;
-        }
-        100%{
-            z-index: 0;
-        }
-    }
 </style>
 

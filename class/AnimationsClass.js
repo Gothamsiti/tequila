@@ -130,8 +130,13 @@ export default class AnimationsClass {
     stopTimeline(){
         this.isPlaying = false
         this.masterTl.seek(0,false);
-        this.masterTl.pause();
-        this.silo.resetTimeline(this.silo);
+        const interval = setInterval(() => {
+            if(this.inited){
+                clearInterval(interval)
+                this.masterTl.pause();
+                this.silo.resetTimeline(this.silo);
+            } 
+        }, 100);
     }
 
     pouseTimeLine(){

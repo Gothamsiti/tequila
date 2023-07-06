@@ -9,6 +9,7 @@ $red: #FF0000;
 $green: #4BB543;
 $mainColor : #333;
 $azure:#0099CD;
+$blueAgave: #669999;
 
 $dbr : 3px;
 $de : cubic-bezier(0.955, 0.610, 0.580, 0.935);
@@ -36,16 +37,16 @@ $dtHalf : .2s;
     @media screen and (max-height:#{$h}px) { @content; }
 }
 
-@keyframes splash {
-    0% {
-        z-index: 999;
+@keyframes vanish {
+    0%{
         opacity: 1;
-    }
-    99% {
         z-index: 999;
-        opacity: 0;
     }
-    100% {
+    99%{
+        opacity: 0;
+        z-index: 999;
+    }
+    100%{
         z-index: 0;
     }
 }

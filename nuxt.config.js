@@ -25,13 +25,24 @@ export default defineNuxtConfig({
 
   modules: [
     '@vite-pwa/nuxt',
+    // 'dayjs-nuxt',
+    // 'nuxt-font-loader',
+    // '@nuxt/image-edge',
+    // [
+        // '@storyblok/nuxt', { 
+        //     accessToken: process.env.STORYBLOK_API_KEY
+        // }
+    // ],
+    // "@nuxtjs/robots",
+    // 'nuxt-simple-sitemap' //https://nuxt.com/modules/simple-sitemap
   ],
   pwa: {
     registerType: 'autoUpdate',
     manifest: {
-      name: 'Tequila',
+      name: 'Nuxt Vite PWA',
       short_name: 'Tequila',
-      theme_color: '#669999',
+      theme_color: '#ffffff',
+      background_color: "#669999",
       icons: [
         {
           "src": "images/icons/icon-72x72.png",

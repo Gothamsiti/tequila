@@ -1,6 +1,7 @@
 <template lang="pug">
 main#ar
     loading(:class="[{ready : ready}]")
+    intro
     canvas#camerafeed
     #stats
     
@@ -42,14 +43,18 @@ onMounted(() => {
     const onxrloaded = () => {
         arClass.value.init();
     }
-    watch(()=>arClass.value.ready ,(v)=> {
-        if(!Object.values(v).includes(false)){
-            ready.value = true;
-        }
-    }, {deep: true})
+    // watch(()=>arClass.value.ready ,(v)=> {
+    //     if(!Object.values(v).includes(false)){
+    //         ready.value = true;
+    //     }
+    // }, {deep: true})
     
     window.XR8 ? onxrloaded() : window.addEventListener('xrloaded', onxrloaded);
 })
+
+setTimeout(()=> {
+    ready.value= true;
+}, 2000)
 </script>
 <style lang="scss">
 html,
