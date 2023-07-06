@@ -44,6 +44,7 @@ onMounted(() => {
         arClass.value.init();
     }
     watch(()=>arClass.value.ready ,(v)=> {
+        console.log(v)
         if(!Object.values(v).includes(false)){
             ready.value = true;
         }

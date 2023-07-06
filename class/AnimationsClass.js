@@ -57,7 +57,7 @@ export default class AnimationsClass {
                 const pauseBtn = controls.getElementsByClassName('pause')[0];
                 if(pauseBtn){
                     pauseBtn.addEventListener('click',() => {
-                        this.pauseTimeLine()
+                        this.pouseTimeLine()
 
                     })
                 }
