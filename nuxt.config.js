@@ -39,9 +39,9 @@ export default defineNuxtConfig({
   pwa: {
     registerType: 'autoUpdate',
     manifest: {
-      name: 'Nuxt Vite PWA',
+      name: 'Tequila - The Blue Agave stroy',
       short_name: 'Tequila',
-      theme_color: '#ffffff',
+      theme_color: '#669999',
       background_color: "#669999",
       icons: [
         {
