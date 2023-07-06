@@ -1,13 +1,17 @@
 <template lang="pug">
-#intro(:class="[{vanish: vaish}]")
+#intro(:class="[{vanish: vanish}]")
     .text(v-html="'Intro di tequila'")
-    #startButton
+    #startButton( @click="startAr" )
         span(v-html="'Inizia'")
 
 </template>
 
-<script>
+<script setup>
 const vanish = ref(false)
+
+const startAr = ()=> {
+    vanish.value = true
+}
 
 </script>
 <style lang="scss">
