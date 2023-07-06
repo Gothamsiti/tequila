@@ -2,7 +2,7 @@ import gsap from 'gsap'
 export default class AnimationsClass {
     constructor(parent){
         this.parent = parent;
-
+        this.isPlaying = false
         this.agaves = null;
         this.oven = null;
         this.ovenBase = null;
@@ -21,6 +21,7 @@ export default class AnimationsClass {
         this.inited = false;
 
         this.init();
+        this.stopTimeline()
     }
     async init(){
         this.agaves = this.parent.agaves;
@@ -56,7 +57,7 @@ export default class AnimationsClass {
                 const pauseBtn = controls.getElementsByClassName('pause')[0];
                 if(pauseBtn){
                     pauseBtn.addEventListener('click',() => {
-                        this.masterTl.pause();
+                        this.pauseTimeLine()
 
                     })
                 }
@@ -117,6 +118,7 @@ export default class AnimationsClass {
     }
 
     playTimeline(){
+        this.isPlaying = true
         const interval = setInterval(() => {
             if(this.inited){
                 clearInterval(interval)
@@ -126,9 +128,15 @@ export default class AnimationsClass {
     }
     
     stopTimeline(){
+        this.isPlaying = false
         this.masterTl.seek(0,false);
         this.masterTl.pause();
         this.silo.resetTimeline(this.silo);
+    }
+
+    pouseTimeLine(){
+        this.isPlaying = false;
+        this.masterTl.pause();
     }
 
 }

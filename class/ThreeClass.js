@@ -24,7 +24,7 @@ export default class ThreeClass {
         this.camera = null;
         this.ready= {oven :false, ovenBase : false, silo: false};
         this.renderer = null;
-        
+        this.animationsClass = null
         this.sceneHeight = null;
         this.controls = null;
         this.stats = null;
@@ -117,8 +117,8 @@ export default class ThreeClass {
         this.group.add(this.mainGroup)
         this.scene.add(this.group)
 
-        const animations = new AnimationsClass(this);
-        animations.playTimeline()
+        this.animationsClass = new AnimationsClass(this);
+        
 
         if(this.debug){
             const axesHelper = new THREE.AxesHelper(5);
@@ -147,7 +147,9 @@ export default class ThreeClass {
 
     handleTargetFound(detail) {
         console.log('=== FOUND ===')
-
+        if(!Object.values(this.ready).includes(false)){
+            this.animationsClass.playTimeline()
+        }
         this.group.visible = true;
         this.avaragePX = [detail.position.x];
         this.avaragePY = [detail.position.y];
@@ -161,6 +163,9 @@ export default class ThreeClass {
         this.avarageScale = [detail.scale];
     }
     handleTargetLost(detail) {
+        if(this.animationsClass.isPlaying) {
+            this.animationsClass
+        }
         console.log('=== LOST ===')
         this.group.visible = false;
     }

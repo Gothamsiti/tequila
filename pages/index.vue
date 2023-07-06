@@ -1,5 +1,6 @@
 <template lang="pug">
 main#ar
+    loading(:class="[{ready : ready}]")
     canvas#camerafeed
     #stats
     
@@ -28,6 +29,9 @@ useHead({
         }
     ]
 });
+
+const ready = ref(false)
+
 onMounted(() => {
     const el = document.documentElement;
     // if (el.requestFullscreen) el.requestFullscreen();
@@ -39,7 +43,9 @@ onMounted(() => {
         arClass.value.init();
     }
     watch(()=>arClass.value.ready ,(v)=> {
-        console.log('ready', v)
+        if(!Object.values(v).includes(false)){
+            ready.value = true;
+        }
     }, {deep: true})
     
     window.XR8 ? onxrloaded() : window.addEventListener('xrloaded', onxrloaded);

@@ -17,7 +17,7 @@ export default class ArClass{
             LandingPage.pipelineModule(),                   // Detects unsupported browsers and gives hints.
             // VpsCoachingOverlay.pipelineModule(),            // Shows the Lightship VPS coaching overlay.
             fullWindowCanvas.pipelineModule(),              // Modifies the canvas to fill the window.
-            XRExtras.Loading.pipelineModule(),              // Manages the loading screen on startup.
+            // XRExtras.Loading.pipelineModule(),              // Manages the loading screen on startup.
             XRExtras.RuntimeError.pipelineModule(),         // Shows an error image on runtime error.
             this.initScenePipelineModule(),                 // Sets up the threejs camera and scene content.
             this.initCameraLightPipelineModule(),
