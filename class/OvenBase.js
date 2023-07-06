@@ -14,6 +14,7 @@ export default class OvenBaase {
         this.ovenBaseHeight  = 5
         this.seeds = null;
         this.inited = false;
+        this.parent.ready.ovenBase = false
         this.init()
     }
 
@@ -40,6 +41,7 @@ export default class OvenBaase {
         this.ovenBaseHeight = size.y;
         this.opacityWacher();
         this.inited = true;  
+        this.parent.ready.ovenBase = true
     }
 
     setMillstone(){

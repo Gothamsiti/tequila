@@ -3,8 +3,9 @@ import InstancedMeshClass from '~/class/InstancedMeshClass.js';
 import gsap from 'gsap' 
 
 export default class Agave {
-    constructor(parent, origin, gltf){
+    constructor(parent, origin, gltf, i){
         this.origin = origin;
+        this.i = i;
         this.gltf = gltf;
         this.parent = parent;
         this.group = this.parent.agaveGroup
@@ -23,6 +24,7 @@ export default class Agave {
         ]
         this.leafDummies = [];
         this.inited = false;
+        this.parent.ready['agave'+this.i] = false
         this.init()
     }
 
@@ -55,7 +57,7 @@ export default class Agave {
         this.groupHeight = size.y
         this.group.add(this.modelGroup)
         this.group.scale.set(.01,.01,.01);
-        
+        this.parent.ready['agave'+this.i] = true
         this.inited = true;
     }
     addToTimeline(context){

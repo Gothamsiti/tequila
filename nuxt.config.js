@@ -13,6 +13,15 @@ export default defineNuxtConfig({
       {rel: "manifest", href: "/manifest.json" }
     ]
   },
+  vite: {
+    css: {
+        preprocessorOptions: {
+            scss: {
+                additionalData: '@import "@/assets/scss/vars.scss";\n',
+            },
+        },
+    },
+},
 
   modules: [
     '@vite-pwa/nuxt',
@@ -20,9 +29,9 @@ export default defineNuxtConfig({
   pwa: {
     registerType: 'autoUpdate',
     manifest: {
-      name: 'Nuxt Vite PWA',
-      short_name: 'NuxtVitePWA',
-      theme_color: '#ffffff',
+      name: 'Tequila',
+      short_name: 'Tequila',
+      theme_color: '#669999',
       icons: [
         {
           "src": "images/icons/icon-72x72.png",

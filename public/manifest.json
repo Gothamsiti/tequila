@@ -1,8 +1,8 @@
 {
   "name": "Tequila",
   "short_name": "Tequila",
-  "theme_color": "#2196f3",
-  "background_color": "#2196f3",
+  "theme_color": "#669999",
+  "background_color": "#669999",
   "display": "browser",
   "orientation": "portrait",
   "scope": "/",
