@@ -57,7 +57,7 @@ export default class AnimationsClass {
                 const pauseBtn = controls.getElementsByClassName('pause')[0];
                 if(pauseBtn){
                     pauseBtn.addEventListener('click',() => {
-                        this.pauseTimeLine()
+                        this.pauseTimeline()
 
                     })
                 }
@@ -139,7 +139,7 @@ export default class AnimationsClass {
         }, 100);
     }
 
-    pouseTimeLine(){
+    pauseTimeline(){
         this.isPlaying = false;
         this.masterTl.pause();
     }

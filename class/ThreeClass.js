@@ -10,6 +10,7 @@ import Oven from '~/class/Oven.js';
 import Silo from '~/class/Silo.js';
 import AnimationsClass from '~/class/AnimationsClass.js'
 import OvenBaase from '~/class/OvenBase.js';
+// import OutlineShader from '~/class/OutlineShader.js';
 
 if(!Array.prototype.avarage){
     Object.defineProperty(Array.prototype, 'avarage', {
@@ -22,7 +23,7 @@ export default class ThreeClass {
         this.canvas = canvas;
         this.scene = null;
         this.camera = null;
-        this.ready= {oven :false, ovenBase : false, silo: false};
+        this.ready = {oven :false, ovenBase : false, silo: false};
         this.renderer = null;
         this.animationsClass = null
         this.sceneHeight = null;
@@ -63,11 +64,9 @@ export default class ThreeClass {
         };
     }
     async init(canvas) {
-
-        
         this.group.visible = true;
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0xffffff);
+        this.scene.background = new THREE.Color(0xFFFFFF);
 
         // this.camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, .1, 1000);
         this.camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, .1, 20); // improve performance
@@ -85,6 +84,9 @@ export default class ThreeClass {
         }
 
         await this.initScene();
+
+        //DA RIMUOVERE
+        // new OutlineShader(this, this.renderer, canvas.clientWidth, canvas.clientHeight, this.scene, this.camera)
         
         this.animate();
     }
@@ -112,13 +114,11 @@ export default class ThreeClass {
         this.oven = new Oven(this, this.mainGroup, {})
         this.ovenBase = new OvenBaase(this, this.mainGroup, {})
         this.silo = new Silo(this, this.mainGroup, {position: {y: -6 }, rotation: {y: THREE.MathUtils.degToRad(-90)}})
-        console.log(this.ready)
         this.mainGroup.add(this.agaveGroup);
         this.group.add(this.mainGroup)
         this.scene.add(this.group)
 
         this.animationsClass = new AnimationsClass(this);
-        
 
         if(this.debug){
             const axesHelper = new THREE.AxesHelper(5);
@@ -217,7 +217,6 @@ export default class ThreeClass {
         if (this.debug) {
             const axesHelper = new THREE.AxesHelper(5);
             light_1.add(axesHelper);
-            
         }
 
     }
