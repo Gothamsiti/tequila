@@ -29,7 +29,7 @@ export default class ThreeClass {
         this.sceneHeight = null;
         this.controls = null;
         this.stats = null;
-        this.maxAvarageSize = 30;
+        this.maxAvarageSize = 20;
         this.debug = true;
 
         this.sceneYOffset = -.45
@@ -88,6 +88,7 @@ export default class ThreeClass {
         //DA RIMUOVERE
         // new OutlineShader(this, this.renderer, canvas.clientWidth, canvas.clientHeight, this.scene, this.camera)
         
+        this.animationsClass.playTimeline()
         this.animate();
     }
     async initScene(){
@@ -147,7 +148,7 @@ export default class ThreeClass {
 
     handleTargetFound(detail) {
         console.log('=== FOUND ===')
-        if(!Object.values(this.ready).includes(false)){
+        if(!Object.values(this.ready).includes(false) ){
             this.animationsClass.playTimeline()
         }
         this.group.visible = true;
@@ -163,8 +164,8 @@ export default class ThreeClass {
         this.avarageScale = [detail.scale];
     }
     handleTargetLost(detail) {
-        if(this.animationsClass.isPlaying) {
-            this.animationsClass
+        if(this.animationsClass.masterTl.isActive()) {
+            this.animationsClass.pouseTimeLine()
         }
         console.log('=== LOST ===')
         this.group.visible = false;
@@ -242,7 +243,6 @@ export default class ThreeClass {
         }
         if(this.arAmbientLight){
             const formattedExposure = (exposure +1 ) / 2
-            console.log('exposure', exposure, formattedExposure)
             this.arAmbientLight.intensity = formattedExposure
         }
     }

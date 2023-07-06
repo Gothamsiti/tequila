@@ -28,6 +28,7 @@ export default class Oven {
         this.ovenHeight = size.y;
         this.door = this.oven.getObjectByName(`door`);
         this.door.scale.set(.01,.01,.01)
+        this.door.position.y = -2
         this.oven.scale.set(this.ovenScale,this.ovenScale,this.ovenScale)
         this.group.add(this.door)
         this.initLight()
@@ -75,7 +76,7 @@ export default class Oven {
     }
     initCylinder(){
         // Define the outer and inner radius of the cylinder
-        const outerRadius = 1;
+        const outerRadius = 1.2
         
 
         // Create a shape for the outer circle
@@ -104,7 +105,7 @@ export default class Oven {
         });
 
         // Create a material
-        const material = new THREE.MeshBasicMaterial({ color: 0xAAAAAA, side: THREE.DoubleSide, transparent: true });
+        const material = new THREE.MeshBasicMaterial({ color: 0x958980, side: THREE.DoubleSide, transparent: true });
 
         // Create a mesh and add it to the scene
         this.ring = new THREE.Mesh(geometry, material);

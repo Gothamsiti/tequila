@@ -9,6 +9,7 @@ export default class OvenBaase {
         this.direction = 1;
         this.ovenBase = null;
         this.ovenBaseScale = .9;
+        this.millstone = null;
         this.rondella = null;
         this.animationDuration = 3
         this.ovenBaseHeight  = 5
@@ -46,6 +47,7 @@ export default class OvenBaase {
 
     setMillstone(){
         this.rondella = this.ovenBase.getObjectByName(`macina-cilindro`);
+        this.millstone = this.ovenBase.getObjectByName(`macina-braccio`);
         const box = new THREE.Box3().setFromObject( this.rondella); 
         const size = box.getSize(new THREE.Vector3());
         this.rondella.position.y += size.y /2
@@ -67,11 +69,11 @@ export default class OvenBaase {
             step1 :{position : {y : .4}},
             step2 :{position: {y : 15}},
         }
-        const millstone = context.ovenBase.getObjectByName(`macina-braccio`);
+        
         const millstoneTL = {
-            from: { scale : {x : millstone.scale.x} , rotation : { y : 0}},
+            from: { scale : {x : context.millstone.scale.x} , rotation : { y : 0}},
             step1: { scale : {x :1} , rotation : { y : THREE.MathUtils.degToRad(150)}},
-            step2: { scale : {x :millstone.scale.x} }
+            step2: { scale : {x :context.millstone.scale.x} }
         }
         const seedsTL = {
             from: { position:{ y : context.seeds.position.y}},
@@ -85,7 +87,7 @@ export default class OvenBaase {
         const tl = gsap.timeline({
             defaults:{
                 onUpdate:()=> {
-                    millstone.scale.set(millstoneTL.from.scale.x,millstoneTL.from.scale.x,millstoneTL.from.scale.x)
+                    context.millstone.scale.set(millstoneTL.from.scale.x,millstoneTL.from.scale.x,millstoneTL.from.scale.x)
                 },
                 
             },
@@ -112,7 +114,7 @@ export default class OvenBaase {
         },
         "4.5")
 
-        tl.to(millstone.rotation, {
+        tl.to(context.millstone.rotation, {
             ...millstoneTL.step1.rotation,
             ease: "none",
             duration: 5
@@ -136,7 +138,7 @@ export default class OvenBaase {
         tl.to(context.rondella.rotation,{
             ...rondellaTl.step1.rotation,
             duration: 5
-        }, '9')
+        }, '7')
 
         return tl;
     }

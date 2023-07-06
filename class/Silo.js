@@ -55,6 +55,7 @@ export default class Silo {
         this.group.add(this.siloGroup);
         if(this.parent.debug){
             const gui = new GUI();
+            gui.close()
             for(var i in this.perno){
                 const gui_group = gui.addFolder(i);
                 this.perno[i].traverse(child => {
