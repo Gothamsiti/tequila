@@ -163,7 +163,7 @@ export default class ThreeClass {
         this.avarageScale = [detail.scale];
     }
     handleTargetLost(detail) {
-        if(this.animationsClass.isPlaying) {
+        if(this.animationsClass.masterTl.isActive()) {
             this.animationsClass.pouseTimeLine()
         }
         console.log('=== LOST ===')

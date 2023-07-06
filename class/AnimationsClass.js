@@ -2,7 +2,7 @@ import gsap from 'gsap'
 export default class AnimationsClass {
     constructor(parent){
         this.parent = parent;
-        this.isPlaying = false
+        
         this.agaves = null;
         this.oven = null;
         this.ovenBase = null;
@@ -118,7 +118,6 @@ export default class AnimationsClass {
     }
 
     playTimeline(){
-        this.isPlaying = true
         const interval = setInterval(() => {
             if(this.inited){
                 clearInterval(interval)
@@ -128,7 +127,6 @@ export default class AnimationsClass {
     }
     
     stopTimeline(){
-        this.isPlaying = false
         this.masterTl.seek(0,false);
         const interval = setInterval(() => {
             if(this.inited){
@@ -140,7 +138,6 @@ export default class AnimationsClass {
     }
 
     pouseTimeLine(){
-        this.isPlaying = false;
         this.masterTl.pause();
     }
 
