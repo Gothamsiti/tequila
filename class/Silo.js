@@ -14,7 +14,6 @@ export default class Silo {
         this.objMorphs = {}
         this.perno = {};
         this.inited = false;
-        this.parent.ready.silo= false
         this.init()
     }
     async init(){
@@ -71,7 +70,6 @@ export default class Silo {
             }
         }
         this.inited = true;
-        this.parent.ready.silo = true;
     }
     addToTimeline(context){
         var morphs = context.initMorph(context);
