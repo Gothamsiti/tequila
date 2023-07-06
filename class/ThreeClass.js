@@ -29,7 +29,7 @@ export default class ThreeClass {
         this.controls = null;
         this.stats = null;
         this.maxAvarageSize = 30;
-        this.debug = true;
+        this.debug = false;
 
         this.sceneYOffset = -.45
         this.sceneScale = .425
@@ -147,7 +147,7 @@ export default class ThreeClass {
 
     handleTargetFound(detail) {
         console.log('=== FOUND ===')
-        if(!Object.values(this.ready).includes(false)){
+        if(!Object.values(this.ready).includes(false) ){
             this.animationsClass.playTimeline()
         }
         this.group.visible = true;
@@ -164,7 +164,7 @@ export default class ThreeClass {
     }
     handleTargetLost(detail) {
         if(this.animationsClass.isPlaying) {
-            this.animationsClass
+            this.animationsClass.pouseTimeLine()
         }
         console.log('=== LOST ===')
         this.group.visible = false;

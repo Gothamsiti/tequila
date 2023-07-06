@@ -70,6 +70,7 @@ export default class Silo {
             }
         }
         this.inited = true;
+        this.parent.ready.silo = true;
     }
     addToTimeline(context){
         var morphs = context.initMorph(context);
