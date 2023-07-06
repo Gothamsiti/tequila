@@ -76,13 +76,9 @@ export default class ArClass{
         this.threeClass.handleTargetLost(e.detail)
     }
     async checkReady(){
-        console.log('checking ready')
         const readyArray = Object.values(this.threeClass.ready)
-        console.log(this.threeClass.ready , "!this.threeClass",!this.threeClass ,"!readyArray", readyArray, 'readyArray.includes(false)',  readyArray.includes(false))
         if(!this.threeClass || !readyArray.length || readyArray.includes(false)){
-            console.log('***')
             setTimeout(()=> {
-                console.log('++++++')
                 this.checkReady()
             }, 200)
         }else {

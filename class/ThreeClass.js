@@ -243,7 +243,6 @@ export default class ThreeClass {
         }
         if(this.arAmbientLight){
             const formattedExposure = (exposure +1 ) / 2
-            console.log('exposure', exposure, formattedExposure)
             this.arAmbientLight.intensity = formattedExposure
         }
     }
