@@ -17,7 +17,7 @@ export default class Silo {
         this.init()
     }
     async init(){
-        const model = await this.parent.loadModel('./models/silo.glb');
+        const model = await this.parent.loadModel('./models/silo_texture.glb');
 
         this.siloGroup = new THREE.Group();
         this.siloGroup.position.y = this.settings.position.y;
