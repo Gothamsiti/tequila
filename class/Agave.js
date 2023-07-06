@@ -73,7 +73,7 @@ export default class Agave {
                 position: { y: 0 },
             },
             step3: {
-                rotation: { y: THREE.MathUtils.degToRad(510) },
+                rotation: { y: THREE.MathUtils.degToRad(520) },
             }
         }
 
