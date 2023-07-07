@@ -2,12 +2,13 @@ import * as THREE from 'three'
 import gsap from 'gsap'
 
 export default class Oven {
-    constructor(parent, group, settings) {
+    constructor(parent, oven, group, settings) {
         this.parent = parent;
         this.group = group;
         this.settings = settings
         this.direction = 1;
-        this.oven = null;
+        this.glb = oven;
+        this.oven = new THREE.Group();
         this.door = null
         this.animationDuration = 3
         this.ovenHeight = 5
@@ -21,15 +22,19 @@ export default class Oven {
     }
 
     async init() {
-        const gltf = await this.parent.loadModel('/models/forno_texture.glb')
-        this.oven = gltf.scene
+        var models = [];
+        this.glb.scene.traverse((child) => {
+            if(['liv_01','liv_02','liv_03','liv_04','door'].includes(child.name)) models.push(child)
+        })
+        models.map(m => this.oven.add(m));
+
         const box = new THREE.Box3().setFromObject(this.oven);
         const size = box.getSize(new THREE.Vector3());
         this.ovenHeight = size.y;
         this.door = this.oven.getObjectByName(`door`);
         this.door.scale.set(.01,.01,.01)
         this.door.position.y = -2
-        this.oven.scale.set(this.ovenScale,this.ovenScale,this.ovenScale)
+        // this.oven.scale.set(this.ovenScale,this.ovenScale,this.ovenScale)
         this.group.add(this.door)
         this.initLight()
         this.initCylinder()
@@ -48,7 +53,7 @@ export default class Oven {
             }
         })
         this.group.add(this.oven)
-        this.opacityWatcher();
+        // this.opacityWatcher();
 
         this.inited = true;
         this.parent.ready.oven = true

@@ -88,7 +88,7 @@ export default class ThreeClass {
         //DA RIMUOVERE
         // new OutlineShader(this, this.renderer, canvas.clientWidth, canvas.clientHeight, this.scene, this.camera)
         
-        this.animationsClass.playTimeline()
+        // this.animationsClass.playTimeline()
         this.animate();
     }
     async initScene(){
@@ -111,9 +111,12 @@ export default class ThreeClass {
             this.agaves.push(agave);
         }
 
+        const forno = await this.loadModel('./models/forno_texture.glb');
+        this.ovenBase = new OvenBaase(this, forno, this.mainGroup, {position: { y: -1.5 }})
+        this.oven = new Oven(this, forno, this.mainGroup, {})
+
+
         this.bottle = new Bottle(this, this.mainGroup, {position: { y : 0 }})
-        this.oven = new Oven(this, this.mainGroup, {})
-        this.ovenBase = new OvenBaase(this, this.mainGroup, {})
         this.silo = new Silo(this, this.mainGroup, {position: {y: -6 }, rotation: {y: THREE.MathUtils.degToRad(-90)}})
         this.mainGroup.add(this.agaveGroup);
         this.group.add(this.mainGroup)
