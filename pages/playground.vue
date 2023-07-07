@@ -14,7 +14,7 @@ import ThreeClass from '~/class/ThreeClass';
 const mainThree = ref();
 const debug = ref(false)
 onMounted(() => {
-    const threeClass = new ThreeClass(false, true, mainThree.value);
+    const threeClass = new ThreeClass(false, mainThree.value, true, );
     debug.value = threeClass.debug
 
     
