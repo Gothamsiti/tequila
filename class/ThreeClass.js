@@ -311,7 +311,7 @@ export default class ThreeClass {
 
 
     setAvarages(){
-        this.mainGroup.position.set(this.avaragePX.avarage(), this.avaragePY.avarage(), this.avaragePZ.avarage());
+        this.mainGroup.position.set(this.avaragePX.avarage()-.02, this.avaragePY.avarage(), this.avaragePZ.avarage());
         this.mainGroup.quaternion.set(this.avarageRX.avarage(), this.avarageRY.avarage(), this.avarageRZ.avarage(), this.avarageRW.avarage());
         // this.mainGroup.scale.set(this.avarageScale.avarage() / 2, this.avarageScale.avarage() / 2, this.avarageScale.avarage() / 2);
     }
