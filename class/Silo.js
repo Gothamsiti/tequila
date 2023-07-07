@@ -138,8 +138,8 @@ export default class Silo {
         },'+=3')
 
         //ENTRA OBLO
-        tl.to(context.oblo.rotation,{ z: THREE.MathUtils.degToRad(90) },'<')
-        tl.to(context.oblo.position,{ z: 1.05 },'<')
+        tl.to(context.oblo.rotation,{ z: THREE.MathUtils.degToRad(90), ease: 'power3.in' },'<')
+        tl.to(context.oblo.position,{ z: 1.05, ease: 'power3.in' },'<')
 
         //CADE LA SCALA
         tl.to(context.ladder.rotation,{ z: THREE.MathUtils.degToRad(-90), duration: 1 }, '<')
@@ -168,8 +168,8 @@ export default class Silo {
         },'<')
 
         //ESCE OBLO
-        tl.to(context.oblo.rotation,{ z: 0 },'<')
-        tl.to(context.oblo.position,{ z: 0 },'<')
+        tl.to(context.oblo.rotation,{ z: 0, ease: 'power3.in' },'<')
+        tl.to(context.oblo.position,{ z: 0, ease: 'power3.in' },'<')
         
         tl.addLabel('base_move'); // LA BASE ESCE 
         tl.to(context.baseGroup.position,{y:-1, duration: 1},'<')
