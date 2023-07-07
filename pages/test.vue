@@ -17,7 +17,6 @@ onMounted(() => {
     position: relative;
     width: 100vw;
     height: 100vh;
-
     canvas {
         position: absolute;
         top:0;
