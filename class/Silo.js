@@ -122,7 +122,7 @@ export default class Silo {
 
         tl.addLabel('ladder_in'); //ENTRA LA SCALA
         tl.to(context.ladder.rotation,{ z: THREE.MathUtils.degToRad(18), duration: 2, ease: 'bounce.out' }, '<+=1')
-        tl.to(context.ladder.position,{ y: 0, duration: .5, ease: 'bounce.out' }, '<')
+        tl.to(context.ladder.position,{ y: 0, duration: .5 }, '<')
 
 
         tl.addLabel('morph')
@@ -133,7 +133,8 @@ export default class Silo {
                 morphs.sx['alambicco-sx'],
             ],{
                 value: 1,
-                duration: 1
+                duration: 1,
+                ease: 'power3.in'
         },'+=3')
 
         //ENTRA OBLO
@@ -152,7 +153,8 @@ export default class Silo {
             morphs.sx['alambicco-sx'],
         ],{
             value: 0,
-            duration: 1
+            duration: 1,
+            ease: 'power3.in'
         }, '+=3')
         tl.to([
             morphs.dx['anelli-botti'],
@@ -161,7 +163,8 @@ export default class Silo {
             morphs.sx['botte-sx'],
         ],{
             value: 1,
-            duration: 1
+            duration: 1,
+            ease: 'power3.in'
         },'<')
 
         //ESCE OBLO
@@ -172,8 +175,8 @@ export default class Silo {
         tl.to(context.baseGroup.position,{y:-1, duration: 1},'<')
 
         // IL BARILE SI APRE
-        tl.to(context.perno.dx.rotation,{ y: THREE.MathUtils.degToRad(45)},'+=3')
-        tl.to(context.perno.sx.rotation,{ y: THREE.MathUtils.degToRad(-45)},'<')
+        tl.to(context.perno.dx.rotation,{ y: THREE.MathUtils.degToRad(45), ease: 'power3.inOut' },'+=3')
+        tl.to(context.perno.sx.rotation,{ y: THREE.MathUtils.degToRad(-45), ease: 'power3.inOut' },'<')
 
         tl.addLabel('fade_out');
         const opacity = {value: 1}
