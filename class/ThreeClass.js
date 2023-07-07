@@ -10,7 +10,7 @@ import Oven from '~/class/Oven.js';
 import Silo from '~/class/Silo.js';
 import AnimationsClass from '~/class/AnimationsClass.js'
 import OvenBaase from '~/class/OvenBase.js';
-// import OutlineShader from '~/class/OutlineShader.js';
+import AssetsLoader from '~/class/AssetsLoader.js';
 
 if(!Array.prototype.avarage){
     Object.defineProperty(Array.prototype, 'avarage', {
@@ -18,7 +18,7 @@ if(!Array.prototype.avarage){
     });
 }
 export default class ThreeClass {
-    constructor(isAr = false, canvas) {
+    constructor(isAr = false, isDebug = false, canvas) {
         this.isAr = isAr;
         this.canvas = canvas;
         this.scene = null;
@@ -30,7 +30,7 @@ export default class ThreeClass {
         this.controls = null;
         this.stats = null;
         this.maxAvarageSize = 20;
-        this.debug = true;
+        this.debug = isDebug;
 
         this.sceneYOffset = -.45
         this.sceneScale = .425
@@ -58,6 +58,8 @@ export default class ThreeClass {
         this.avarageRW = [];
 
         this.avarageScale = [];
+
+        this.assetsLoader = new AssetsLoader();
        
         if(!this.isAr) {
             this.init(canvas)
@@ -68,7 +70,6 @@ export default class ThreeClass {
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color(0xFFFFFF);
 
-        // this.camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, .1, 1000);
         this.camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, .1, 20); // improve performance
         this.camera.position.z = 5;
         
@@ -84,25 +85,27 @@ export default class ThreeClass {
         }
 
         await this.initScene();
-
-        //DA RIMUOVERE
-        // new OutlineShader(this, this.renderer, canvas.clientWidth, canvas.clientHeight, this.scene, this.camera)
         
-        // this.animationsClass.playTimeline()
+        this.animationsClass.playTimeline()
         this.animate();
     }
     async initScene(){
+       await this.assetsLoader.loadTextures();
+
+
         if(this.isAr){
             this.initARLights();
         }else {
             this.initLights();
         }
-        this.setUpGroupSceneLimits()
+        this.setUpGroupSceneLimits();
+        
 
         this.mainGroup.scale.set(this.sceneScale, this.sceneScale, this.sceneScale)
         this.mainGroup.position.y = this.sceneYOffset;
 
-        this.gltf = await this.loadModel('./models/agave_texture.glb');
+        // this.gltf = await this.loadModel('./models/agave_texture.glb');
+        this.gltf = await this.assetsLoader.loadModel('./models/agave.glb');
         this.agaves = [];
         for(let i = 0; i<this.agaveQuantity ;i++){
             this.ready['agave'+i]= false;
@@ -111,7 +114,9 @@ export default class ThreeClass {
             this.agaves.push(agave);
         }
 
-        const forno = await this.loadModel('./models/forno_texture.glb');
+        // const forno = await this.loadModel('./models/forno_texture.glb');
+        const forno = await this.assetsLoader.loadModel('./models/forno.glb');
+
         this.ovenBase = new OvenBaase(this, forno, this.mainGroup, {position: { y: -1.5 }})
         this.oven = new Oven(this, forno, this.mainGroup, {})
 
@@ -204,6 +209,7 @@ export default class ThreeClass {
 
         this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: antiAlias, powerPreference: 'high-performance'});
         this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
+        // this.renderer.outputEncoding = THREE.sRGBEncoding;
         if(this.isAr){
             this.renderer.setPixelRatio(window.devicePixelRatio * 0.5) // imporove performance 
         }
