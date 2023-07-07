@@ -121,7 +121,7 @@ export default class Silo {
         tl.to(group_in,{ positionY: 0, rotationY: 0, duration: 2})
 
         tl.addLabel('ladder_in'); //ENTRA LA SCALA
-        tl.to(context.ladder.rotation,{ z: THREE.MathUtils.degToRad(20), duration: 2, ease: 'bounce.out' }, '<+=1')
+        tl.to(context.ladder.rotation,{ z: THREE.MathUtils.degToRad(18), duration: 2, ease: 'bounce.out' }, '<+=1')
         tl.to(context.ladder.position,{ y: 0, duration: .5, ease: 'bounce.out' }, '<')
 
 
@@ -138,7 +138,7 @@ export default class Silo {
 
         //ENTRA OBLO
         tl.to(context.oblo.rotation,{ z: THREE.MathUtils.degToRad(90) },'<')
-        tl.to(context.oblo.position,{ z: 1 },'<')
+        tl.to(context.oblo.position,{ z: 1.05 },'<')
 
         //CADE LA SCALA
         tl.to(context.ladder.rotation,{ z: THREE.MathUtils.degToRad(-90), duration: 1 }, '<')

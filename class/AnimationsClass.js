@@ -21,7 +21,6 @@ export default class AnimationsClass {
         this.inited = false;
 
         this.init();
-        this.stopTimeline()
     }
     async init(){
         this.agaves = this.parent.agaves;
@@ -57,8 +56,7 @@ export default class AnimationsClass {
                 const pauseBtn = controls.getElementsByClassName('pause')[0];
                 if(pauseBtn){
                     pauseBtn.addEventListener('click',() => {
-                        this.pouseTimeLine()
-
+                        this.pauseTimeline()
                     })
                 }
                 const stop = controls.getElementsByClassName('stop')[0];
@@ -137,7 +135,8 @@ export default class AnimationsClass {
         }, 100);
     }
 
-    pouseTimeLine(){
+    pauseTimeline(){
+        this.isPlaying = false;
         this.masterTl.pause();
     }
 

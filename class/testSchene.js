@@ -41,8 +41,8 @@ export default class CubeScene {
         const light_1 = new THREE.PointLight(0xffffff, 1, 100);
         light_1.position.set(0, 10, 0);
         if (this.debug) {
-            // const axesHelper = new THREE.AxesHelper(5);
-            // light_1.add(axesHelper);
+            const axesHelper = new THREE.AxesHelper(5);
+            light_1.add(axesHelper);
         }
 
         this.scene.add(light_1);
