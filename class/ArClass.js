@@ -6,12 +6,13 @@ export default class ArClass{
         this.ready =false
         this.scannable = false;
         this.found = false
+        this.animationCompleted = false;
         
     }
     init(){
         const fullWindowCanvas = new FullWindowCanvas();
         
-        XR8.XrController.configure({ disableWorldTracking: true, enableLighting: true });
+        XR8.XrController.configure({ disableWorldTracking: true,  });
         XR8.addCameraPipelineModules([ 
             XR8.GlTextureRenderer.pipelineModule(),         // Draws the camera feed.
             XR8.Threejs.pipelineModule(),                   // Creates a ThreeJS AR Scene.
@@ -22,7 +23,7 @@ export default class ArClass{
             // XRExtras.Loading.pipelineModule(),              // Manages the loading screen on startup.
             XRExtras.RuntimeError.pipelineModule(),         // Shows an error image on runtime error.
             this.initScenePipelineModule(),                 // Sets up the threejs camera and scene content.
-            this.initCameraLightPipelineModule(),
+            // this.initCameraLightPipelineModule(),
         ])
 
         
@@ -48,7 +49,7 @@ export default class ArClass{
     initScenePipelineModule(){
         return {
             name: 'threejsinitscene',
-            onStart: e => { this.initScenePipelineModuleONStart(e) },
+            onStart: async e => { await this.initScenePipelineModuleONStart(e) },
             listeners: [
                 {event: 'reality.imagefound', process: e => { this.handleTargetFound(e) }},
                 {event: 'reality.imageupdated', process: e => { this.handleTargetUpdate(e) }},
@@ -57,11 +58,12 @@ export default class ArClass{
             ],
         }
     }
-    initScenePipelineModuleONStart({canvas}){
+    async initScenePipelineModuleONStart({canvas}){
         const {scene, camera, renderer} = XR8.Threejs.xrScene();
         this.threeClass = new ThreeClass(true, canvas);
         this.threeClass.initAr(scene, camera, renderer)
         this.checkReady()
+        this.checkCompleted()
         canvas.addEventListener('touchmove', (event) => {
             event.preventDefault()
         })
@@ -92,5 +94,15 @@ export default class ArClass{
         }else {
             this.ready = true;
         }
+    }
+    async checkCompleted(){
+        const completed = this.threeClass?.animationsClass?.animationCompleted;
+        if(!completed){
+            setTimeout(()=> {
+                this.checkCompleted()
+            },200)
+            return
+        }
+        this.animationCompleted = true;
     }
 }

@@ -52,17 +52,21 @@ onMounted(() => {
         if(!Object.values(v).includes(false)){
             ready.value = true;
         }
-    }, {deep: true})
+    })
     watch(()=>arClass.value.scannable ,(v)=> {
         if(v){
             scannable.value = true
         }
-    }, {deep: true})
+    })
     watch(()=>arClass.value.found ,(v)=> {
         if(v){
             scannable.value= false;
         }
-    }, {deep: true})
+    })
+
+    watch(()=>arClass.value.animationCompleted ,(v)=> {
+        
+    })
     
     window.XR8 ? onxrloaded() : window.addEventListener('xrloaded', onxrloaded);
 })
