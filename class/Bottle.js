@@ -6,7 +6,7 @@ export default class Bottle {
         this.group = group;
         this.settings = settings
         this.bottle = null;
-        this.bottleScale =1.5;
+        this.bottleScale =1.55;
         this.parent.ready.bottle = false
         this.init()
     }

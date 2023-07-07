@@ -272,7 +272,7 @@ export default class ThreeClass {
     ARanimate(time){
         if (this.stats) this.stats.begin();
         if(time%2 ){
-            this.memoSetAvarages()
+            this.setAvarages()
         }else {
             this.renderer.render(this.scene, this.camera)
         }

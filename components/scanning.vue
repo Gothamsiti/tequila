@@ -4,13 +4,6 @@
 
 <script setup>
 const props = defineProps(['visible', 'scannable'])
-
-
-watch(props.visible, (v)=> {
-    if(v){
-        inited.value= true
-    }
-})  
 </script>
 
 <style lang ="scss">
