@@ -63,17 +63,15 @@ export default class Agave {
     addToTimeline(context){
         const leafDummiesPositions = context.leafDummies.map(d => d.position);
         const agaveGroupTl = {
-            from: { scale : { x : context.group.scale.x },},
+            from: { scale : { x : context.group.scale.x }, rotation: { y: context.group.rotation.y }, position: { y: context.group.position.y }},
             step1: {
-                scale: { x :1 },
-                rotation: { y: THREE.MathUtils.degToRad(150) }
+                scale: { x :1 }, rotation: { y: THREE.MathUtils.degToRad(150) }
             },
             step2: {
-                rotation: { y: THREE.MathUtils.degToRad(360) },
-                position: { y: 0 },
+                rotation: { y: THREE.MathUtils.degToRad(360) }, position: { y: 0 }
             },
             step3: {
-                rotation: { y: THREE.MathUtils.degToRad(520) },
+                rotation: { y: THREE.MathUtils.degToRad(520) }
             }
         }
 
@@ -86,7 +84,12 @@ export default class Agave {
         const tl = gsap.timeline({
             onStart: () => { context.modelGroup.visible = true; },
             onUpdate : () => {
-                context.group.scale.set(agaveGroupTl.from.scale.x,agaveGroupTl.from.scale.x,agaveGroupTl.from.scale.x)
+                if(context.i == 0){ //SOLO UNA ISTANZA DI AGAVE SI OCCUPA DI MUOVERE L'INTERO GRUPPO
+                    context.group.scale.set(agaveGroupTl.from.scale.x, agaveGroupTl.from.scale.x, agaveGroupTl.from.scale.x)
+                    context.group.rotation.y = agaveGroupTl.from.rotation.y;
+                    context.group.position.y = agaveGroupTl.from.position.y;
+                }
+
                 for(const dummy of context.leafDummies){
                     dummy.updateMatrix();
                     dummy.parentMesh.setMatrixAt(dummy.dummyIndex, dummy.matrix);
@@ -126,27 +129,13 @@ export default class Agave {
             },
             "-=.75"
         )
-        tl.to(context.group.rotation, {
-            ...agaveGroupTl.step1.rotation,
-            duration: 4,      
-            ease: "power2.out"  
-            
-        },
-        '0')
-        tl.to(context.modelGroup.rotation, {
-            ...agaveTl.step1.rotation,
-            duration: 4,            
-            ease: "power4.out"  
-        },
-        '0')
 
+        tl.to(agaveGroupTl.from.rotation, {...agaveGroupTl.step1.rotation, duration: 4, ease: "power2.out" }, '0')
+        
+        tl.to(context.modelGroup.rotation, {...agaveTl.step1.rotation, duration: 4, ease: "power4.out"}, '0')
 
-        tl.to(context.group.rotation, {
-            ...agaveGroupTl.step2.rotation,
-            duration: 5,      
-            ease: "power2.in"  
-        },
-        '4')
+        tl.to(agaveGroupTl.from.rotation, {...agaveGroupTl.step2.rotation, duration: 5, ease: "power2.in"}, '4')
+        
         tl.to(context.modelGroup.rotation, {
             ...agaveTl.step2.rotation,
             duration: 7,  
@@ -161,19 +150,9 @@ export default class Agave {
         },
         "5"
         )
-        tl.to(context.group.position, {
-            ...agaveGroupTl.step2.position,
-            duration: 1,       
-            ease: "power2.in",     
-        },
-        "7.5"
-        )
-        tl.to(context.group.rotation, {
-            ...agaveGroupTl.step3.rotation,
-            duration: 2,
-        },
-        '9')
-        
+
+        tl.to(agaveGroupTl.from.position, {...agaveGroupTl.step2.position, duration: 1, ease: "power2.in" }, "7.5")
+        tl.to(agaveGroupTl.from.rotation, {...agaveGroupTl.step3.rotation, duration: 2 }, '9')
 
         return tl
     }
