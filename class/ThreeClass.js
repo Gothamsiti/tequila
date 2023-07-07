@@ -18,7 +18,7 @@ if(!Array.prototype.avarage){
     });
 }
 export default class ThreeClass {
-    constructor(isAr = false, isDebug = false, canvas) {
+    constructor(isAr = false,  canvas, isDebug = false,) {
         this.isAr = isAr;
         this.canvas = canvas;
         this.scene = null;
