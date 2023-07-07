@@ -5,12 +5,6 @@
 
 <script setup>
 defineProps({ blok: Object })
-console.log('********')
-console.log('********')
-console.log('********')
-console.log('********')
-console.log('********')
-console.log('********')
 </script>
 <style lang="scss">
 #page{

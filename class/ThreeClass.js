@@ -30,7 +30,7 @@ export default class ThreeClass {
         this.controls = null;
         this.stats = null;
         this.maxAvarageSize = 20;
-        this.debug = true;
+        this.debug = false;
 
         this.sceneYOffset = -.45
         this.sceneScale = .425
@@ -155,7 +155,7 @@ export default class ThreeClass {
     }
 
     handleTargetFound(detail) {
-        console.log('=== FOUND ===')
+        // console.log('=== FOUND ===')
         if(!Object.values(this.ready).includes(false) ){
             this.animationsClass.playTimeline()
         }
@@ -172,14 +172,14 @@ export default class ThreeClass {
         this.avarageScale = [detail.scale];
     }
     handleTargetLost(detail) {
-        if(this.animationsClass.masterTl.isActive()) {
-            this.animationsClass.pouseTimeLine()
+        if(this.animationsClass?.masterTl?.isActive()) {
+            this.animationsClass.pauseTimeline()
         }
-        console.log('=== LOST ===')
+        // console.log('=== LOST ===')
         this.group.visible = false;
     }
     handleTargetUpdate(detail) {
-        console.log('=== UPDATE ===');
+        // console.log('=== UPDATE ===');
 
         this.avaragePX.push(detail.position.x)
         this.avaragePY.push(detail.position.y + this.sceneYOffset)
@@ -278,7 +278,7 @@ export default class ThreeClass {
     ARanimate(time){
         if (this.stats) this.stats.begin();
         if(time%2 ){
-            this.memoSetAvarages()
+            this.setAvarages()
         }else {
             this.renderer.render(this.scene, this.camera)
         }
@@ -317,7 +317,7 @@ export default class ThreeClass {
 
 
     setAvarages(){
-        this.mainGroup.position.set(this.avaragePX.avarage(), this.avaragePY.avarage(), this.avaragePZ.avarage());
+        this.mainGroup.position.set(this.avaragePX.avarage()-.02, this.avaragePY.avarage(), this.avaragePZ.avarage());
         this.mainGroup.quaternion.set(this.avarageRX.avarage(), this.avarageRY.avarage(), this.avarageRZ.avarage(), this.avarageRW.avarage());
         // this.mainGroup.scale.set(this.avarageScale.avarage() / 2, this.avarageScale.avarage() / 2, this.avarageScale.avarage() / 2);
     }

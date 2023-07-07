@@ -10,7 +10,9 @@
 const { richText } = richTextModule();
 const props = defineProps(['blok'])
 const vanish = ref(false)
+const emit = defineEmits(['start']);
 const startAr = ()=> {
+    emit('start')
     vanish.value = true
 }
 
@@ -27,9 +29,11 @@ const startAr = ()=> {
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    padding: mw(4);
+    box-sizing: border-box;
     gap: mw(2);
     &.vanish {
-        animation: vanish 2s ease-in-out;
+        animation: vanish 1s ease-in-out;
         z-index: 0;
         opacity: 0;
     }
