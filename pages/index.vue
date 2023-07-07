@@ -74,9 +74,9 @@ const setScanningVisble= ()=>{
  scannable.value= true;
 }
 
-setTimeout(()=> {
-    ready.value = true;
-}, 2000)
+// setTimeout(()=> {
+//     ready.value = true;
+// }, 2000)
 
 </script>
 <style lang="scss">
