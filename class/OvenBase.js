@@ -30,30 +30,33 @@ export default class OvenBaase {
                     this.seeds = node
                     this.seeds.position.y = -1;
                 }
+                if(node.name == 'Circle002'){
+                    node.material = node.material.clone()
+                }
             }
         } )
         this.macinaBraccio = this.ovenBase.getObjectByName(`macina-braccio`);
         this.macinaBraccio.scale.set(0,0,0);
 
-        this.macinaBraccio.rotation.y = THREE.MathUtils.degToRad(-90)
+        this.macinaBraccio.rotation.y = THREE.MathUtils.degToRad(-45)
         this.macinaCilindro = this.ovenBase.getObjectByName(`macina-cilindro`);
 
         const box = new THREE.Box3().setFromObject( this.ovenBase); 
         const size = box.getSize(new THREE.Vector3());
         this.ovenBaseHeight = size.y;
-        this.opacityWacher();
+        this.opacityWatcher();
 
         this.inited = true;  
         this.parent.ready.ovenBase = true
     }
 
-    opacityWacher(){
+    opacityWatcher(){
         this.ovenBase.traverse(node=>{
             if(node.type=="Mesh"){
                 node.material.opacity = this.parent.memoGetOpacity(this.ovenBaseHeight/2, this.ovenBase.position.y, 6 )
             }
         } )
-        requestAnimationFrame(()=> this.opacityWacher())
+        requestAnimationFrame(()=> this.opacityWatcher())
     }
 
     addToTimeline(context){

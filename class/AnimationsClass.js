@@ -14,8 +14,8 @@ export default class AnimationsClass {
         this.regia = [
             {name: 'agave', offsetStart: 0, inited: false},
             {name: 'ovenBase', offsetStart: -3, inited: false},
-            // {name: 'oven', offsetStart: -13, inited: false},
-            // {name: 'silo', offsetStart: 1, inited: false}
+            {name: 'oven', offsetStart: -13, inited: false},
+            {name: 'silo', offsetStart: 1, inited: false}
         ]
 
         this.inited = false;

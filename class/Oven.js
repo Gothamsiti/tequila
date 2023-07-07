@@ -34,7 +34,7 @@ export default class Oven {
         this.door = this.oven.getObjectByName(`door`);
         this.door.scale.set(.01,.01,.01)
         this.door.position.y = -2
-        // this.oven.scale.set(this.ovenScale,this.ovenScale,this.ovenScale)
+        this.oven.scale.set(this.ovenScale,this.ovenScale,this.ovenScale)
         this.group.add(this.door)
         this.initLight()
         this.initCylinder()
@@ -47,13 +47,14 @@ export default class Oven {
         })
         this.door.traverse(node => {
             if (node.type == "Mesh") {
+                node.material = node.material.clone();
                 node.material.transparent = true
                 node.position.z+= 0.4
                 
             }
         })
         this.group.add(this.oven)
-        // this.opacityWatcher();
+        this.opacityWatcher();
 
         this.inited = true;
         this.parent.ready.oven = true
