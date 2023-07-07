@@ -12,9 +12,9 @@
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
+    "@storyblok/nuxt": "^5.5.2",
     "@types/node": "^18",
     "@vite-pwa/nuxt": "^0.1.0",
-    "@storyblok/nuxt": "^5.4.4",
     "@webdiscus/pug-loader": "^2.9.4",
     "nuxt": "3.5.2",
     "pug": "^3.0.2",

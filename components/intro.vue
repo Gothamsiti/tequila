@@ -1,14 +1,15 @@
 <template lang="pug">
 #intro(:class="[{vanish: vanish}]")
-    .text(v-html="'Intro di tequila'")
+    .text(v-html="richText(blok.introText)")
     #startButton( @click="startAr" )
-        span(v-html="'Inizia'")
+        span(v-html="blok.ctaLabel")
 
 </template>
 
 <script setup>
+const { richText } = richTextModule();
+const props = defineProps(['blok'])
 const vanish = ref(false)
-
 const startAr = ()=> {
     vanish.value = true
 }
