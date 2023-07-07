@@ -1,7 +1,8 @@
 <template lang="pug">
 main#ar
     loading(:class="[{ready : ready}]")
-    intro(v-if="story && story.content && story.content.body  && story.content.body[0]" :blok="story.content.body[0]")
+    intro(v-if="story && story.content && story.content.body  && story.content.body[0]" :blok="story.content.body[0]" @start="setScanningVisble")
+    scanning(:visible="scanningVisible"  :scannable="scannable")
     canvas#camerafeed
     #stats
     
@@ -30,11 +31,12 @@ useHead({
         }
     ]
 });
+const scanningVisible = ref(false)
+const scannable = ref(false)
 
 const ready = ref(false)
-
 const story = await useAsyncStoryblok('/home', { version: config.public.storyblokVersion });
-console.log(story.value)
+
 onMounted(() => {
     const el = document.documentElement;
     // if (el.requestFullscreen) el.requestFullscreen();
@@ -45,15 +47,32 @@ onMounted(() => {
     const onxrloaded = () => {
         arClass.value.init();
     }
-    // watch(()=>arClass.value.ready ,(v)=> {
-    //     console.log(v)
-    //     if(!Object.values(v).includes(false)){
-    //         ready.value = true;
-    //     }
-    // }, {deep: true})
+    watch(()=>arClass.value.ready ,(v)=> {
+        console.log(v)
+        if(!Object.values(v).includes(false)){
+            ready.value = true;
+        }
+    }, {deep: true})
+    watch(()=>arClass.value.scannable ,(v)=> {
+        if(v){
+            scannable.value = true
+        }
+    }, {deep: true})
+    watch(()=>arClass.value.found ,(v)=> {
+        if(v){
+            scannable.value= false;
+        }
+    }, {deep: true})
     
     window.XR8 ? onxrloaded() : window.addEventListener('xrloaded', onxrloaded);
 })
+
+
+const setScanningVisble= ()=>{
+ console.log('aooooh')
+ scanningVisible.value= true;
+ scannable.value= true;
+}
 
 setTimeout(()=> {
     ready.value = true;

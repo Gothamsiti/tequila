@@ -150,7 +150,7 @@ export default class ThreeClass {
     }
 
     handleTargetFound(detail) {
-        console.log('=== FOUND ===')
+        // console.log('=== FOUND ===')
         if(!Object.values(this.ready).includes(false) ){
             this.animationsClass.playTimeline()
         }
@@ -167,14 +167,14 @@ export default class ThreeClass {
         this.avarageScale = [detail.scale];
     }
     handleTargetLost(detail) {
-        if(this.animationsClass.masterTl.isActive()) {
-            this.animationsClass.pouseTimeLine()
+        if(this.animationsClass?.masterTl?.isActive()) {
+            this.animationsClass.pauseTimeline()
         }
-        console.log('=== LOST ===')
+        // console.log('=== LOST ===')
         this.group.visible = false;
     }
     handleTargetUpdate(detail) {
-        console.log('=== UPDATE ===');
+        // console.log('=== UPDATE ===');
 
         this.avaragePX.push(detail.position.x)
         this.avaragePY.push(detail.position.y + this.sceneYOffset)

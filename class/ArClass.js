@@ -4,6 +4,8 @@ export default class ArClass{
     constructor(){
         this.threeClass = null;
         this.ready =false
+        this.scannable = false;
+        this.found = false
         
     }
     init(){
@@ -68,6 +70,7 @@ export default class ArClass{
         )
     }
     handleTargetFound(e){
+        this.found = true;
         this.threeClass.handleTargetFound(e.detail)
     }
     handleTargetUpdate(e){
@@ -77,7 +80,7 @@ export default class ArClass{
         this.threeClass.handleTargetLost(e.detail)
     }
     handleScanning(e){
-        console.log(e)
+        this.scannable = true;
         // this.threeClass.handleTargetLost(e.detail)
     }
     async checkReady(){

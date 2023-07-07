@@ -13,12 +13,11 @@
 #loading {
     width: 100vw;
     height: 100vh;
-    animation: colorChange 5s infinite;
     position: fixed;
     z-index: 999;
     overflow: hidden;
     &.ready{
-        animation: vanish 2s ease-in-out;
+        animation: vanish 1s ease-in-out;
         z-index: 0;
         opacity: 0;
     }

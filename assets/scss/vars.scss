@@ -2,12 +2,10 @@ $white: #ffffff;
 $bkg: #EDEDEC;
 $black: #000000;
 $grey: #767676;
-$contentBkg: #DEDEDE;
 $darkGrey: #505050;
 $lightGrey: #A0A0A0;
 $red: #FF0000;
 $green: #4BB543;
-$mainColor : #333;
 $azure:#0099CD;
 $blueAgave: #669999;
 
@@ -48,5 +46,21 @@ $dtHalf : .2s;
     }
     100%{
         z-index: 0;
+    }
+}
+@keyframes appear {
+    0%{
+        z-index: 0;
+    }
+    50%{
+        z-index: 0;
+    }
+    51%{
+        opacity: 0;
+        z-index: 999;
+    }
+    100%{
+        opacity: 1;
+        z-index: 999;
     }
 }
