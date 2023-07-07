@@ -49,7 +49,7 @@ export default class ArClass{
     initScenePipelineModule(){
         return {
             name: 'threejsinitscene',
-            onStart: async e => { await this.initScenePipelineModuleONStart(e) },
+            onStart: e => { this.initScenePipelineModuleONStart(e) },
             listeners: [
                 {event: 'reality.imagefound', process: e => { this.handleTargetFound(e) }},
                 {event: 'reality.imageupdated', process: e => { this.handleTargetUpdate(e) }},
@@ -58,7 +58,7 @@ export default class ArClass{
             ],
         }
     }
-    async initScenePipelineModuleONStart({canvas}){
+    initScenePipelineModuleONStart({canvas}){
         const {scene, camera, renderer} = XR8.Threejs.xrScene();
         this.threeClass = new ThreeClass(true, canvas);
         this.threeClass.initAr(scene, camera, renderer)
@@ -100,7 +100,7 @@ export default class ArClass{
         if(!completed){
             setTimeout(()=> {
                 this.checkCompleted()
-            },200)
+            },500)
             return
         }
         this.animationCompleted = true;
