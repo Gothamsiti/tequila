@@ -14,9 +14,9 @@ const props = defineProps(['visible', 'scannable'])
     left: 50%;
     top: 50%;
     transform: translate(-50% , -50%);
-    width: calc(100vw - #{mw(6)});
-    height: calc(100vh - #{mw(6)});
-    background-color: #b2b2b255;
+    width: calc(100vw - #{mw(12)});
+    height: calc(100vh - #{mw(32)});
+    background-color: #2b2b2255;
     &.scannable{
         z-index: 997;
         opacity: 1;
