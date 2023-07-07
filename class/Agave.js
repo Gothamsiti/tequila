@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import InstancedMeshClass from '~/class/InstancedMeshClass.js';
 import gsap from 'gsap' 
-
+import { mDeg, mX, mY, mZ, mGroupX, mGroupZ } from '~/utils/leaves'; 
 export default class Agave {
     constructor(parent, origin, gltf, i){
         this.origin = origin;
@@ -26,6 +26,51 @@ export default class Agave {
         this.inited = false;
         this.parent.ready['agave'+this.i] = false
         this.init()
+    }
+
+    memoizedDeg(offsetDegrees, i, deltaDegrees) {
+        const key = `${offsetDegrees}-${i}-${deltaDegrees}`
+        if (mDeg[key]) return mDeg[key]
+        const deg = offsetDegrees - i * deltaDegrees;
+        mDeg[key]= deg;
+        return deg
+
+    }
+    memoizedX(position, deg) {
+        const key = `${position}-${deg}`
+        if(mX[key])return mX[key]
+        const result = position *  Math.cos(THREE.MathUtils.degToRad(deg))
+        mX[key]= result
+        return result;
+
+    }
+    memoizedZ(position, deg) {
+        const key = `${position}-${deg}`
+        if(mZ[key])return mZ[key]
+        const result = position *  Math.sin(THREE.MathUtils.degToRad(deg))
+        mZ[key]= result
+        return result;
+    }
+    memoizedY(position, angle) {
+        const key = `${position}-${angle}`
+        if(mY[key])return mY[key]
+        const result = position *  Math.sin(THREE.MathUtils.degToRad(angle))
+        mY[key]= result
+        return result;
+    }
+    memoizedGroupX(distance, deg) {
+        const key = `${distance}-${deg}`
+        if(mGroupX[key])return mGroupX[key]
+        const result = distance *  Math.cos(THREE.MathUtils.degToRad(deg))
+        mGroupX[key]= result
+        return result;
+    }
+    memoizedGroupZ(distance, deg) {
+        const key = `${distance}-${deg}`
+        if(mGroupZ[key])return mGroupZ[key]
+        const result = distance *  Math.sin(THREE.MathUtils.degToRad(deg))
+        mGroupZ[key]= result
+        return result;
     }
 
     init() {
@@ -95,8 +140,8 @@ export default class Agave {
                     dummy.parentMesh.setMatrixAt(dummy.dummyIndex, dummy.matrix);
                     dummy.parentMesh.instanceMatrix.needsUpdate = true;
                 }
-                context.modelGroup.position.x = agaveTl.from.distanceFromBottle.distance * Math.cos(THREE.MathUtils.degToRad(context.origin.deg))
-                context.modelGroup.position.z = agaveTl.from.distanceFromBottle.distance * Math.sin(THREE.MathUtils.degToRad(context.origin.deg))
+                context.modelGroup.position.x = context.memoizedGroupX(agaveTl.from.distanceFromBottle.distance, context.origin.deg)
+                context.modelGroup.position.z = context.memoizedGroupZ(agaveTl.from.distanceFromBottle.distance, context.origin.deg)
             },
             onComplete: ()=> { context.modelGroup.visible = false; }
         })
@@ -105,15 +150,15 @@ export default class Agave {
             leafDummiesPositions,
             { 
                 x : i => {  
-                    const deg = context.leafDummies[i].offsetDegrees - i * context.leafDummies[i].deltaDegrees;
-                    return -context.leafDummies[i].layer.to.position.x * Math.cos(THREE.MathUtils.degToRad(deg))
+                    const deg = context.memoizedDeg(context.leafDummies[i].offsetDegrees ,i , context.leafDummies[i].deltaDegrees);
+                    return context.memoizedX(-context.leafDummies[i].layer.to.position.x , deg)
                 },
                 z : i => {  
-                    const deg = context.leafDummies[i].offsetDegrees - i * context.leafDummies[i].deltaDegrees;
-                    return -context.leafDummies[i].layer.to.position.z * Math.sin(THREE.MathUtils.degToRad(deg))
+                    const deg = context.memoizedDeg(context.leafDummies[i].offsetDegrees, i , context.leafDummies[i].deltaDegrees);
+                    return context.memoizedZ(-context.leafDummies[i].layer.to.position.z , deg)
                 },
                 y : i => {
-                    return context.leafDummies[i].layer.to.position.y * Math.sin(context.leafDummies[i].layer.angle)
+                    return context.memoizedY(context.leafDummies[i].layer.to.position.y , context.leafDummies[i].layer.angle)
                 },
                 stagger: .02,
                 duration : .6,

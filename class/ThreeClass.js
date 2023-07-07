@@ -30,7 +30,7 @@ export default class ThreeClass {
         this.controls = null;
         this.stats = null;
         this.maxAvarageSize = 20;
-        this.debug = false;
+        this.debug = true;
 
         this.sceneYOffset = -.45
         this.sceneScale = .425
