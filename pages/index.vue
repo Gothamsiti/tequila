@@ -3,6 +3,7 @@ main#ar
     loading(:class="[{ready : ready}]")
     intro(v-if="story && story.content && story.content.body  && story.content.body[0]" :blok="story.content.body[0]" @start="setScanningVisble")
     scanning(:visible="scanningVisible"  :scannable="scannable")
+    outro(v-if="story && story.content && story.content.body  && story.content.body[0]" :blok="story.content.body[0]" :appear="animationCompleted")
     canvas#camerafeed
     #stats
     
@@ -33,7 +34,7 @@ useHead({
 });
 const scanningVisible = ref(false)
 const scannable = ref(false)
-
+const animationCompleted = ref(false)
 const ready = ref(false)
 const story = await useAsyncStoryblok('/home', { version: config.public.storyblokVersion });
 
@@ -65,7 +66,7 @@ onMounted(() => {
     })
 
     watch(()=>arClass.value.animationCompleted ,(v)=> {
-        
+        animationCompleted.value= true;
     })
     
     window.XR8 ? onxrloaded() : window.addEventListener('xrloaded', onxrloaded);
