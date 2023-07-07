@@ -18,7 +18,7 @@ if(!Array.prototype.avarage){
     });
 }
 export default class ThreeClass {
-    constructor(isAr = false, canvas) {
+    constructor(isAr = false, isDebug = false, canvas) {
         this.isAr = isAr;
         this.canvas = canvas;
         this.scene = null;
@@ -30,7 +30,7 @@ export default class ThreeClass {
         this.controls = null;
         this.stats = null;
         this.maxAvarageSize = 20;
-        this.debug = false;
+        this.debug = isDebug;
 
         this.sceneYOffset = -.45
         this.sceneScale = .425
@@ -86,7 +86,7 @@ export default class ThreeClass {
 
         await this.initScene();
         
-        // this.animationsClass.playTimeline()
+        this.animationsClass.playTimeline()
         this.animate();
     }
     async initScene(){
