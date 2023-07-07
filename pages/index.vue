@@ -1,7 +1,7 @@
 <template lang="pug">
 main#ar
     loading(:class="[{ready : ready}]")
-    intro
+    intro(v-if="story && story.content && story.content.body  && story.content.body[0]" :blok="story.content.body[0]")
     canvas#camerafeed
     #stats
     
@@ -9,7 +9,7 @@ main#ar
 <script setup>
 import ArClass from '~/class/ArClass';
 import * as THREE from 'three';
-
+const config = useRuntimeConfig()
 useHead({
     meta: [
         { name: "apple-mobile-web-app-capable", content: "yes" }
@@ -33,6 +33,8 @@ useHead({
 
 const ready = ref(false)
 
+const story = await useAsyncStoryblok('/home', { version: config.public.storyblokVersion });
+console.log(story.value)
 onMounted(() => {
     const el = document.documentElement;
     // if (el.requestFullscreen) el.requestFullscreen();
@@ -43,15 +45,19 @@ onMounted(() => {
     const onxrloaded = () => {
         arClass.value.init();
     }
-    watch(()=>arClass.value.ready ,(v)=> {
-        console.log(v)
-        if(!Object.values(v).includes(false)){
-            ready.value = true;
-        }
-    }, {deep: true})
+    // watch(()=>arClass.value.ready ,(v)=> {
+    //     console.log(v)
+    //     if(!Object.values(v).includes(false)){
+    //         ready.value = true;
+    //     }
+    // }, {deep: true})
     
     window.XR8 ? onxrloaded() : window.addEventListener('xrloaded', onxrloaded);
 })
+
+setTimeout(()=> {
+    ready.value = true;
+}, 2000)
 
 </script>
 <style lang="scss">

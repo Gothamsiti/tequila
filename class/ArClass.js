@@ -51,6 +51,7 @@ export default class ArClass{
                 {event: 'reality.imagefound', process: e => { this.handleTargetFound(e) }},
                 {event: 'reality.imageupdated', process: e => { this.handleTargetUpdate(e) }},
                 {event: 'reality.imagelost', process: e => { this.handleTargetLost(e) }},
+                {event: 'reality.imagescanning', process: e => {this.handleScanning(e)}}
             ],
         }
     }
@@ -74,6 +75,10 @@ export default class ArClass{
     }
     handleTargetLost(e){
         this.threeClass.handleTargetLost(e.detail)
+    }
+    handleScanning(e){
+        console.log(e)
+        // this.threeClass.handleTargetLost(e.detail)
     }
     async checkReady(){
         const readyArray = Object.values(this.threeClass.ready)

@@ -1,38 +1,51 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  components : {
-    global : true,
-    dirs : [
-        {
-            path : '~/components'
-        }
+  components: {
+    global: true,
+    dirs: [
+      {
+        path: '~/components'
+      }
     ]
   },
   head: {
     link: [
-      {rel: "manifest", href: "/manifest.json" }
+      { rel: "manifest", href: "/manifest.json" }
     ]
   },
   vite: {
+    optimizeDeps: { exclude: ["fsevents"] },
     css: {
-        preprocessorOptions: {
-            scss: {
-                additionalData: '@import "@/assets/scss/vars.scss";\n',
-            },
+      preprocessorOptions: {
+        scss: {
+          additionalData: '@import "@/assets/scss/vars.scss";\n',
         },
+      },
     },
-},
+  },
+  runtimeConfig: {
+    env: process.env.ENVIROMENT,
+    api: {
+      baseUrl: process.env.API_BASE_URL
+    },
+    public: {
+      env: process.env.ENVIROMENT,
+      storyblokVersion: process.env.STORYBLOK_API_VERSION,
+      STORYBLOK_KEY: process.env.STORYBLOK_API_KEY,
+      baseUrl: process.env.API_BASE_URL
+    }
+  },
 
   modules: [
     '@vite-pwa/nuxt',
     // 'dayjs-nuxt',
     // 'nuxt-font-loader',
     // '@nuxt/image-edge',
-    // [
-        // '@storyblok/nuxt', { 
-        //     accessToken: process.env.STORYBLOK_API_KEY
-        // }
-    // ],
+    [
+      '@storyblok/nuxt', {
+        accessToken: process.env.STORYBLOK_API_KEY
+      }
+    ],
     // "@nuxtjs/robots",
     // 'nuxt-simple-sitemap' //https://nuxt.com/modules/simple-sitemap
   ],

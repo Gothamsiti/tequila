@@ -1,6 +1,6 @@
 <template lang="pug">
 #loading
-    h2(v-html="'Loading'")
+    h2(v-html="$__('loading')")
     #backgroundGradient
 
 </template>
