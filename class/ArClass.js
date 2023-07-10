@@ -5,7 +5,7 @@ export default class ArClass{
         this.threeClass = null;
         this.ready =false
         this.scannable = false;
-        this.found = false
+        this.targetFound = false
         this.animationCompleted = false;
         
     }
@@ -33,8 +33,6 @@ export default class ArClass{
         
     }
 
-  
-
     initCameraLightPipelineModule(){
         return {
             name: 'xr-light',
@@ -50,10 +48,10 @@ export default class ArClass{
     initImmersion(){
         return {'name': 'responsiveImmersive', 
         onAttach: (env)=> {
-            console.log(env)
+            // console.log(env)
         },
         onUpdate: (env)=> {
-            console.log(env)
+            // console.log(env)
         },
     }
         
@@ -84,18 +82,18 @@ export default class ArClass{
         )
     }
     handleTargetFound(e){
-        this.found = true;
+        this.targetFound = true;
         this.threeClass.handleTargetFound(e.detail)
     }
     handleTargetUpdate(e){
         this.threeClass.handleTargetUpdate(e.detail)
     }
     handleTargetLost(e){
+        this.targetFound = false;
         this.threeClass.handleTargetLost(e.detail)
     }
     handleScanning(e){
         this.scannable = true;
-        // this.threeClass.handleTargetLost(e.detail)
     }
     async checkReady(){
         const readyArray = Object.values(this.threeClass.ready)
@@ -116,5 +114,6 @@ export default class ArClass{
             return
         }
         this.animationCompleted = true;
+        console.log('COMPLETED!')
     }
 }

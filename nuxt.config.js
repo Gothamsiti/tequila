@@ -8,6 +8,7 @@ export default defineNuxtConfig({
       }
     ]
   },
+  css: ["@/assets/scss/main.scss"],
   head: {
     link: [
       { rel: "manifest", href: "/manifest.json" }
@@ -35,19 +36,14 @@ export default defineNuxtConfig({
       baseUrl: process.env.API_BASE_URL
     }
   },
-
   modules: [
     '@vite-pwa/nuxt',
-    // 'dayjs-nuxt',
-    // 'nuxt-font-loader',
-    // '@nuxt/image-edge',
+    
     [
       '@storyblok/nuxt', {
         accessToken: process.env.STORYBLOK_API_KEY
       }
     ],
-    // "@nuxtjs/robots",
-    // 'nuxt-simple-sitemap' //https://nuxt.com/modules/simple-sitemap
   ],
   pwa: {
     registerType: 'autoUpdate',

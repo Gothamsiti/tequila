@@ -1,15 +1,18 @@
 <template lang="pug">
-#intro(:class="[{vanish: vanish}]")
-    .text(v-html="richText(blok.introText)")
-    #startButton( @click="startAr" )
-        span(v-html="blok.ctaLabel")
+#intro(:class="[{hide:hide}]")
+    .content
+        img(src="images/flower.svg")
+        div.text.bold.white(v-html="richText(blok.introText)")
+        .btn.pink( @click="startAr" )
+            span(v-html="blok.introCtaLabel")
+    
+    mainLogo(:color="'white'")
 
 </template>
-
 <script setup>
+const props = defineProps(['blok', 'hide'])
 const { richText } = richTextModule();
-const props = defineProps(['blok'])
-const vanish = ref(false)
+const vanish = ref(false);
 const emit = defineEmits(['start']);
 const startAr = ()=> {
     emit('start')
@@ -19,31 +22,34 @@ const startAr = ()=> {
 </script>
 <style lang="scss">
 #intro{
-    z-index: 998;
+    z-index: 2;
     opacity: 1;
-    background-color: $white;
     position: fixed;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    padding: mw(4);
+    width: 100%;
+    height: 100%;
+    padding: 6rem 4rem;
     box-sizing: border-box;
-    gap: mw(2);
-    &.vanish {
-        animation: vanish 1s ease-in-out;
-        z-index: 0;
-        opacity: 0;
+    background: $blue;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    transition: opacity $dt $de;
+    > .content{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        > img{
+            margin-bottom: 4rem;
+        }
+        > .text{
+            text-align: center;
+        }
     }
-}
-#startButton {
-    color: $white;
-    padding: 5px 20px;
-    background:$blueAgave;
-    border-radius: 50px;
-
+    &.hide{
+        opacity: 0;
+        pointer-events: none;
+    }
 }
 
 </style>

@@ -37,7 +37,7 @@ export default class AnimationsClass {
         this.coreografie.push({name: 'silo', tween: this.silo.addToTimeline, context: this.silo});
 
         // this.masterTl = gsap.timeline({paused: true, repeat: -1, onComplete: ()=> { this.animationCompleted = true}});
-        this.masterTl = gsap.timeline({paused: true, onComplete: ()=> {this.animationCompleted = true}});
+        this.masterTl = gsap.timeline({paused: true, onStart: () => { this.animationCompleted = false }, onComplete: ()=> { this.animationCompleted = true }});
 
         for(var o in this.regia){
             for(var c in this.coreografie){
@@ -114,6 +114,11 @@ export default class AnimationsClass {
                 return resolve();
             }
         })
+    }
+
+    restartTimeline(){
+        this.stopTimeline();
+        this.playTimeline();
     }
 
     playTimeline(){
