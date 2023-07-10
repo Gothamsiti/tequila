@@ -24,6 +24,7 @@ export default class ArClass{
             XRExtras.RuntimeError.pipelineModule(),         // Shows an error image on runtime error.
             this.initScenePipelineModule(),                 // Sets up the threejs camera and scene content.
             // this.initCameraLightPipelineModule(),
+            this.initImmersion()
         ])
 
         
@@ -45,6 +46,17 @@ export default class ArClass{
                 }
             },
         } 
+    }
+    initImmersion(){
+        return {'name': 'responsiveImmersive', 
+        onAttach: (env)=> {
+            console.log(env)
+        },
+        onUpdate: (env)=> {
+            console.log(env)
+        },
+    }
+        
     }
     initScenePipelineModule(){
         return {

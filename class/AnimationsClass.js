@@ -36,8 +36,8 @@ export default class AnimationsClass {
         this.coreografie.push({name: 'ovenBase', tween: this.ovenBase.addToTimeline, context: this.ovenBase});
         this.coreografie.push({name: 'silo', tween: this.silo.addToTimeline, context: this.silo});
 
-        this.masterTl = gsap.timeline({paused: true, repeat: -1, onComplete: ()=> { this.animationCompleted = true}});
-        // this.masterTl = gsap.timeline({paused: true, onComplete: ()=> {this.animationCompleted = true}});
+        // this.masterTl = gsap.timeline({paused: true, repeat: -1, onComplete: ()=> { this.animationCompleted = true}});
+        this.masterTl = gsap.timeline({paused: true, onComplete: ()=> {this.animationCompleted = true}});
 
         for(var o in this.regia){
             for(var c in this.coreografie){
