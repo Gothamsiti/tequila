@@ -1,6 +1,6 @@
 <template lang="pug">
 .scanningLottie(:class="[{visible:visible}]")
-    img(src="images/scan.svg")
+    img(src="/images/scan.svg")
 
     p.bold.white(v-html="$__('scanBottle')")
 

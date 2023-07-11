@@ -1,7 +1,7 @@
 <template lang="pug">
 #outro(:class="[{visible: visible}]")
     .content
-        img(src="images/flower.svg")
+        img(src="/images/flower.svg")
         div.text.bold.white(v-html="richText(blok.completedText)")
         .actions
             .btn.green( @click="restart()" )

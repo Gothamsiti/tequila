@@ -1,7 +1,7 @@
 <template lang="pug">
 #intro(:class="[{hide:hide}]")
     .content
-        img(src="images/flower.svg")
+        img(src="/images/flower.svg")
         div.text.bold.white(v-html="richText(blok.introText)")
         .btn.pink( @click="startAr" )
             span(v-html="blok.introCtaLabel")
