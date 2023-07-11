@@ -106,8 +106,7 @@ export default class ThreeClass {
         this.mainGroup.scale.set(this.sceneScale, this.sceneScale, this.sceneScale)
         this.mainGroup.position.y = this.sceneYOffset;
 
-        // this.gltf = await this.loadModel('./models/agave_texture.glb');
-        this.gltf = await this.assetsLoader.loadModel('./models/agave.glb');
+        this.gltf = await this.assetsLoader.loadModel('./models/agave_compressed.glb');
         this.agaves = [];
         for(let i = 0; i<this.agaveQuantity ;i++){
             this.ready['agave'+i]= false;
@@ -116,8 +115,7 @@ export default class ThreeClass {
             this.agaves.push(agave);
         }
 
-        // const forno = await this.loadModel('./models/forno_texture.glb');
-        const forno = await this.assetsLoader.loadModel('./models/forno.glb');
+        const forno = await this.assetsLoader.loadModel('./models/forno_compressed.glb');
 
         this.ovenBase = new OvenBaase(this, forno, this.mainGroup, {position: { y: -1.5 }})
         this.oven = new Oven(this, forno, this.mainGroup, {})
