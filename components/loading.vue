@@ -1,64 +1,35 @@
 <template lang="pug">
-#loading
-    h2(v-html="$__('loading')")
-    #backgroundGradient
+#loading(:class="[{ready:ready}]")
+    loadingLottie
+    mainLogo(:color="'blue'")
 
 </template>
-
 <script setup>
-
+const props = defineProps(['ready'])
 </script>
 
 <style lang="scss">
 #loading {
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     position: fixed;
-    z-index: 999;
+    z-index: 100;
     overflow: hidden;
+    background: $grey;
+    opacity: 1;
+    transition: opacity $dt $de;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6rem 4rem;
+    box-sizing: border-box;
     &.ready{
-        animation: vanish 1s ease-in-out;
-        z-index: 0;
         opacity: 0;
+        pointer-events: none;
+
     }
-    > h2 {
-        position: absolute;
-        z-index: 1;
-        color: $white;
-        top: 50%;
-        mix-blend-mode:screen;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-
-
 }
-
-
-
-
-#backgroundGradient {
-    position:absolute;
-    background:$blueAgave;
-    /* background: linear-gradient(45deg, #669999, #2E5050); */
-    background-size: vw(300) 100%;
-    animation: gradient 10s ease-in-out infinite;
-    z-index: 0;
-    width:100vw;
-    height: 100vh;
-}
-
-    /* @keyframes gradient {
-        0% {
-            background-position: 0% 50%;
-        }
-        50% {
-            background-position: 100% 50%;
-        }
-        100% {
-            background-position: 0% 50%;
-        }
-    } */
 
 </style>
 

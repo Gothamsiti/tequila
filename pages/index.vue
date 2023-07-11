@@ -1,9 +1,9 @@
 <template lang="pug">
-main#ar
-    loading(:class="[{ready : ready}]")
-    intro(v-if="story && story.content && story.content.body  && story.content.body[0]" :blok="story.content.body[0]" @start="setScanningVisble")
-    scanning(:visible="scanningVisible"  :scannable="scannable")
-    outro(v-if="story && story.content && story.content.body  && story.content.body[0]" :blok="story.content.body[0]" :appear="animationCompleted")
+main#ar(v-if="story && story.content")
+    loading(:ready="ready")
+    intro(:hide="started" :blok="story.content" @start="handleStart()")
+    scanningLottie(:visible="started && scanning")
+    outro(:visible="animationCompleted" :blok="story.content" @restart="handleReStart()")
     canvas#camerafeed
     #stats
     
@@ -32,103 +32,56 @@ useHead({
         }
     ]
 });
-const scanningVisible = ref(false)
-const scannable = ref(false)
-const animationCompleted = ref(false)
-const ready = ref(false)
-const story = await useAsyncStoryblok('/home', { version: config.public.storyblokVersion });
+
+const ready = ref(false);
+const started = ref(false);
+const scanning = ref(false);
+const animationCompleted = ref(false);
+
+var clock = null;
+
+const story = await useAsyncStoryblok('/interfaccia-ar', { version: config.public.storyblokVersion });
+var arClass = null;
+const handleStart = () => {
+    started.value = true;
+    scanning.value = true;
+}
+const handleReStart = () => {
+    started.value = true;
+    scanning.value = true;
+    arClass.animationCompleted = false;
+    arClass.threeClass.animationsClass.restartTimeline();
+}
 
 onMounted(() => {
-    const el = document.documentElement;
-    // if (el.requestFullscreen) el.requestFullscreen();
-    // if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
-    // if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
-    const arClass = ref(new ArClass());
+    arClass = new ArClass();
     window.THREE = THREE;
+    clock = new THREE.Clock();
     const onxrloaded = () => {
-        arClass.value.init();
+        arClass.init();
     }
-    watch(()=>arClass.value.ready ,(v)=> {
-        console.log(v)
-        if(!Object.values(v).includes(false)){
-            ready.value = true;
-        }
-    })
-    watch(()=>arClass.value.scannable ,(v)=> {
-        if(v){
-            scannable.value = true
-        }
-    })
-    watch(()=>arClass.value.found ,(v)=> {
-        if(v){
-            scannable.value= false;
-        }
-    })
-
-    watch(()=>arClass.value.animationCompleted ,(v)=> {
-        animationCompleted.value= true;
-    })
-    
+    animate();
     window.XR8 ? onxrloaded() : window.addEventListener('xrloaded', onxrloaded);
 })
 
+const animate = () => {
+    ready.value = arClass.ready;
+    animationCompleted.value = arClass?.threeClass?.animationsClass?.animationCompleted;
 
-const setScanningVisble= ()=>{
- console.log('aooooh')
- scanningVisible.value= true;
- scannable.value= true;
-}
+    if(started.value){
+        if(arClass.targetFound){
+            scanning.value = false;
+            clock.start();
+        }
 
-// setTimeout(()=> {
-//     ready.value = true;
-// }, 2000)
-
-</script>
-<style lang="scss">
-html,
-body {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    position: relative;
-    overflow: hidden;
-}
-
-
-#__nuxt {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    overflow: hidden;
-    > #app{
-        position: absolute;
-        height: 100%;
-        width: 100%;
-        > main#ar {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            position: relative;
-            background: rgb(26, 26, 26);
-            > #stats{
-                position: absolute;
-                left: 0;
-                top: 0;
-                z-index: 2;
-            }
-
-            canvas#camerafeed,
-            >video {
-                position: absolute;
-                z-index: 1;
-                left: 0;
-                top: 0;
-                width: 100%;
-                height: 100%;
-            }
+        if(!arClass.targetFound && clock.getElapsedTime() > 2 && !animationCompleted.value){
+            scanning.value = true;
         }
     }
+
+
+    requestAnimationFrame(() => {
+        animate();
+    })
 }
-
-
-</style>
+</script>

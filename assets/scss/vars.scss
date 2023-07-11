@@ -1,13 +1,8 @@
+$grey: #D3BFA3;
+$pink: #DC73AC;
+$blue: #3954A4;
+$green: #52B857;
 $white: #ffffff;
-$bkg: #EDEDEC;
-$black: #000000;
-$grey: #767676;
-$darkGrey: #505050;
-$lightGrey: #A0A0A0;
-$red: #FF0000;
-$green: #4BB543;
-$azure:#0099CD;
-$blueAgave: #669999;
 
 $dbr : 3px;
 $de : cubic-bezier(0.955, 0.610, 0.580, 0.935);
@@ -33,34 +28,4 @@ $dtHalf : .2s;
 }
 @mixin mediaH($h) {
     @media screen and (max-height:#{$h}px) { @content; }
-}
-
-@keyframes vanish {
-    0%{
-        opacity: 1;
-        z-index: 999;
-    }
-    99%{
-        opacity: 0;
-        z-index: 999;
-    }
-    100%{
-        z-index: 0;
-    }
-}
-@keyframes appear {
-    0%{
-        z-index: 0;
-    }
-    50%{
-        z-index: 0;
-    }
-    51%{
-        opacity: 0;
-        z-index: 999;
-    }
-    100%{
-        opacity: 1;
-        z-index: 999;
-    }
 }

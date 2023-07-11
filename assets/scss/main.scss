@@ -1,0 +1,66 @@
+html,body{
+    margin: 0;
+    width: 100%;
+    font-size: 10px;
+}
+body{
+    font-family: aktiv-grotesk, Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    line-height: 1.2em;
+    font-weight: 400;
+}
+#__nuxt {
+    width: 100%;
+    height: 100dvh;
+    position: relative;
+    overflow: hidden;
+    > #app{
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        > main#ar {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+            > #stats{
+                position: absolute;
+                left: 0;
+                top: 0;
+                z-index: 2;
+            }
+            canvas#camerafeed,
+            >video {
+                position: absolute;
+                z-index: 1;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+}
+
+.white{
+    color: $white;
+}
+.bold{
+    font-weight: 700;
+}
+.btn{
+    padding: 1.5rem 2.5rem;
+    box-sizing: border-box;
+    color: $white;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    &.pink{
+        background: $pink;
+    }
+    &.green{
+        background: $green;
+    }
+}

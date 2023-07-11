@@ -8,6 +8,7 @@ main#main(:class="{debug:debug}")
         button.play(v-html="'PLAY'")
         button.pause(v-html="'PAUSE'")
         button.stop(v-html="'STOP'")
+        button.restart(v-html="'RESTART'")
 </template>
 <script setup>
 import ThreeClass from '~/class/ThreeClass';
