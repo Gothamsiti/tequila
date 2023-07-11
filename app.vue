@@ -1,7 +1,7 @@
 <template lang="pug">
 #app  
   NuxtLayout
-      VitePwaManifest
+      //- VitePwaManifest
       NuxtLoadingIndicator
       NuxtPage
 </template>
