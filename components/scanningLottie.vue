@@ -28,6 +28,7 @@ const props = defineProps(['visible'])
         left: 50%;
         bottom: 3rem;
         transform: translateX(-50%);
+        text-align: center;
     }
     &.visible{
         opacity: 1;
