@@ -45,6 +45,7 @@ var arClass = null;
 const handleStart = () => {
     started.value = true;
     scanning.value = true;
+    arClass.threeClass.canStart = true;
 }
 const handleReStart = () => {
     started.value = true;

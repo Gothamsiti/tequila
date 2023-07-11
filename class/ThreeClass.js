@@ -60,6 +60,8 @@ export default class ThreeClass {
         this.avarageScale = [];
 
         this.assetsLoader = new AssetsLoader();
+
+        this.canStart = false;
        
         if(!this.isAr) {
             this.init(canvas)
@@ -155,8 +157,7 @@ export default class ThreeClass {
     }
 
     handleTargetFound(detail) {
-        // console.log('=== FOUND ===')
-        if(!Object.values(this.ready).includes(false) ){
+        if(!Object.values(this.ready).includes(false) && this.canStart){
             this.animationsClass.playTimeline()
         }
         this.group.visible = true;
@@ -175,11 +176,9 @@ export default class ThreeClass {
         if(this.animationsClass?.masterTl?.isActive()) {
             this.animationsClass.pauseTimeline()
         }
-        // console.log('=== LOST ===')
         this.group.visible = false;
     }
     handleTargetUpdate(detail) {
-        // console.log('=== UPDATE ===');
 
         this.avaragePX.push(detail.position.x)
         this.avaragePY.push(detail.position.y + this.sceneYOffset)

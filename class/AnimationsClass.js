@@ -132,6 +132,7 @@ export default class AnimationsClass {
     }
 
     playTimeline(){
+        console.log('playTimeline')
         const interval = setInterval(() => {
             if(this.inited){
                 clearInterval(interval)
