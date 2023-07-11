@@ -9,11 +9,11 @@ const $el = ref();
 
 onMounted(() => {
     lottie.loadAnimation({
-    container: $el.value,
-    renderer: 'svg',
-    loop: true,
-    autoplay: true,
-    path: '/images/loading-animation.json' // the path to the animation json
+        container: $el.value,
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: '/images/loading-animation.json' // the path to the animation json
     });
 })
 </script>
