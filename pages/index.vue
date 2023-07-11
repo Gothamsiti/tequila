@@ -47,7 +47,6 @@ const handleStart = () => {
     scanning.value = true;
 }
 const handleReStart = () => {
-    console.log('handleReStart');
     started.value = true;
     scanning.value = true;
     arClass.animationCompleted = false;

@@ -1,11 +1,25 @@
 <template lang='pug'>
-.loadingLottie
+.loadingLottie(ref="$el")
 
 </template>
+
+<script setup>
+import lottie from 'lottie-web';
+const $el = ref();
+
+onMounted(() => {
+    lottie.loadAnimation({
+    container: $el.value,
+    renderer: 'svg',
+    loop: true,
+    autoplay: true,
+    path: '/images/loading-animation.json' // the path to the animation json
+    });
+})
+</script>
 <style lang="scss">
 .loadingLottie{
-    width: 150px;
-    height: 300px;
-    background: red;
+    margin-top: 8rem;
+    width: 100%;
 }
 </style>
