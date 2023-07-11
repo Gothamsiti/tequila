@@ -124,7 +124,6 @@ export default class AnimationsClass {
     }
 
     restartTimeline(){
-        console.log('restartTimeline');
         this.masterTl.seek(0,false);
         this.masterTl.pause();
         this.silo.resetTimeline(this.silo); 
@@ -132,7 +131,6 @@ export default class AnimationsClass {
     }
 
     playTimeline(){
-        console.log('playTimeline')
         const interval = setInterval(() => {
             if(this.inited){
                 clearInterval(interval)

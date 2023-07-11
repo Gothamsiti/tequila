@@ -52,7 +52,7 @@ const handleReStart = () => {
     started.value = true;
     scanning.value = true;
     arClass.animationCompleted = false;
-    arClass.threeClass.animationsClass.restartTimeline();
+    arClass.threeClass.animationsClass.stopTimeline();
 }
 
 onMounted(() => {
