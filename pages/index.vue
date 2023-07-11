@@ -14,7 +14,8 @@ import * as THREE from 'three';
 const config = useRuntimeConfig()
 useHead({
     meta: [
-        { name: "apple-mobile-web-app-capable", content: "yes" }
+        { name: "apple-mobile-web-app-capable", content: "yes" },
+        { name: "viewport", content: "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" }
     ],
     script: [
         {
@@ -45,12 +46,13 @@ var arClass = null;
 const handleStart = () => {
     started.value = true;
     scanning.value = true;
+    arClass.threeClass.canStart = true;
 }
 const handleReStart = () => {
     started.value = true;
     scanning.value = true;
     arClass.animationCompleted = false;
-    arClass.threeClass.animationsClass.restartTimeline();
+    arClass.threeClass.animationsClass.stopTimeline();
 }
 
 onMounted(() => {

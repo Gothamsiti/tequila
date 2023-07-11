@@ -1,6 +1,6 @@
 <template lang="pug">
 .scanningLottie(:class="[{visible:visible}]")
-    img(src="images/scan.svg")
+    img(src="/images/scan.svg")
 
     p.bold.white(v-html="$__('scanBottle')")
 
@@ -28,6 +28,7 @@ const props = defineProps(['visible'])
         left: 50%;
         bottom: 3rem;
         transform: translateX(-50%);
+        text-align: center;
     }
     &.visible{
         opacity: 1;

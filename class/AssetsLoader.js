@@ -1,4 +1,5 @@
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import * as THREE from 'three';
 
 export default class AssetsLoader {
@@ -11,6 +12,12 @@ export default class AssetsLoader {
             violet: null,
             wall: null
         };
+        this.loader = new GLTFLoader();
+        const dracoLoader = new DRACOLoader();
+        dracoLoader.setDecoderPath( '/draco/' );
+        dracoLoader.preload();
+        
+        this.loader.setDRACOLoader( dracoLoader );
     }
 
     async loadTextures(){
@@ -33,8 +40,8 @@ export default class AssetsLoader {
 
     async loadModel(src) {
         return await new Promise(async (resolve, reject) => {
-            const loader = new GLTFLoader();
-            const model = await loader.loadAsync(src);
+            // const loader = new GLTFLoader();
+            const model = await this.loader.loadAsync(src);
             if(!model) reject('error loading model', src);
 
             try{

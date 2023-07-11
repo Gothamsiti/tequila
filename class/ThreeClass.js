@@ -60,6 +60,8 @@ export default class ThreeClass {
         this.avarageScale = [];
 
         this.assetsLoader = new AssetsLoader();
+
+        this.canStart = false;
        
         if(!this.isAr) {
             this.init(canvas)
@@ -104,8 +106,7 @@ export default class ThreeClass {
         this.mainGroup.scale.set(this.sceneScale, this.sceneScale, this.sceneScale)
         this.mainGroup.position.y = this.sceneYOffset;
 
-        // this.gltf = await this.loadModel('./models/agave_texture.glb');
-        this.gltf = await this.assetsLoader.loadModel('./models/agave.glb');
+        this.gltf = await this.assetsLoader.loadModel('./models/agave_compressed.glb');
         this.agaves = [];
         for(let i = 0; i<this.agaveQuantity ;i++){
             this.ready['agave'+i]= false;
@@ -114,8 +115,7 @@ export default class ThreeClass {
             this.agaves.push(agave);
         }
 
-        // const forno = await this.loadModel('./models/forno_texture.glb');
-        const forno = await this.assetsLoader.loadModel('./models/forno.glb');
+        const forno = await this.assetsLoader.loadModel('./models/forno_compressed.glb');
 
         this.ovenBase = new OvenBaase(this, forno, this.mainGroup, {position: { y: -1.5 }})
         this.oven = new Oven(this, forno, this.mainGroup, {})
@@ -155,8 +155,7 @@ export default class ThreeClass {
     }
 
     handleTargetFound(detail) {
-        // console.log('=== FOUND ===')
-        if(!Object.values(this.ready).includes(false) ){
+        if(!Object.values(this.ready).includes(false) && this.canStart){
             this.animationsClass.playTimeline()
         }
         this.group.visible = true;
@@ -175,11 +174,9 @@ export default class ThreeClass {
         if(this.animationsClass?.masterTl?.isActive()) {
             this.animationsClass.pauseTimeline()
         }
-        // console.log('=== LOST ===')
         this.group.visible = false;
     }
     handleTargetUpdate(detail) {
-        // console.log('=== UPDATE ===');
 
         this.avaragePX.push(detail.position.x)
         this.avaragePY.push(detail.position.y + this.sceneYOffset)
