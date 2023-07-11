@@ -6,7 +6,6 @@ export default class ArClass{
         this.ready =false
         this.scannable = false;
         this.targetFound = false
-        this.animationCompleted = false;
         
     }
     init(){
@@ -73,7 +72,7 @@ export default class ArClass{
         this.threeClass = new ThreeClass(true, canvas);
         this.threeClass.initAr(scene, camera, renderer)
         this.checkReady()
-        this.checkCompleted()
+        // this.checkCompleted()
         canvas.addEventListener('touchmove', (event) => {
             event.preventDefault()
         })
@@ -104,16 +103,5 @@ export default class ArClass{
         }else {
             this.ready = true;
         }
-    }
-    async checkCompleted(){
-        const completed = this.threeClass?.animationsClass?.animationCompleted;
-        if(!completed){
-            setTimeout(()=> {
-                this.checkCompleted()
-            },500)
-            return
-        }
-        this.animationCompleted = true;
-        console.log('COMPLETED!')
     }
 }

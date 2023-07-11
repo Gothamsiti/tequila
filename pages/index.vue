@@ -47,6 +47,7 @@ const handleStart = () => {
     scanning.value = true;
 }
 const handleReStart = () => {
+    console.log('handleReStart');
     started.value = true;
     scanning.value = true;
     arClass.animationCompleted = false;
@@ -66,7 +67,7 @@ onMounted(() => {
 
 const animate = () => {
     ready.value = arClass.ready;
-    animationCompleted.value = arClass.animationCompleted;
+    animationCompleted.value = arClass?.threeClass?.animationsClass?.animationCompleted;
 
     if(started.value){
         if(arClass.targetFound){

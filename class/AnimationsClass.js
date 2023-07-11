@@ -67,6 +67,13 @@ export default class AnimationsClass {
                         
                     })
                 }
+                const restart = controls.getElementsByClassName('restart')[0];
+                if(restart){
+                    restart.addEventListener('click',() => {
+                        this.restartTimeline();
+                        
+                    })
+                }
             }
         }
 
@@ -117,8 +124,11 @@ export default class AnimationsClass {
     }
 
     restartTimeline(){
-        this.stopTimeline();
-        this.playTimeline();
+        console.log('restartTimeline');
+        this.masterTl.seek(0,false);
+        this.masterTl.pause();
+        this.silo.resetTimeline(this.silo); 
+        this.masterTl.play();
     }
 
     playTimeline(){
