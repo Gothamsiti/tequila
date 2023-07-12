@@ -7,7 +7,7 @@ module.exports = {
         time: true
       },
       {
-        name: 'tequilaMain',
+        name: 'tequilaProduction',
         script: "npm run start",
         time: true
       }
