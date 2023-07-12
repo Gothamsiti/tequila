@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "build": "nuxt build",
+    "buildMain": "nuxt build",
     "dev": "nuxt dev",
     "start": "PORT=3500 nuxt start",
     "generate": "nuxt generate",
