@@ -11,7 +11,7 @@ export default class ArClass{
     init(){
         const fullWindowCanvas = new FullWindowCanvas();
         
-        XR8.XrController.configure({ disableWorldTracking: true,  });
+        XR8.XrController.configure({ disableWorldTracking: true,  enableLighting: true  });
         XR8.addCameraPipelineModules([ 
             XR8.GlTextureRenderer.pipelineModule(),         // Draws the camera feed.
             XR8.Threejs.pipelineModule(),                   // Creates a ThreeJS AR Scene.
@@ -22,8 +22,7 @@ export default class ArClass{
             // XRExtras.Loading.pipelineModule(),              // Manages the loading screen on startup.
             XRExtras.RuntimeError.pipelineModule(),         // Shows an error image on runtime error.
             this.initScenePipelineModule(),                 // Sets up the threejs camera and scene content.
-            // this.initCameraLightPipelineModule(),
-            this.initImmersion()
+            this.initCameraLightPipelineModule(),
         ])
 
         
@@ -44,17 +43,7 @@ export default class ArClass{
             },
         } 
     }
-    initImmersion(){
-        return {'name': 'responsiveImmersive', 
-        onAttach: (env)=> {
-            // console.log(env)
-        },
-        onUpdate: (env)=> {
-            // console.log(env)
-        },
-    }
         
-    }
     initScenePipelineModule(){
         return {
             name: 'threejsinitscene',
