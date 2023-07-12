@@ -6,7 +6,7 @@ export default class Bottle {
         this.group = group;
         this.settings = settings
         this.bottle = null;
-        this.bottleScale =1.55;
+        this.bottleScale =1.75;
         this.parent.ready.bottle = false
         this.init()
     }
@@ -14,7 +14,7 @@ export default class Bottle {
     async init(){
         this.bottle = await this.parent.loadModel('./models/bottiglia.glb')
         
-        const trasparentMaterial = new THREE.MeshPhongMaterial( {color: 0xffFFFF ,colorWrite: !this.parent.isAr} );
+        const trasparentMaterial = new THREE.MeshPhongMaterial( {color: 0xffFFFF ,colorWrite: false} );
         this.bottle.scene.children[0].material =  trasparentMaterial;
         
         this.bottle.scene.scale.set(this.bottleScale, this.bottleScale, this.bottleScale) 
