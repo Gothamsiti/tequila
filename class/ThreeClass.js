@@ -32,8 +32,8 @@ export default class ThreeClass {
         this.maxAvarageSize = 20;
         this.debug = isDebug;
 
-        this.sceneYOffset = -.45
-        this.sceneScale = .425
+        this.sceneOffsets = new THREE.Vector3(.05,-1.8,0);
+        this.sceneScale = 1.45
         this.agaveModels = []
         
         this.arAmbientLight = null;
@@ -100,11 +100,8 @@ export default class ThreeClass {
         }else {
             this.initLights();
         }
-        this.setUpGroupSceneLimits();
         
 
-        this.mainGroup.scale.set(this.sceneScale, this.sceneScale, this.sceneScale)
-        this.mainGroup.position.y = this.sceneYOffset;
 
         this.gltf = await this.assetsLoader.loadModel('./models/agave_compressed.glb');
         this.agaves = [];
@@ -117,13 +114,25 @@ export default class ThreeClass {
 
         const forno = await this.assetsLoader.loadModel('./models/forno_compressed.glb');
 
-        this.ovenBase = new OvenBaase(this, forno, this.mainGroup, {position: { y: -1.5 }})
-        this.oven = new Oven(this, forno, this.mainGroup, {})
+        const dummyGroup = new THREE.Group();
+
+        this.ovenBase = new OvenBaase(this, forno, dummyGroup, {position: { y: -1.5 }})
+        this.oven = new Oven(this, forno, dummyGroup, {})
 
 
-        this.bottle = new Bottle(this, this.mainGroup, {position: { y : 0 }})
-        this.silo = new Silo(this, this.mainGroup, {position: {y: -6 }, rotation: {y: THREE.MathUtils.degToRad(-90)}})
-        this.mainGroup.add(this.agaveGroup);
+        this.bottle = new Bottle(this, dummyGroup, {position: { y : 0 }})
+        this.silo = new Silo(this, dummyGroup, {position: {y: -6 }, rotation: {y: THREE.MathUtils.degToRad(-90)}})
+
+        dummyGroup.position.x = this.sceneOffsets.x;
+        dummyGroup.position.y = this.sceneOffsets.y;
+        dummyGroup.position.z = this.sceneOffsets.z;
+        dummyGroup.add(this.agaveGroup);
+        dummyGroup.scale.set(this.sceneScale,this.sceneScale,this.sceneScale);
+        this.setUpGroupSceneLimits(dummyGroup);
+        
+        this.mainGroup.add(dummyGroup);
+        
+        
         this.group.add(this.mainGroup)
         this.scene.add(this.group)
 
@@ -131,15 +140,15 @@ export default class ThreeClass {
 
         if(this.debug){
             const axesHelper = new THREE.AxesHelper(5);
-            this.mainGroup.add(axesHelper);
+            dummyGroup.add(axesHelper);
         }
        
     }
 
     async initAr(XR8scene, XR8camera, XR8renderer){
         this.scene = XR8scene;
-        this.initRenderer() // o questo renderer
-        // this.renderer = XR8renderer; // oppure questo
+        //this.initRenderer() // o questo renderer
+        this.renderer = XR8renderer; // oppure questo
         
         this.camera = XR8camera;
         this.renderer.autoClear = false;
@@ -179,7 +188,7 @@ export default class ThreeClass {
     handleTargetUpdate(detail) {
 
         this.avaragePX.push(detail.position.x)
-        this.avaragePY.push(detail.position.y + this.sceneYOffset)
+        this.avaragePY.push(detail.position.y)
         this.avaragePZ.push(detail.position.z)
 
         this.avarageRX.push(detail.rotation.x)
@@ -187,7 +196,7 @@ export default class ThreeClass {
         this.avarageRZ.push(detail.rotation.z)
         this.avarageRW.push(detail.rotation.w)
 
-        // this.avarageScale.push(detail.scale)
+        this.avarageScale.push(detail.scale)
          
         if(this.avaragePX.length >=  this.maxAvarageSize) this.avaragePX.shift();
         if(this.avaragePY.length >=  this.maxAvarageSize) this.avaragePY.shift();
@@ -198,7 +207,7 @@ export default class ThreeClass {
         if(this.avarageRZ.length >=  this.maxAvarageSize) this.avarageRZ.shift();
         if(this.avarageRW.length >=  this.maxAvarageSize) this.avarageRW.shift();
 
-        // if(this.avarageScale.length >=  this.maxAvarageSize) this.avarageScale.shift();
+        if(this.avarageScale.length >=  this.maxAvarageSize) this.avarageScale.shift();
     }
 
     initRenderer() {
@@ -316,40 +325,9 @@ export default class ThreeClass {
     setAvarages(){
         this.mainGroup.position.set(this.avaragePX.avarage()-.02, this.avaragePY.avarage(), this.avaragePZ.avarage());
         this.mainGroup.quaternion.set(this.avarageRX.avarage(), this.avarageRY.avarage(), this.avarageRZ.avarage(), this.avarageRW.avarage());
-        // this.mainGroup.scale.set(this.avarageScale.avarage() / 2, this.avarageScale.avarage() / 2, this.avarageScale.avarage() / 2);
+        this.mainGroup.scale.set(this.avarageScale.avarage() / 2, this.avarageScale.avarage() / 2, this.avarageScale.avarage() / 2);
     }
-    memoSetAvarages(){
-        if(this.mainGroup ){
-            const avaragePXMemoIndex = this.avaragePX.join('-')
-            const avaragePZMemoIndex = this.avaragePY.join('-')
-            const avaragePYMemoIndex = this.avaragePZ.join('-')
-            const avarageRXMemoIndex = this.avarageRX.join('-')
-            const avarageRYMemoIndex = this.avarageRY.join('-')
-            const avarageRZMemoIndex = this.avarageRZ.join('-')
-            const avarageRWMemoIndex = this.avarageRW.join('-')
-            const avarageScaleMemoIndex = this.avarageScale.join('-')
-            if(! avaragePositions.x[avaragePXMemoIndex] ) { avaragePositions.x[avaragePXMemoIndex] = this.avaragePX.avarage()}
-            if(! avaragePositions.y[avaragePYMemoIndex] ) { avaragePositions.y[avaragePYMemoIndex] = this.avaragePY.avarage()}
-            if(! avaragePositions.z[avaragePZMemoIndex] ) { avaragePositions.z[avaragePZMemoIndex] = this.avaragePZ.avarage()}
-            if(! avarageRotations.x[avarageRXMemoIndex] ) { avarageRotations.x[avarageRXMemoIndex] = this.avarageRX.avarage()}
-            if(! avarageRotations.y[avarageRYMemoIndex] ) { avarageRotations.y[avarageRYMemoIndex] = this.avarageRY.avarage()}
-            if(! avarageRotations.z[avarageRZMemoIndex] ) { avarageRotations.z[avarageRZMemoIndex] = this.avarageRZ.avarage()}
-            if(! avarageRotations.w[avarageRWMemoIndex] ) { avarageRotations.w[avarageRWMemoIndex] = this.avarageRW.avarage()}
-            // if(! avarageScales[avarageScaleMemoIndex]) {  avarageScales[avarageScaleMemoIndex] = this.avarageScale.avarage()}
-            this.mainGroup.position.set(
-                avaragePositions.x[avaragePXMemoIndex], 
-                avaragePositions.y[avaragePYMemoIndex], 
-                avaragePositions.z[avaragePZMemoIndex]);
-            this.mainGroup.quaternion.set(
-                avarageRotations.x[avarageRXMemoIndex], 
-                avarageRotations.y[avarageRYMemoIndex], 
-                avarageRotations.z[avarageRZMemoIndex]-0.01, 
-                avarageRotations.w[avarageRWMemoIndex]);
-        // this.mainGroup.scale.set(avarageScales[avarageScaleMemoIndex] / 2, avarageScales[avarageScaleMemoIndex] / 2, avarageScales[avarageScaleMemoIndex] / 2);
-        }
-    }
-
-    setUpGroupSceneLimits(){
+    setUpGroupSceneLimits(dummyGroup){
         this.sceneHeight = 4;
        
         const cubeSize = 10;
@@ -357,7 +335,6 @@ export default class ThreeClass {
         const trasparentMaterial = new THREE.MeshPhongMaterial( {color: 0xffff00, colorWrite: false} );
         const cube = new THREE.Mesh(CubeGeometry, trasparentMaterial)
         cube.position.y= -cubeSize/2;
-        this.mainGroup.add(cube)
-
+        dummyGroup.add(cube)
     }
 }

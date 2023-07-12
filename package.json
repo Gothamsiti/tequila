@@ -8,7 +8,7 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "devssl": "nuxt dev --https --ssl-cert 192.168.3.125.pem --ssl-key 192.168.3.125-key.pem"
+    "devssl": "nuxt dev --https --ssl-cert 192.168.3.147.pem --ssl-key 192.168.3.147-key.pem"
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
@@ -16,13 +16,12 @@
     "@types/node": "^18",
     "@vite-pwa/nuxt": "^0.1.0",
     "@webdiscus/pug-loader": "^2.9.4",
-    "nuxt": "3.5.2",
+    "nuxt": "3.6.2",
     "pug": "^3.0.2",
     "sass": "^1.56.1",
     "sass-loader": "^13.2.0"
   },
   "dependencies": {
-    "@esbuild/win32-x64": "^0.18.11",
     "gsap": "npm:@gsap/business@^3.11.5",
     "lottie-web": "^5.12.2",
     "stats-js": "^1.0.1",
