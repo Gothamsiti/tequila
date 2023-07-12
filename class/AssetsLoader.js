@@ -24,7 +24,7 @@ export default class AssetsLoader {
         const textureLoader = new THREE.TextureLoader();
         let promiseArr = [];
         const keys = Object.keys(this.textures);
-        for(var i in keys){ promiseArr.push(textureLoader.loadAsync('./textures/jpg/tequila-texture-'+keys[i]+'.jpg')); }
+        for(var i in keys){ promiseArr.push(textureLoader.loadAsync('./textures/webp/tequila-texture-'+keys[i]+'.webp')); }
         
         await Promise.all(promiseArr).then(res => {
             for(var o in res){ 
