@@ -56,6 +56,8 @@ export default class ThreeClass {
         this.avarageRY = [];
         this.avarageRZ = [];
         this.avarageRW = [];
+        
+        this.avarageExposure= [];
 
         this.avarageScale = [];
 
@@ -242,15 +244,20 @@ export default class ThreeClass {
 
     }
     upadeARLightIntensity(exposure){
+        console.log('updating lights')
+        this.avarageExposure.push ( exposure +1); 
+        if( this.avarageExposure.length > this.maxAvarageSize) this.avarageExposure.shift()
+        const avarageExposure =  this.avarageExposure.avarage() ;
         if(this.arPointLight){
-            const formattedExposure = (exposure +1 ) / 2
+            const formattedExposure = (avarageExposure +1 ) / 2
             // console.log('exposure', exposure, formattedExposure)
             this.arPointLight.intensity = formattedExposure
         }
         if(this.arAmbientLight){
-            const formattedExposure = (exposure +1 ) / 2
+            const formattedExposure = (avarageExposure +1 ) / 2
             this.arAmbientLight.intensity = formattedExposure
         }
+        this.renderer.toneMappingExposure = avarageExposure;
     }
 
     async loadModel(src) {
